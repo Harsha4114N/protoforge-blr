@@ -98,7 +98,7 @@
             Scope Your Custom College Project in 4 Steps
           </h1>
           <p class="text-sm text-slate-600 mt-1">
-            Submit your approved title, select components (no upfront retail clutter), and choose IEEE paper or editable report add-ons for a 24-hour engineer feasibility quote.
+            Submit your approved title, select components (no upfront retail clutter), and choose IEEE paper or editable report add-ons for an instant WhatsApp feasibility quote.
           </p>
         </div>
         <div class="flex items-center gap-2 shrink-0">
@@ -442,18 +442,19 @@
             ← Back
           </button>
           <button id="submitRequestBtn" type="button" onclick="submitProjectRequest()" class="px-7 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-md transition">
-            Submit Project Request for Quote ✓
+            Submit & Send Dossier on WhatsApp ✓
           </button>
         </div>
       </div>
 
       <!-- SUBMISSION SUCCESS CARD -->
-      <div id="submissionSuccessPanel" class="hidden bg-white rounded-2xl border-2 border-emerald-500 p-6 sm:p-8 shadow-md text-center max-w-2xl mx-auto space-y-4">
+      <div id="submissionSuccessPanel" class="hidden bg-white rounded-2xl border-2 border-emerald-500 p-6 sm:p-8 shadow-md text-center max-w-2xl mx-auto space-y-5">
         <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl font-bold mx-auto">✓</div>
-        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Project Dossier Received!</h2>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Project Dossier Saved & Ready!</h2>
         <p class="text-sm text-slate-600">
-          Our Bengaluru engineering desk is reviewing your component list and requirements. Save your tracking code below to check your itemized quote and feasibility notes.
+          Your complete component list, academic add-ons, and estimated quote breakdown have been formatted for our Bengaluru engineering WhatsApp desk.
         </p>
+
         <div class="bg-slate-900 text-white rounded-xl p-4 flex items-center justify-between max-w-md mx-auto">
           <div class="text-left">
             <div class="text-[10px] uppercase tracking-wider text-slate-400">Your Tracking Code</div>
@@ -463,11 +464,22 @@
             Copy Code
           </button>
         </div>
-        <div class="pt-2 flex flex-wrap justify-center gap-3">
-          <button type="button" onclick="openTrackWithGeneratedCode()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold">
+
+        <!-- Direct WhatsApp Dispatch Button -->
+        <div class="flex flex-col sm:flex-row justify-center gap-3 pt-1">
+          <a id="directWhatsappDispatchBtn" href="#" target="_blank" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md transition flex items-center justify-center gap-2">
+            <span>📲 Send Full Dossier to WhatsApp Now</span>
+          </a>
+          <button type="button" onclick="copyFullWhatsappSummary()" class="px-5 py-3 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold">
+            Copy Full Summary
+          </button>
+        </div>
+
+        <div class="pt-2 flex flex-wrap justify-center gap-3 border-t border-slate-100">
+          <button type="button" onclick="openTrackWithGeneratedCode()" class="px-4 py-2 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold">
             Open Quote Tracker →
           </button>
-          <button type="button" onclick="resetFormForNew()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold">
+          <button type="button" onclick="resetFormForNew()" class="px-4 py-2 rounded-xl text-slate-500 hover:text-slate-800 text-xs font-semibold">
             Submit Another Project
           </button>
         </div>
@@ -503,9 +515,7 @@
           </span>
         </div>
 
-        <div id="trackQuoteDetailsBox" class="space-y-4">
-          <!-- Populated dynamically -->
-        </div>
+        <div id="trackQuoteDetailsBox" class="space-y-4"></div>
       </div>
     </section>
 
@@ -513,7 +523,6 @@
     <!-- VIEW 3: PASSWORD-PROTECTED ADMIN WORKBENCH                            -->
     <!-- ===================================================================== -->
     <section id="adminView" class="hidden space-y-6">
-      <!-- Admin Header Bar -->
       <div class="bg-navy-900 text-white rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-2">
@@ -555,7 +564,6 @@
           </div>
 
           <div id="adminTicketEditor" class="hidden space-y-6">
-            <!-- Student Dossier Header -->
             <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-100 pb-4">
               <div>
                 <div class="flex items-center gap-2">
@@ -580,7 +588,6 @@
               </div>
             </div>
 
-            <!-- Functional Description -->
             <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 space-y-1.5">
               <div class="text-xs font-bold text-slate-700">Student Functional Requirements & Notes:</div>
               <p id="edDescription" class="text-xs text-slate-600 whitespace-pre-line"></p>
@@ -601,7 +608,6 @@
               <div id="adminBomRows" class="space-y-2"></div>
             </div>
 
-            <!-- Feasibility Note (Visible to Student) -->
             <div>
               <label class="block text-xs font-bold text-slate-800 mb-1">Engineer's Feasibility & Architecture Note (Visible to Student)</label>
               <textarea id="edFeasibilityNote" rows="3" placeholder="e.g., Verified sensor compatibility. Added a 3S 20A BMS protection board and LM2596 buck converter for stable voltage during college viva demo." class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
@@ -728,7 +734,7 @@
     </div>
   </div>
 
-  <!-- POLICY INFO MODAL (FOR PAYMENT GATEWAY COMPLIANCE) -->
+  <!-- POLICY INFO MODAL -->
   <div id="policyModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -739,7 +745,7 @@
     </div>
   </div>
 
-  <!-- FOOTER (PAYMENT-GATEWAY READY) -->
+  <!-- FOOTER -->
   <footer class="bg-white border-t border-slate-200 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
       <div>
@@ -758,10 +764,12 @@
   <!-- APPLICATION LOGIC -->
   <script>
     // =========================================================================
-    // 1. SUPABASE CONFIGURATION (LIVE PROJECT CREDENTIALS)
+    // 1. SUPABASE & OWNER WHATSAPP CONFIGURATION
     // =========================================================================
     const SUPABASE_URL = 'https://uvkgomlzeyivczvkesdj.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CQNaUF-_rBtO_3312BuMJw_J2pdOTgN';
+    const OWNER_WHATSAPP_NUMBER = '917892672646'; // Your Bengaluru WhatsApp Desk Number (with 91 country code)
+
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
     // =========================================================================
@@ -801,8 +809,9 @@
     let currentStep = 1;
     let selectedUniversity = 'VTU Affiliated';
     let selectedBrand = 'All';
-    let selectedKit = []; // [{ id, name, brand, qty, defaultCost }]
+    let selectedKit = [];
     let validatedAdvisorDiscount = 0;
+    let lastFormattedWhatsappText = '';
     let adminRequestsCache = [];
     let activeAdminRequest = null;
     let activeAdminBom = [];
@@ -824,7 +833,7 @@
       icon.className = isError ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold';
       text.textContent = msg;
       banner.classList.remove('hidden');
-      setTimeout(() => banner.classList.add('hidden'), 3500);
+      setTimeout(() => banner.classList.add('hidden'), 4000);
     }
 
     // =========================================================================
@@ -1026,7 +1035,7 @@
       document.getElementById('kitCountBadge').textContent = `${totalItems} item${totalItems === 1 ? '' : 's'}`;
       const list = document.getElementById('selectedKitList');
       if (selectedKit.length === 0) {
-        list.innerHTML = `<p class="text-xs text-slate-400 italic py-4 text-center">No components added yet. Tap "+ Add to Kit" on any module.</p>`;
+        list.innerHTML = `<p class="text-xs text-slate-400 italic py-4 text-center">No components added yet. Tap "+ Add" on any module.</p>`;
         return;
       }
       list.innerHTML = selectedKit.map(k => `
@@ -1051,7 +1060,141 @@
     }
 
     // =========================================================================
-    // 7. CAMPUS ADVISOR CODE VALIDATION & FORM SUBMISSION TO SUPABASE
+    // 7. ACCURATE QUOTE CALCULATOR & WHATSAPP MESSAGE FORMATTER
+    // =========================================================================
+    function calculateAccurateEstimate(params) {
+      const { projectType, domain, deadline, kit, aiRecommend, customParts, addons, advisorDiscount } = params;
+      const isPureSoftware = domain.includes('Full-Stack') || (domain.includes('AI / ML') && kit.length === 0 && !customParts);
+
+      // 1. Internal SP Road Hardware Cost + 20% Buffer
+      let rawPartsCost = kit.reduce((sum, item) => sum + ((item.defaultCost || 200) * (item.qty || 1)), 0);
+      if (!isPureSoftware && rawPartsCost === 0) {
+        rawPartsCost = projectType.includes('Mini') ? 1400 : 2800; // Baseline kit if engineer recommends parts
+      }
+      if (customParts) rawPartsCost += 750; // Buffer for custom requested parts
+      const hardwareBuffer = isPureSoftware ? 0 : Math.max(400, Math.round(rawPartsCost * 0.20));
+      const totalInternalHardware = rawPartsCost + hardwareBuffer;
+
+      // 2. Engineering & Build Labor Fee by Project Tier
+      let baseEngineeringFee = 8500;
+      if (projectType.includes('Mini')) baseEngineeringFee = 4500;
+      else if (projectType.includes('M.Tech')) baseEngineeringFee = 12000;
+      else if (projectType.includes('Hackathon')) baseEngineeringFee = 7500;
+
+      // Rush order surcharge (< 15 days)
+      let isRush = false;
+      if (deadline) {
+        const diffDays = Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
+        if (diffDays > 0 && diffDays < 15) isRush = true;
+      }
+      const rushFee = isRush ? 2000 : 0;
+
+      // Round prototype quote cleanly to nearest ₹500
+      const rawProtoQuote = totalInternalHardware + baseEngineeringFee + rushFee;
+      const prototypePrice = Math.ceil(rawProtoQuote / 500) * 500;
+
+      // 3. Academic Deliverables & Add-Ons Pricing
+      let addonsPrice = 0;
+      const addonLines = [];
+      if (addons.report_pdf && addons.report_editable) {
+        addonsPrice += 2000;
+        addonLines.push('College Report (Formatted PDF + Editable DOCX/LaTeX)');
+      } else if (addons.report_pdf) {
+        addonsPrice += 1000;
+        addonLines.push('College Project Report (Formatted PDF)');
+      } else if (addons.report_editable) {
+        addonsPrice += 1500;
+        addonLines.push('College Project Report (Editable DOCX/LaTeX)');
+      }
+
+      if (addons.ieee_paper) {
+        addonsPrice += 3000;
+        addonLines.push('IEEE Conference Paper (Editable + PDF + Graphs)');
+      }
+      if (addons.review_ppts) {
+        addonsPrice += 1500;
+        addonLines.push('Review 1, Review 2 & Final Viva PPT Decks');
+      }
+      if (addons.viva_walkthrough) {
+        addonsPrice += 1000;
+        addonLines.push('1-on-1 Live Viva & Code Walkthrough (40 Mins)');
+      }
+
+      const discount = advisorDiscount || 0;
+      const totalRecommendedQuote = Math.max(0, prototypePrice + addonsPrice - discount);
+      const advance50 = Math.round(totalRecommendedQuote / 2);
+      const balance50 = totalRecommendedQuote - advance50;
+      const estimatedNetProfit = totalRecommendedQuote - totalInternalHardware;
+
+      return {
+        rawPartsCost,
+        hardwareBuffer,
+        totalInternalHardware,
+        prototypePrice,
+        addonsPrice,
+        addonLines,
+        discount,
+        isRush,
+        totalRecommendedQuote,
+        advance50,
+        balance50,
+        estimatedNetProfit
+      };
+    }
+
+    function buildNeatlyFormattedWhatsappMessage(data, est) {
+      const componentsSection = data.ai_recommend_parts
+        ? '• Engineer Recommended Kit (Team requested part selection)'
+        : (data.selected_components.length > 0
+            ? data.selected_components.map(c => `• ${c.name} (${c.brand}) × ${c.qty}`).join('\n')
+            : '• No specific components selected');
+
+      const customPartLine = data.custom_parts ? `\n• Custom Unlisted Part: ${data.custom_parts}` : '';
+
+      const addonsSection = est.addonLines.length > 0
+        ? est.addonLines.map(a => `• ${a}`).join('\n')
+        : '• Core Prototype & Code Only';
+
+      const lines = [
+        `*NEW PROJECT DOSSIER — PROTOFORGE BLR*`,
+        `*Tracking ID:* ${data.tracking_code}`,
+        ``,
+        `*1. STUDENT & ACADEMIC DETAILS*`,
+        `• *Name:* ${data.student_name}`,
+        `• *Student WhatsApp:* ${data.phone}`,
+        `• *College:* ${data.college_name}`,
+        `• *Curriculum:* ${data.university_type}`,
+        `• *City / Hub:* ${data.city}`,
+        `• *Deadline:* ${data.deadline || 'Flexible'}${est.isRush ? ' (PRIORITY RUSH <15 DAYS)' : ''}`,
+        ``,
+        `*2. PROJECT SCOPE & REQUIREMENTS*`,
+        `• *Tier:* ${data.project_type}`,
+        `• *Domain:* ${data.domain}`,
+        `• *Title:* ${data.title}`,
+        `• *Working Logic:* ${data.description}`,
+        ``,
+        `*3. SELECTED COMPONENT KIT*`,
+        `${componentsSection}${customPartLine}`,
+        ``,
+        `*4. ACADEMIC DELIVERABLES & ADD-ONS*`,
+        `• Core Working Prototype + Tested Code + Circuit Diagram (Included)`,
+        `${addonsSection}`,
+        data.advisor_code ? `• *Campus Advisor Code:* ${data.advisor_code}` : null,
+        ``,
+        `*5. ESTIMATED PROJECT QUOTE (50/50 MILESTONE)*`,
+        `• Prototype & Engineering Build: ₹${est.prototypePrice.toLocaleString('en-IN')}`,
+        `• Academic Documentation & Viva Add-Ons: ₹${est.addonsPrice.toLocaleString('en-IN')}`,
+        est.discount > 0 ? `• Campus Advisor Discount: − ₹${est.discount.toLocaleString('en-IN')}` : null,
+        `*Total Estimated Quote: ₹${est.totalRecommendedQuote.toLocaleString('en-IN')}*`,
+        `• 50% Advance to Start: ₹${est.advance50.toLocaleString('en-IN')}`,
+        `• 50% on Live Demo Video: ₹${est.balance50.toLocaleString('en-IN')}`
+      ].filter(Boolean);
+
+      return lines.join('\n');
+    }
+
+    // =========================================================================
+    // 8. CAMPUS ADVISOR CODE VALIDATION & FORM SUBMISSION
     // =========================================================================
     async function validateAdvisorCode() {
       const code = document.getElementById('advisorCodeInput').value.trim().toUpperCase();
@@ -1073,7 +1216,7 @@
       if (data && !error) {
         validatedAdvisorDiscount = 1500;
         msgEl.className = 'text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-lg';
-        msgEl.textContent = `✓ Code ${data.code} (${data.college_name}) verified! Free Review 1 & 2 PPTs unlocked on your quote.`;
+        msgEl.textContent = `✓ Code ${data.code} (${data.college_name}) verified! Free Review 1 & 2 PPTs (₹1,500 value) unlocked.`;
       } else {
         validatedAdvisorDiscount = 0;
         msgEl.className = 'text-xs font-semibold text-rose-600 bg-rose-50 border border-rose-200 px-3 py-2 rounded-lg';
@@ -1095,11 +1238,41 @@
       }
 
       btn.disabled = true;
-      btn.textContent = 'Submitting Dossier...';
+      btn.textContent = 'Saving & Preparing WhatsApp...';
+
+      // Auto-verify advisor code if typed without clicking Apply
+      const rawCode = document.getElementById('advisorCodeInput').value.trim().toUpperCase();
+      if (rawCode && validatedAdvisorDiscount === 0) {
+        await validateAdvisorCode();
+      }
 
       const trackingCode = `BLR-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
       const refText = document.getElementById('referenceInput').value.trim();
-      const fullDescription = refText ? `${desc}\n\nReference / Base Paper: ${refText}` : desc;
+      const fullDescription = refText ? `${desc}\nReference / Base Paper: ${refText}` : desc;
+      const projectType = document.getElementById('projectTypeInput').value;
+      const domain = document.getElementById('domainInput').value;
+      const deadline = document.getElementById('deadlineInput').value || null;
+      const aiRecommend = document.getElementById('aiRecommendCheckbox').checked;
+      const customParts = document.getElementById('customPartsInput').value.trim();
+
+      const addonsObj = {
+        report_pdf: document.getElementById('addonReportPdf').checked,
+        report_editable: document.getElementById('addonReportEditable').checked,
+        ieee_paper: document.getElementById('addonIeee').checked,
+        review_ppts: document.getElementById('addonPpts').checked,
+        viva_walkthrough: document.getElementById('addonViva').checked
+      };
+
+      const estimate = calculateAccurateEstimate({
+        projectType,
+        domain,
+        deadline,
+        kit: selectedKit,
+        aiRecommend,
+        customParts,
+        addons: addonsObj,
+        advisorDiscount: validatedAdvisorDiscount
+      });
 
       const payload = {
         tracking_code: trackingCode,
@@ -1108,29 +1281,24 @@
         phone: phone,
         college_name: college,
         university_type: selectedUniversity,
-        project_type: document.getElementById('projectTypeInput').value,
-        domain: document.getElementById('domainInput').value,
+        project_type: projectType,
+        domain: domain,
         title: title,
         description: fullDescription,
-        ai_recommend_parts: document.getElementById('aiRecommendCheckbox').checked,
+        ai_recommend_parts: aiRecommend,
         selected_components: selectedKit,
-        custom_parts: document.getElementById('customPartsInput').value.trim(),
-        addons: {
-          report_pdf: document.getElementById('addonReportPdf').checked,
-          report_editable: document.getElementById('addonReportEditable').checked,
-          ieee_paper: document.getElementById('addonIeee').checked,
-          review_ppts: document.getElementById('addonPpts').checked,
-          viva_walkthrough: document.getElementById('addonViva').checked
-        },
-        advisor_code: document.getElementById('advisorCodeInput').value.trim().toUpperCase() || null,
-        deadline: document.getElementById('deadlineInput').value || null,
-        status: 'New Request'
+        custom_parts: customParts,
+        addons: addonsObj,
+        advisor_code: validatedAdvisorDiscount > 0 ? rawCode : null,
+        deadline: deadline,
+        status: 'New Request',
+        estimated_quote_summary: estimate
       };
 
       const { error } = await db.from('project_requests').insert([payload]);
 
       btn.disabled = false;
-      btn.textContent = 'Submit Project Request for Quote ✓';
+      btn.textContent = 'Submit & Send Dossier on WhatsApp ✓';
 
       if (error) {
         console.error(error);
@@ -1138,16 +1306,31 @@
         return;
       }
 
+      // Build formatted WhatsApp message & link
+      lastFormattedWhatsappText = buildNeatlyFormattedWhatsappMessage(payload, estimate);
+      const waUrl = `https://wa.me/${OWNER_WHATSAPP_NUMBER}?text=${encodeURIComponent(lastFormattedWhatsappText)}`;
+
       document.getElementById('generatedTrackingCode').textContent = trackingCode;
+      document.getElementById('directWhatsappDispatchBtn').href = waUrl;
+
       [1, 2, 3, 4].forEach(n => document.getElementById('stepPanel' + n).classList.add('hidden'));
       document.getElementById('submissionSuccessPanel').classList.remove('hidden');
-      showToast('Project submitted successfully!');
+      showToast('Dossier saved! Opening WhatsApp to send details...');
+
+      // Automatically open WhatsApp with the full pre-filled dossier
+      window.open(waUrl, '_blank');
     }
 
     function copyTrackingCode() {
       const code = document.getElementById('generatedTrackingCode').textContent;
       navigator.clipboard.writeText(code);
       showToast('Tracking code copied: ' + code);
+    }
+
+    function copyFullWhatsappSummary() {
+      if (!lastFormattedWhatsappText) return;
+      navigator.clipboard.writeText(lastFormattedWhatsappText);
+      showToast('Full formatted project & quote summary copied!');
     }
 
     function openTrackWithGeneratedCode() {
@@ -1162,13 +1345,16 @@
       document.getElementById('titleInput').value = '';
       document.getElementById('descInput').value = '';
       selectedKit = [];
+      validatedAdvisorDiscount = 0;
+      document.getElementById('advisorCodeInput').value = '';
+      document.getElementById('advisorStatusMsg').classList.add('hidden');
       renderCatalog();
       renderSelectedKit();
       goToStep(1);
     }
 
     // =========================================================================
-    // 8. STUDENT TRACK QUOTE LOOKUP
+    // 9. STUDENT TRACK QUOTE LOOKUP
     // =========================================================================
     async function lookupStudentQuote() {
       const code = document.getElementById('trackCodeSearchInput').value.trim().toUpperCase();
@@ -1202,9 +1388,11 @@
 
       const detailsBox = document.getElementById('trackQuoteDetailsBox');
       if (!quote) {
+        const est = req.estimated_quote_summary || {};
         detailsBox.innerHTML = `
-          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs sm:text-sm text-amber-900">
-            <strong>Status: Under Engineer Feasibility Review.</strong> Our Bengaluru hardware & software lead is verifying your component list and calculating your final quote. Check back shortly or watch for a WhatsApp message.
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs sm:text-sm text-amber-900 space-y-1.5">
+            <div><strong>Status: Under Engineer Feasibility Review.</strong></div>
+            <p>Our Bengaluru hardware & software lead is verifying your component list. ${est.totalRecommendedQuote ? `Initial System Estimate: <strong>₹${Number(est.totalRecommendedQuote).toLocaleString('en-IN')}</strong> (final confirmed quote will appear here shortly).` : ''}</p>
           </div>
         `;
       } else {
@@ -1231,7 +1419,7 @@
               </div>
             ` : ''}
             <div class="flex justify-between px-4 py-3.5 bg-navy-900 text-white font-bold">
-              <span>Total Project Quote</span>
+              <span>Confirmed Total Project Quote</span>
               <span class="mono text-base">₹${Number(quote.total_amount).toLocaleString('en-IN')}</span>
             </div>
           </div>
@@ -1259,7 +1447,7 @@
     }
 
     // =========================================================================
-    // 9. PASSWORD-PROTECTED ADMIN AUTH & WORKBENCH
+    // 10. PASSWORD-PROTECTED ADMIN AUTH & WORKBENCH
     // =========================================================================
     async function checkAdminAuthState() {
       const { data: { session } } = await db.auth.getSession();
@@ -1354,17 +1542,23 @@
         return;
       }
 
-      listEl.innerHTML = adminRequestsCache.map(r => `
-        <button type="button" onclick="openAdminTicket('${r.id}')"
-          class="w-full text-left p-3 rounded-xl border ${activeAdminRequest && activeAdminRequest.id === r.id ? 'border-indigo-600 bg-indigo-50/40' : 'border-slate-200 hover:bg-slate-50'} transition space-y-1">
-          <div class="flex items-center justify-between">
-            <span class="mono text-[11px] font-bold text-indigo-600">${r.tracking_code}</span>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">${r.status}</span>
-          </div>
-          <div class="text-xs font-bold text-slate-900 line-clamp-1">${r.title}</div>
-          <div class="text-[11px] text-slate-500">${r.student_name} • ${r.college_name}</div>
-        </button>
-      `).join('');
+      listEl.innerHTML = adminRequestsCache.map(r => {
+        const estTotal = r.estimated_quote_summary?.totalRecommendedQuote;
+        return `
+          <button type="button" onclick="openAdminTicket('${r.id}')"
+            class="w-full text-left p-3 rounded-xl border ${activeAdminRequest && activeAdminRequest.id === r.id ? 'border-indigo-600 bg-indigo-50/40' : 'border-slate-200 hover:bg-slate-50'} transition space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="mono text-[11px] font-bold text-indigo-600">${r.tracking_code}</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">${r.status}</span>
+            </div>
+            <div class="text-xs font-bold text-slate-900 line-clamp-1">${r.title}</div>
+            <div class="flex items-center justify-between text-[11px] text-slate-500">
+              <span>${r.student_name} • ${r.college_name}</span>
+              ${estTotal ? `<span class="mono font-bold text-emerald-700">Est ₹${Number(estTotal).toLocaleString('en-IN')}</span>` : ''}
+            </div>
+          </button>
+        `;
+      }).join('');
     }
 
     async function openAdminTicket(reqId) {
@@ -1385,9 +1579,8 @@
 
       const cleanPhone = activeAdminRequest.phone.replace(/\D/g, '');
       const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
-      document.getElementById('edWhatsappLink').href = `https://wa.me/${waPhone}?text=${encodeURIComponent(`Hi ${activeAdminRequest.student_name}, we reviewed your ProtoForge BLR project (${activeAdminRequest.tracking_code}). Check your quote using your tracking code!`)}`;
+      document.getElementById('edWhatsappLink').href = `https://wa.me/${waPhone}?text=${encodeURIComponent(`Hi ${activeAdminRequest.student_name}, we reviewed your ProtoForge BLR project (${activeAdminRequest.tracking_code}). Check your confirmed quote on our website using your tracking code!`)}`;
 
-      // Load existing quote if any
       const { data: existingQuote } = await db
         .from('quotes')
         .select('*')
@@ -1403,23 +1596,20 @@
         document.getElementById('edAdvancePaidCheck').checked = !!existingQuote.advance_paid;
         document.getElementById('edFinalPaidCheck').checked = !!existingQuote.final_paid;
       } else {
+        const est = activeAdminRequest.estimated_quote_summary || {};
         activeAdminBom = (activeAdminRequest.selected_components || []).map(c => ({
           name: c.name,
           qty: c.qty || 1,
           unit_cost: c.defaultCost || 200
         }));
-        const addons = activeAdminRequest.addons || {};
-        let suggestedAddons = 0;
-        if (addons.report_pdf) suggestedAddons += 1000;
-        if (addons.report_editable) suggestedAddons += 1500;
-        if (addons.ieee_paper) suggestedAddons += 3000;
-        if (addons.review_ppts) suggestedAddons += 1500;
-        if (addons.viva_walkthrough) suggestedAddons += 1000;
+        if (est.hardwareBuffer > 0) {
+          activeAdminBom.push({ name: 'Wiring, BMS & Enclosure Hardware Buffer (20%)', qty: 1, unit_cost: est.hardwareBuffer });
+        }
 
         document.getElementById('edFeasibilityNote').value = '';
-        document.getElementById('edProtoPrice').value = activeAdminRequest.project_type.includes('Mini') ? 6500 : 13500;
-        document.getElementById('edAddonsPrice').value = suggestedAddons;
-        document.getElementById('edDiscountPrice').value = activeAdminRequest.advisor_code ? 1500 : 0;
+        document.getElementById('edProtoPrice').value = est.prototypePrice || (activeAdminRequest.project_type.includes('Mini') ? 6500 : 13500);
+        document.getElementById('edAddonsPrice').value = est.addonsPrice ?? 0;
+        document.getElementById('edDiscountPrice').value = est.discount ?? (activeAdminRequest.advisor_code ? 1500 : 0);
         document.getElementById('edAdvancePaidCheck').checked = false;
         document.getElementById('edFinalPaidCheck').checked = false;
       }
@@ -1516,7 +1706,7 @@
     }
 
     // =========================================================================
-    // 10. CAMPUS ADVISORS MANAGER
+    // 11. CAMPUS ADVISORS MANAGER
     // =========================================================================
     async function loadAdminAdvisors() {
       const { data } = await db.from('campus_advisors').select('*').order('code');
@@ -1562,7 +1752,7 @@
     }
 
     // =========================================================================
-    // 11. MODALS & COMPLIANCE POLICIES
+    // 12. MODALS & COMPLIANCE POLICIES
     // =========================================================================
     function closeModal(id) {
       document.getElementById(id).classList.add('hidden');
