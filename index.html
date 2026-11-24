@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProtoForge BLR — Custom Engineering Projects & Admin Workbench</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            navy: {
+              900: '#0F172A',
+              800: '#1E293B',
+              700: '#334155',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom scrollbar & smooth transitions */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-step {
+      animation: fadeSlideUp 0.28s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- Toast Notification Container (Replaces alert) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-slate-900 text-white border-b border-slate-800 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shrink-0 shadow-inner border border-indigo-400/30">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold tracking-tight text-base sm:text-lg text-white truncate">ProtoForge <span class="text-indigo-400">BLR</span></span>
+            <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
+              Bengaluru Hardware & AI Lab
+            </span>
+          </div>
+          <p class="hidden sm:block text-xs text-slate-400 truncate">Custom VTU &amp; Autonomous Engineering Projects — Built, Tested &amp; Viva-Ready</p>
+        </div>
+      </div>
+
+      <!-- Switchable View Tabs -->
+      <div class="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700 shrink-0">
+        <button
+          id="nav-student-btn"
+          onclick="switchView('student')"
+          class="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-indigo-600 text-white shadow-sm"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span>Student Configurator</span>
+        </button>
+        <button
+          id="nav-admin-btn"
+          onclick="switchView('admin')"
+          class="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>Admin Ticket Preview</span>
+          <span id="admin-badge-dot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 1: STUDENT 4-STEP CONFIGURATOR                                   -->
+  <!-- ===================================================================== -->
+  <main id="student-view" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- Top Hero Banner + 4-Step Progress Stepper -->
+    <div id="wizard-header-card" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 mb-6">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-5 border-b border-slate-100">
+        <div>
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold mb-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+            Custom Engineering Build &amp; Documentation Desk
+          </div>
+          <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+            Scope Your Custom College Project in 4 Steps
+          </h1>
+          <p class="text-sm text-slate-600 mt-1">
+            Tell us your approved title, select components (no upfront pricing clutter), and choose report or IEEE deliverables for a 24-hour engineer feasibility quote.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 self-start lg:self-center">
+          <button
+            type="button"
+            onclick="fillSampleStudentData()"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors border border-slate-200"
+          >
+            <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Auto-Fill Sample Project
+          </button>
+        </div>
+      </div>
+
+      <!-- 4-Step Interactive Progress Indicator -->
+      <div class="pt-5">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="stepper-container">
+          <!-- Rendered dynamically by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Step Content Container -->
+    <div id="wizard-body">
+      <!-- Dynamic Step Render Target -->
+    </div>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 2: ADMIN TICKET PREVIEW & MARGIN-PROTECTED QUOTE BUILDER         -->
+  <!-- ===================================================================== -->
+  <section id="admin-view" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <!-- Rendered dynamically by renderAdminView() -->
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: UNIFIED STUDENT-FACING QUOTE PREVIEW                           -->
+  <!-- ===================================================================== -->
+  <div id="quote-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden my-8 animate-step">
+      <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+        <div>
+          <span class="text-[11px] font-mono uppercase tracking-wider text-indigo-400">Student Private Quote Link Preview</span>
+          <h3 class="text-lg font-bold">ProtoForge BLR — Unified Project Quotation</h3>
+        </div>
+        <button onclick="closeQuoteModal()" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div id="quote-modal-body" class="p-6 max-h-[78vh] overflow-y-auto space-y-5">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-12 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800">ProtoForge BLR</span>
+        <span>•</span>
+        <span>Bengaluru Custom Prototyping &amp; Academic Documentation Studio</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span>SP Road &amp; Electronic City Component Sourcing</span>
+        <span>•</span>
+        <span>50% Advance / 50% Video Demo Milestone Protection</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION LOGIC & DATA                                              -->
+  <!-- ===================================================================== -->
+  <script>
+    // -----------------------------------------------------------------------
+    // 1. MASTER HARDWARE CATALOG (26 Realistic Parts across Brands & Categories)
+    //    NOTE: internalCost is NEVER shown in the Student Configurator!
+    //          It is used exclusively in the Admin Ticket Preview BOM workbench.
+    // -----------------------------------------------------------------------
+    const COMPONENT_CATALOG = [
+      // Controllers & SBCs
+      { id: 'esp32-wroom', name: 'ESP32-WROOM-32 DevKit V1', brand: 'Espressif', category: 'Controllers & SBCs', specs: 'Dual-Core 240MHz, Wi-Fi + BLE 4.2, 30-Pin, 3.3V Logic', internalCost: 340 },
+      { id: 'esp32-cam', name: 'ESP32-CAM OV2640 Vision Module', brand: 'Espressif', category: 'Controllers & SBCs', specs: 'Wi-Fi + Bluetooth, 2MP OV2640 Camera, MicroSD Slot', internalCost: 520 },
+      { id: 'arduino-uno', name: 'Arduino Uno R3 (ATmega328P)', brand: 'Arduino', category: 'Controllers & SBCs', specs: '16MHz, 14 Digital I/O, 6 Analog Inputs, 5V Logic + USB Cable', internalCost: 480 },
+      { id: 'arduino-mega', name: 'Arduino Mega 2560 R3', brand: 'Arduino', category: 'Controllers & SBCs', specs: '54 Digital I/O, 16 Analog Inputs, 4x Hardware UART', internalCost: 980 },
+      { id: 'rpi-4-4gb', name: 'Raspberry Pi 4 Model B (4GB RAM)', brand: 'Raspberry Pi', category: 'Controllers & SBCs', specs: 'Quad-Core Cortex-A72 1.5GHz, Dual-Band Wi-Fi, Dual Micro-HDMI', internalCost: 5400 },
+      { id: 'rpi-zero-2w', name: 'Raspberry Pi Zero 2 W', brand: 'Raspberry Pi', category: 'Controllers & SBCs', specs: 'Quad-Core 1GHz ARM Cortex-A53, 512MB RAM, Wi-Fi + BLE', internalCost: 1850 },
+      { id: 'stm32-bluepill', name: 'STM32F103C8T6 Blue Pill Board', brand: 'STM32', category: 'Controllers & SBCs', specs: '72MHz ARM Cortex-M3, 64KB Flash, CAN/SPI/I2C/UART', internalCost: 290 },
+      { id: 'jetson-nano', name: 'NVIDIA Jetson Nano Developer Kit', brand: 'NVIDIA', category: 'Controllers & SBCs', specs: '128-Core Maxwell GPU, Quad-Core ARM A57, Edge AI Inference', internalCost: 14500 },
+
+      // Sensors
+      { id: 'bosch-bme280', name: 'Bosch BME280 Environmental Sensor', brand: 'Bosch & TI', category: 'Sensors', specs: 'High-Precision Temp, Humidity & Barometric Pressure (I2C/SPI)', internalCost: 320 },
+      { id: 'mpu6050', name: 'MPU6050 6-Axis Accelerometer + Gyro', brand: 'Bosch & TI', category: 'Sensors', specs: '3-Axis Gyro + 3-Axis Accelerometer, Digital Motion Processor', internalCost: 165 },
+      { id: 'ina219', name: 'TI INA219 Bi-Directional Current Sensor', brand: 'Bosch & TI', category: 'Sensors', specs: 'High-Side DC Current & Bus Voltage Monitor (I2C, up to 26V)', internalCost: 210 },
+      { id: 'dht22', name: 'DHT22 / AM2302 Digital Temp & Humidity', brand: 'Arduino', category: 'Sensors', specs: 'Calibrated Single-Bus Digital Output, -40°C to +80°C', internalCost: 230 },
+      { id: 'hcsr04', name: 'HC-SR04 Ultrasonic Distance Sensor', brand: 'Arduino', category: 'Sensors', specs: '2cm – 400cm Non-Contact Ranging, 40kHz Transducer', internalCost: 95 },
+      { id: 'mq135', name: 'MQ-135 Air Quality & Hazardous Gas Sensor', brand: 'Arduino', category: 'Sensors', specs: 'Detects NH3, NOx, Alcohol, Benzene, Smoke & CO2', internalCost: 140 },
+      { id: 'max30102', name: 'MAX30102 Pulse Oximeter & Heart-Rate', brand: 'Bosch & TI', category: 'Sensors', specs: 'Integrated Red/IR LEDs & Photodetector, I2C Biomedical Sensor', internalCost: 260 },
+
+      // Wireless & GPS
+      { id: 'neo6m-gps', name: 'u-blox NEO-6M GPS Receiver Module', brand: 'Waveshare', category: 'Wireless & GPS', specs: '50-Channel Engine, Ceramic Patch Antenna, UART NMEA Output', internalCost: 420 },
+      { id: 'sim800l', name: 'SIM800L Quad-Band GSM/GPRS Module', brand: 'Waveshare', category: 'Wireless & GPS', specs: 'SMS, Voice & GPRS Data Connectivity with Helical Antenna', internalCost: 390 },
+      { id: 'lora-sx1278', name: 'LoRa SX1278 433MHz Long-Range Transceiver', brand: 'Waveshare', category: 'Wireless & GPS', specs: 'Up to 5km Line-of-Sight Telemetry, SPI Interface, Low Power', internalCost: 460 },
+      { id: 'mfrc522', name: 'MFRC522 13.56MHz RFID Reader + Card/Tag', brand: 'Arduino', category: 'Wireless & GPS', specs: 'SPI Contactless Smart Card Reader with Keyfob & S50 Card', internalCost: 150 },
+
+      // Motors & Actuators
+      { id: 'l298n', name: 'L298N Dual H-Bridge DC/Stepper Driver', brand: 'STM32', category: 'Motors & Actuators', specs: 'Drives 2 DC Motors or 1 Stepper up to 2A/Channel, Onboard 5V Reg', internalCost: 180 },
+      { id: 'mg996r', name: 'MG996R High-Torque Metal Gear Servo', brand: 'Waveshare', category: 'Motors & Actuators', specs: '11 kg-cm Stall Torque, 180° Rotation, Dual Ball Bearing', internalCost: 350 },
+      { id: 'bldc-esc', name: 'A2212 1000KV BLDC Motor + 30A ESC Combo', brand: 'Waveshare', category: 'Motors & Actuators', specs: 'Brushless Outrunner Motor with 30A SimonK ESC for Drones/UAVs', internalCost: 890 },
+
+      // Displays & Cameras
+      { id: 'oled-096', name: '0.96" SSD1306 OLED I2C Display (128x64)', brand: 'Waveshare', category: 'Displays & Cameras', specs: 'High-Contrast Blue/White Self-Illuminating I2C Screen', internalCost: 195 },
+      { id: 'waveshare-7lcd', name: 'Waveshare 7" Capacitive Touch HDMI LCD', brand: 'Waveshare', category: 'Displays & Cameras', specs: '1024x600 IPS Display for Raspberry Pi / Jetson Nano HMI', internalCost: 3650 },
+
+      // Power & BMS
+      { id: 'liion-3s-bms', name: '18650 3S Li-Ion Pack (11.1V) + 20A BMS', brand: 'Power & Lithium', category: 'Power & BMS', specs: '3x Graded 2500mAh Cells + Overcharge/Short-Circuit BMS Board', internalCost: 780 },
+      { id: 'lm2596-buck', name: 'LM2596 DC-DC Adjustable Buck Converter', brand: 'Power & Lithium', category: 'Power & BMS', specs: 'Step-Down Voltage Regulator (4V–35V Input to 1.25V–30V @ 3A)', internalCost: 110 }
+    ];
+
+    const BRAND_FILTERS = ['All', 'Espressif', 'Arduino', 'Raspberry Pi', 'STM32', 'NVIDIA', 'Bosch & TI', 'Waveshare', 'Power & Lithium'];
+    const CATEGORY_FILTERS = ['All', 'Controllers & SBCs', 'Sensors', 'Motors & Actuators', 'Wireless & GPS', 'Displays & Cameras', 'Power & BMS'];
+
+    const COLLEGES_BLR = [
+      'RVCE', 'PES University', 'BMSCE', 'MSRIT', 'Dayananda Sagar', 'New Horizon', 'NMIT', 'RNSIT', 'UVCE'
+    ];
+
+    const DOMAIN_TITLE_SUGGESTIONS = {
+      'IoT & Embedded': [
+        'LoRaWAN-Based Smart Campus Energy & Substation Fault Telemetry System',
+        'ESP32 Edge-Enabled Cold-Chain Vaccine Spoilage Predictor with GSM Alerts',
+        'Non-Intrusive Load Monitoring & Automated Peak-Shaving Smart Meter'
+      ],
+      'Robotics & Drones': [
+        'Autonomous LiDAR & Ultrasonic Warehouse Inventory Rover with Path Planning',
+        'GPS-Guided Agricultural Micro-Spraying Quadcopter with Telemetry Ground Station',
+        '6-DOF Vision-Assisted Robotic Sorting Arm for E-Waste Segregation'
+      ],
+      'AI / ML & Computer Vision': [
+        'Real-Time Driver Drowsiness & Distraction Detection on Edge Vision Hardware',
+        'YOLOv8 Automated Pothole & Road Surface Distress Mapping System',
+        'Multilingual Kannada-English Sign Language Translator Using MediaPipe & LSTM'
+      ],
+      'Full-Stack Web / App': [
+        'Blockchain-Backed Academic Credential & Project Plagiarism Verification Portal',
+        'AI-Driven Bangalore BMTC Last-Mile Commute Crowd & Arrival Forecaster',
+        'Automated VTU Lab Viva Evaluation & Code Similarity Analytics Platform'
+      ],
+      'Power Electronics & EV': [
+        'Active Cell-Balancing 3S/4S Lithium-Ion BMS with State-of-Health Estimation',
+        'Bidirectional Solar-to-EV Trickle Charger with MPPT Tracking',
+        'Brushless DC Motor Regenerative Braking Controller for Light Electric Vehicles'
+      ]
+    };
+
+    const ACADEMIC_ADDONS = [
+      {
+        id: 'report_pdf',
+        title: 'College Project Report — Standard PDF',
+        tag: 'VTU & Autonomous Format',
+        popular: false,
+        description: 'Formatted strictly to your university margin, typography, table of contents, and chapter guidelines (ready-to-print PDF).',
+        defaultAdminPrice: 1200
+      },
+      {
+        id: 'report_editable',
+        title: 'Editable Report Upgrade — DOCX / LaTeX Source',
+        tag: 'Most Popular',
+        popular: true,
+        description: 'Full editable Word (.docx) or Overleaf LaTeX source files + Visio/Draw.io diagrams so you can apply guide revisions anytime.',
+        defaultAdminPrice: 2000
+      },
+      {
+        id: 'ieee_paper',
+        title: 'IEEE Conference Paper',
+        tag: 'Publication Ready',
+        popular: false,
+        description: 'Literature survey comparison table, system architecture diagram, experimental result graphs, and IEEE double-column formatting.',
+        defaultAdminPrice: 3000
+      },
+      {
+        id: 'review_ppts',
+        title: 'Review 1, Review 2 & Final Viva PPT Decks',
+        tag: '3 Complete Decks',
+        popular: false,
+        description: 'Three separate presentation slide decks tailored for Synopsis Review, Mid-Term Evaluation, and Final External Viva.',
+        defaultAdminPrice: 1500
+      },
+      {
+        id: 'viva_walkthrough',
+        title: '1-on-1 Live Viva & Code Walkthrough',
+        tag: '30–45 Min Mentorship',
+        popular: false,
+        description: 'Live Google Meet or Bengaluru studio session explaining circuit wiring, line-by-line code flow, and top external examiner questions.',
+        defaultAdminPrice: 1000
+      }
+    ];
+
+    const KNOWN_ADVISORS = {
+      'RVCE-01': { name: 'Karthik Rao (ECE 4th Yr)', college: 'RV College of Engineering' },
+      'PES-ARJUN': { name: 'Arjun Nair (CSE Lead)', college: 'PES University (RR Campus)' },
+      'BMS-07': { name: 'Sneha Kulkarni (EEE Rep)', college: 'BMS College of Engineering' },
+      'MSRIT-12': { name: 'Rohan Hegde (ISE Rep)', college: 'MS Ramaiah Institute of Technology' }
+    };
+
+    // -----------------------------------------------------------------------
+    // 2. APPLICATION STATE
+    // -----------------------------------------------------------------------
+    function getDefaultDeadline() {
+      const d = new Date();
+      d.setDate(d.getDate() + 24);
+      return d.toISOString().split('T')[0];
+    }
+
+    const state = {
+      activeView: 'student', // 'student' | 'admin'
+      currentStep: 1,        // 1..4
+      isSubmitted: false,
+      requestId: 'BLR-2026-108',
+
+      // Step 1: Academic Context & Deadline
+      city: 'Bengaluru',
+      studentName: '',
+      whatsapp: '',
+      collegeName: '',
+      universityType: 'VTU Affiliated',
+      projectCategory: 'Final Year Major Project',
+      domain: 'IoT & Embedded',
+      deadline: getDefaultDeadline(),
+
+      // Step 2: Title & Requirements
+      projectTitle: '',
+      showTitleSuggestions: false,
+      coreObjective: '',
+      inputsOutputs: '',
+      uploadedFile: null, // { name, size }
+
+      // Step 3: Price-Free Component Catalog
+      letEngineersChoose: false,
+      searchQuery: '',
+      selectedBrand: 'All',
+      selectedCategory: 'All',
+      selectedKit: {}, // { [componentId]: quantity }
+      customParts: [], // [ 'NEMA 17 Stepper Motor', ... ]
+      customPartInput: '',
+
+      // Step 4: Academic Add-Ons & Advisor Code
+      selectedAddons: {
+        report_pdf: true,
+        report_editable: true,
+        ieee_paper: false,
+        review_ppts: false,
+        viva_walkthrough: true
+      },
+      advisorInput: '',
+      appliedAdvisorCode: '',
+
+      // Admin Workbench State (Synchronized with Student Selection)
+      admin: {
+        feasibilityNote:
+          '• Architecture Verified: ESP32-WROOM-32 is ideal for dual Wi-Fi telemetry and local sensor polling.\n' +
+          '• Power Safety Upgrade: Added a 3S 20A BMS + LM2596 regulated buck stage so battery voltage stays stable during external viva demos.\n' +
+          '• Deliverable Readiness: Includes commented source code, pin-level schematic, and tested prototype.',
+        extraInternalItems: [
+          { id: 'ext-1', name: 'Silicone Jumper Harness, Zero-PCB & Acrylic Enclosure', qty: 1, unitCost: 650 }
+        ],
+        costOverrides: {}, // { [componentId]: unitCost }
+        engineeringFee: 6800,
+        applyRushFee: true,
+        rushFeeAmount: 1500,
+        addonPrices: {
+          report_pdf: 1200,
+          report_editable: 2000,
+          ieee_paper: 3000,
+          review_ppts: 1500,
+          viva_walkthrough: 1000
+        }
+      }
+    };
+
+    // -----------------------------------------------------------------------
+    // 3. UTILITY FUNCTIONS
+    // -----------------------------------------------------------------------
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = {
+        info: 'bg-slate-900 text-white border-slate-700',
+        success: 'bg-emerald-700 text-white border-emerald-600',
+        warning: 'bg-amber-600 text-white border-amber-500'
+      };
+      toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg border text-xs sm:text-sm font-medium animate-step ${colors[type] || colors.info}`;
+      toast.innerHTML = `
+        <span class="w-2 h-2 rounded-full bg-white shrink-0"></span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => toast.remove(), 260);
+      }, 3200);
+    }
+
+    function calculateDaysUntil(dateStr) {
+      if (!dateStr) return 30;
+      const target = new Date(dateStr + 'T23:59:59');
+      const now = new Date();
+      const diffMs = target - now;
+      return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    }
+
+    function formatINR(num) {
+      return '₹' + Math.round(num).toLocaleString('en-IN');
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getTotalKitUnits() {
+      return Object.values(state.selectedKit).reduce((acc, q) => acc + q, 0) + state.customParts.length;
+    }
+
+    function getAdvisorInfo(code) {
+      if (!code) return null;
+      const clean = code.trim().toUpperCase();
+      if (KNOWN_ADVISORS[clean]) {
+        return { code: clean, ...KNOWN_ADVISORS[clean] };
+      }
+      return { code: clean, name: 'Verified Campus Ambassador', college: state.collegeName || 'Bengaluru Partner Campus' };
+    }
+
+    // -----------------------------------------------------------------------
+    // 4. VIEW SWITCHING & SAMPLE DATA AUTO-FILL
+    // -----------------------------------------------------------------------
+    function switchView(view) {
+      state.activeView = view;
+      const studentView = document.getElementById('student-view');
+      const adminView = document.getElementById('admin-view');
+      const btnStudent = document.getElementById('nav-student-btn');
+      const btnAdmin = document.getElementById('nav-admin-btn');
+
+      if (view === 'student') {
+        studentView.classList.remove('hidden');
+        adminView.classList.add('hidden');
+        btnStudent.className = 'flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-indigo-600 text-white shadow-sm';
+        btnAdmin.className = 'flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white';
+        renderStudentView();
+      } else {
+        studentView.classList.add('hidden');
+        adminView.classList.remove('hidden');
+        btnAdmin.className = 'flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-indigo-600 text-white shadow-sm';
+        btnStudent.className = 'flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white';
+        renderAdminView();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function fillSampleStudentData() {
+      const rushDate = new Date();
+      rushDate.setDate(rushDate.getDate() + 12);
+
+      state.city = 'Bengaluru';
+      state.studentName = 'pranav_ece_team4 (Pranav Kulkarni)';
+      state.studentName = 'Pranav Kulkarni (Team of 4)';
+      state.whatsapp = '+91 98450 72319';
+      state.collegeName = 'RVCE';
+      state.universityType = 'Autonomous';
+      state.projectCategory = 'Final Year Major Project';
+      state.domain = 'IoT & Embedded';
+      state.deadline = rushDate.toISOString().split('T')[0];
+
+      state.projectTitle = 'LoRaWAN-Based Smart Campus Energy & Substation Fault Telemetry System';
+      state.coreObjective = 'Monitor 3-phase transformer current, ambient temperature, and gas leakage in real time across campus blocks using long-range LoRa nodes, triggering instant SMS alerts and a live web dashboard before insulation failure occurs.';
+      state.inputsOutputs = 'Inputs: INA219 Current/Voltage readings, Bosch BME280 temp/humidity, MQ-135 gas threshold.\nOutputs: LoRa 433MHz wireless packets to central ESP32 gateway, 0.96" OLED status screen, SIM800L SMS alert, and live telemetry charts.';
+      state.uploadedFile = { name: 'RVCE_Synopsis_IEEE_BasePaper.pdf', size: '1.4 MB' };
+
+      state.letEngineersChoose = false;
+      state.selectedKit = {
+        'esp32-wroom': 2,
+        'lora-sx1278': 2,
+        'ina219': 1,
+        'bosch-bme280': 1,
+        'sim800l': 1,
+        'oled-096': 1,
+        'liion-3s-bms': 1,
+        'lm2596-buck': 1
+      };
+      state.customParts = ['IP65 Weatherproof Junction Box'];
+
+      state.selectedAddons = {
+        report_pdf: true,
+        report_editable: true,
+        ieee_paper: true,
+        review_ppts: true,
+        viva_walkthrough: true
+      };
+      state.advisorInput = 'RVCE-01';
+      state.appliedAdvisorCode = 'RVCE-01';
+
+      showToast('Sample RVCE Final Year IoT project populated across all 4 steps!', 'success');
+      if (state.activeView === 'student') {
+        renderStudentView();
+      } else {
+        renderAdminView();
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // 5. STUDENT WIZARD RENDERING
+    // -----------------------------------------------------------------------
+    function renderStepper() {
+      const steps = [
+        { num: 1, title: 'Academic Context', sub: 'Location & Deadline' },
+        { num: 2, title: 'Title & Specs', sub: 'Objective & Files' },
+        { num: 3, title: 'Component Kit', sub: 'Price-Free Catalog' },
+        { num: 4, title: 'Add-Ons & Submit', sub: 'Reports, IEEE & Viva' }
+      ];
+
+      const container = document.getElementById('stepper-container');
+      container.innerHTML = steps.map(s => {
+        const isActive = !state.isSubmitted && state.currentStep === s.num;
+        const isDone = state.isSubmitted || state.currentStep > s.num;
+
+        let cardClass = 'border-slate-200 bg-slate-50/70 text-slate-500 hover:border-slate-300';
+        let circleClass = 'bg-slate-200 text-slate-600';
+        if (isActive) {
+          cardClass = 'border-indigo-600 bg-indigo-50/60 text-slate-900 ring-2 ring-indigo-600/15';
+          circleClass = 'bg-indigo-600 text-white';
+        } else if (isDone) {
+          cardClass = 'border-emerald-200 bg-emerald-50/50 text-slate-800 hover:border-emerald-300';
+          circleClass = 'bg-emerald-600 text-white';
+        }
+
+        return `
+          <button
+            type="button"
+            onclick="goToStep(${s.num})"
+            class="flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${cardClass}"
+          >
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 ${circleClass}">
+              ${isDone ? '✓' : s.num}
+            </div>
+            <div class="min-w-0">
+              <div class="text-xs font-bold truncate">${s.title}</div>
+              <div class="text-[11px] text-slate-500 truncate">${s.sub}</div>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function goToStep(stepNum) {
+      state.isSubmitted = false;
+      state.currentStep = stepNum;
+      renderStudentView();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextStep() {
+      if (state.currentStep === 1) {
+        if (!state.studentName.trim()) {
+          showToast('Please enter your Name or Team Lead Name to continue.', 'warning');
+          return;
+        }
+        if (!state.collegeName.trim()) {
+          showToast('Please enter or tap your College Name.', 'warning');
+          return;
+        }
+      }
+      if (state.currentStep === 2) {
+        if (!state.projectTitle.trim()) {
+          showToast('Please enter a Project Title or click "Suggest 3 Trending Titles".', 'warning');
+          return;
+        }
+        if (!state.coreObjective.trim()) {
+          showToast('Please describe how your project works in a few sentences.', 'warning');
+          return;
+        }
+      }
+      if (state.currentStep < 4) {
+        state.currentStep++;
+        renderStudentView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function prevStep() {
+      if (state.currentStep > 1) {
+        state.currentStep--;
+        renderStudentView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function renderStudentView() {
+      renderStepper();
+      const body = document.getElementById('wizard-body');
+
+      if (state.isSubmitted) {
+        body.innerHTML = renderConfirmationScreen();
+        return;
+      }
+
+      if (state.currentStep === 1) body.innerHTML = renderStep1();
+      if (state.currentStep === 2) body.innerHTML = renderStep2();
+      if (state.currentStep === 3) body.innerHTML = renderStep3();
+      if (state.currentStep === 4) body.innerHTML = renderStep4();
+    }
+
+    // -----------------------------------------------------------------------
+    // STEP 1: ACADEMIC CONTEXT & DEADLINE
+    // -----------------------------------------------------------------------
+    function renderStep1() {
+      const daysLeft = calculateDaysUntil(state.deadline);
+      const isRush = daysLeft >= 0 && daysLeft < 15;
+
+      const universityTypes = [
+        { name: 'VTU Affiliated', desc: 'Belagavi scheme & standard VTU report guidelines' },
+        { name: 'Autonomous', desc: 'RVCE, PES, BMSCE, MSRIT, NMIT custom rubrics' },
+        { name: 'Deemed University', desc: 'Jain, Christ, Dayananda Sagar University, REVA' },
+        { name: 'Diploma / Polytechnic', desc: 'DTE Karnataka final semester working models' }
+      ];
+
+      const categories = [
+        { name: 'Mini / Minor Project (5th–6th Sem)', desc: 'Focused single-module prototype & lab report' },
+        { name: 'Final Year Major Project', desc: 'Full 7th/8th sem multi-module build, IEEE & viva defense' }
+      ];
+
+      const domains = [
+        { name: 'IoT & Embedded', icon: '📡' },
+        { name: 'Robotics & Drones', icon: '🦾' },
+        { name: 'AI / ML & Computer Vision', icon: '🧠' },
+        { name: 'Full-Stack Web / App', icon: '💻' },
+        { name: 'Power Electronics & EV', icon: '⚡' }
+      ];
+
+      return `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-8 space-y-7 animate-step">
+          <div>
+            <span class="text-xs font-mono font-semibold uppercase tracking-wider text-indigo-600">Step 1 of 4</span>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">Academic Context &amp; Submission Deadline</h2>
+            <p class="text-sm text-slate-500">Helps us align circuit complexity, local Bengaluru delivery/pickup, and university report formatting.</p>
+          </div>
+
+          <!-- Row 1: City, Name, WhatsApp -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">City / Delivery Hub</label>
+              <select
+                onchange="state.city = this.value; renderStudentView();"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                ${['Bengaluru', 'Mysuru', 'Mangaluru', 'Hubballi', 'Other India'].map(c => `
+                  <option value="${c}" ${state.city === c ? 'selected' : ''}>${c}${c === 'Bengaluru' ? ' (Local Studio Pickup / Same-Day)' : ''}</option>
+                `).join('')}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Student / Team Lead Name <span class="text-rose-500">*</span></label>
+              <input
+                type="text"
+                value="${escapeHTML(state.studentName)}"
+                oninput="state.studentName = this.value"
+                placeholder="e.g., Rohan Sharma (Team of 4)"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">WhatsApp Number (For Quote &amp; Video Demo)</label>
+              <input
+                type="tel"
+                value="${escapeHTML(state.whatsapp)}"
+                oninput="state.whatsapp = this.value"
+                placeholder="+91 98450 XXXXX"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+
+          <!-- Row 2: College Name + Quick Chips -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">College / Institute Name <span class="text-rose-500">*</span></label>
+            <input
+              type="text"
+              value="${escapeHTML(state.collegeName)}"
+              oninput="state.collegeName = this.value"
+              placeholder="Type your college name or tap a Bengaluru campus below..."
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
+              <span class="text-[11px] font-medium text-slate-400 mr-1">Popular BLR Campuses:</span>
+              ${COLLEGES_BLR.map(col => {
+                const active = state.collegeName === col;
+                return `
+                  <button
+                    type="button"
+                    onclick="state.collegeName = '${col}'; renderStudentView();"
+                    class="px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
+                      active
+                        ? 'bg-indigo-600 text-white border-indigo-600'
+                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }"
+                  >${col}</button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- Row 3: University Type Cards -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-2">University / Curriculum Framework</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              ${universityTypes.map(u => {
+                const selected = state.universityType === u.name;
+                return `
+                  <button
+                    type="button"
+                    onclick="state.universityType = '${u.name}'; renderStudentView();"
+                    class="p-3.5 rounded-xl border text-left transition-all ${
+                      selected
+                        ? 'border-indigo-600 bg-indigo-50/70 ring-2 ring-indigo-600/15'
+                        : 'border-slate-200 hover:border-slate-300 bg-white'
+                    }"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-bold text-slate-900">${u.name}</span>
+                      <span class="w-4 h-4 rounded-full border flex items-center justify-center ${selected ? 'border-indigo-600 bg-indigo-600' : 'border-slate-300'}">
+                        ${selected ? '<span class="w-1.5 h-1.5 rounded-full bg-white"></span>' : ''}
+                      </span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">${u.desc}</p>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- Row 4: Project Category & Target Deadline -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div class="lg:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-2">Project Tier</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                ${categories.map(cat => {
+                  const selected = state.projectCategory === cat.name;
+                  return `
+                    <button
+                      type="button"
+                      onclick="state.projectCategory = '${cat.name}'; renderStudentView();"
+                      class="p-4 rounded-xl border text-left transition-all ${
+                        selected
+                          ? 'border-indigo-600 bg-indigo-50/70 ring-2 ring-indigo-600/15'
+                          : 'border-slate-200 hover:border-slate-300 bg-white'
+                      }"
+                    >
+                      <div class="flex items-center justify-between gap-2">
+                        <span class="text-sm font-bold text-slate-900">${cat.name}</span>
+                        <span class="w-4 h-4 rounded-full border shrink-0 flex items-center justify-center ${selected ? 'border-indigo-600 bg-indigo-600' : 'border-slate-300'}">
+                          ${selected ? '<span class="w-1.5 h-1.5 rounded-full bg-white"></span>' : ''}
+                        </span>
+                      </div>
+                      <p class="text-xs text-slate-500 mt-1">${cat.desc}</p>
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-2">Target Final Viva / Submission Date</label>
+              <input
+                type="date"
+                value="${state.deadline}"
+                onchange="state.deadline = this.value; renderStudentView();"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <div class="mt-2">
+                ${isRush ? `
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                    ⚡ Priority Rush Timeline (${daysLeft} days left &lt;15 days)
+                  </span>
+                ` : `
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    ✓ Standard Build Window (${Math.max(daysLeft, 0)} days remaining)
+                  </span>
+                `}
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 5: Engineering Domain -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-2">Primary Engineering Domain</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+              ${domains.map(dom => {
+                const selected = state.domain === dom.name;
+                return `
+                  <button
+                    type="button"
+                    onclick="state.domain = '${dom.name}'; renderStudentView();"
+                    class="p-3 rounded-xl border text-left transition-all flex flex-col gap-1.5 ${
+                      selected
+                        ? 'border-indigo-600 bg-indigo-600 text-white shadow-sm'
+                        : 'border-slate-200 bg-white text-slate-800 hover:border-slate-300'
+                    }"
+                  >
+                    <span class="text-lg">${dom.icon}</span>
+                    <span class="text-xs font-bold leading-snug">${dom.name}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- Footer Navigation -->
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-end">
+            <button
+              type="button"
+              onclick="nextStep()"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition-all"
+            >
+              <span>Continue to Title &amp; Requirements</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // -----------------------------------------------------------------------
+    // STEP 2: PROJECT TITLE & REQUIREMENTS
+    // -----------------------------------------------------------------------
+    function renderStep2() {
+      const suggestions = DOMAIN_TITLE_SUGGESTIONS[state.domain] || DOMAIN_TITLE_SUGGESTIONS['IoT & Embedded'];
+
+      return `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-8 space-y-6 animate-step">
+          <div>
+            <span class="text-xs font-mono font-semibold uppercase tracking-wider text-indigo-600">Step 2 of 4</span>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">Project Title &amp; Functional Specifications</h2>
+            <p class="text-sm text-slate-500">Explain what your prototype must demonstrate to your internal guide and external examiner.</p>
+          </div>
+
+          <!-- Project Title + Trending Title Generator -->
+          <div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1.5">
+              <label class="text-xs font-semibold text-slate-700">Approved or Proposed Project Title <span class="text-rose-500">*</span></label>
+              <button
+                type="button"
+                onclick="state.showTitleSuggestions = !state.showTitleSuggestions; renderStudentView();"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition-colors self-start"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+                Suggest 3 Trending Titles (${state.domain})
+              </button>
+            </div>
+            <input
+              type="text"
+              value="${escapeHTML(state.projectTitle)}"
+              oninput="state.projectTitle = this.value"
+              placeholder="e.g., IoT-Based Smart Substation Load Monitoring & Fault Alert System"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+
+            ${state.showTitleSuggestions ? `
+              <div class="mt-3 p-3.5 rounded-xl bg-slate-50 border border-indigo-200 space-y-2 animate-step">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-indigo-900">Click any guide-approved ${state.domain} title to auto-fill:</span>
+                  <button type="button" onclick="state.showTitleSuggestions = false; renderStudentView();" class="text-xs text-slate-400 hover:text-slate-700">Hide</button>
+                </div>
+                ${suggestions.map(title => `
+                  <button
+                    type="button"
+                    onclick="state.projectTitle = '${title.replace(/'/g, "\\'")}'; state.showTitleSuggestions = false; showToast('Project title selected!', 'success'); renderStudentView();"
+                    class="w-full text-left p-2.5 rounded-lg bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-xs font-medium text-slate-800 transition-colors flex items-center justify-between gap-2"
+                  >
+                    <span>${title}</span>
+                    <span class="text-indigo-600 font-semibold shrink-0">Use Title →</span>
+                  </button>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Core Objective & How It Works -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+              Core Objective &amp; How It Works (In Plain Words) <span class="text-rose-500">*</span>
+            </label>
+            <textarea
+              rows="4"
+              oninput="state.coreObjective = this.value"
+              placeholder="Describe the problem you are solving, how the hardware/software processes data, and what live demo you need to show during evaluation..."
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >${escapeHTML(state.coreObjective)}</textarea>
+          </div>
+
+          <!-- Expected Inputs & Outputs -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+              Expected Inputs, Sensors &amp; Outputs
+            </label>
+            <textarea
+              rows="3"
+              oninput="state.inputsOutputs = this.value"
+              placeholder="e.g., Inputs: Heart-rate sensor, GPS location, emergency push button. Outputs: OLED display reading, mobile dashboard graph, and SMS alert to guardian."
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >${escapeHTML(state.inputsOutputs)}</textarea>
+          </div>
+
+          <!-- Reference File Dropzone -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+              Reference Upload (Optional — Base IEEE Paper PDF, Synopsis, or Block Diagram Sketch)
+            </label>
+
+            ${state.uploadedFile ? `
+              <div class="flex items-center justify-between p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0 font-mono text-xs font-bold">
+                    PDF
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-sm font-semibold text-slate-900 truncate">${escapeHTML(state.uploadedFile.name)}</div>
+                    <div class="text-xs text-slate-500">${state.uploadedFile.size} • Attached for Engineer Review</div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onclick="state.uploadedFile = null; renderStudentView();"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
+                >
+                  Remove
+                </button>
+              </div>
+            ` : `
+              <div class="border-2 border-dashed border-slate-300 hover:border-indigo-400 rounded-xl p-5 text-center bg-slate-50/60 transition-colors">
+                <input
+                  id="file-upload-input"
+                  type="file"
+                  accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                  class="hidden"
+                  onchange="handleFileUpload(event)"
+                />
+                <div class="flex flex-col items-center">
+                  <svg class="w-8 h-8 text-slate-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  <p class="text-xs sm:text-sm font-medium text-slate-700">
+                    <button type="button" onclick="document.getElementById('file-upload-input').click()" class="text-indigo-600 font-semibold hover:underline">Choose a file</button>
+                    or attach your guide's base paper / rough circuit sketch
+                  </p>
+                  <p class="text-[11px] text-slate-400 mt-1">Supports PDF, DOCX, PNG, JPG up to 15MB</p>
+                  <button
+                    type="button"
+                    onclick="state.uploadedFile = { name: 'IEEE_Base_Paper_2025.pdf', size: '1.2 MB' }; showToast('Sample IEEE base paper attached!', 'info'); renderStudentView();"
+                    class="mt-3 px-3 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-[11px] font-semibold text-slate-600"
+                  >
+                    + Simulate Attaching Sample Base Paper
+                  </button>
+                </div>
+              </div>
+            `}
+          </div>
+
+          <!-- Footer Navigation -->
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onclick="prevStep()"
+              class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors"
+            >
+              ← Back
+            </button>
+            <button
+              type="button"
+              onclick="nextStep()"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition-all"
+            >
+              <span>Continue to Component Catalog</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const sizeKB = Math.max(1, Math.round(file.size / 1024));
+      const sizeLabel = sizeKB > 1024 ? (sizeKB / 1024).toFixed(1) + ' MB' : sizeKB + ' KB';
+      state.uploadedFile = { name: file.name, size: sizeLabel };
+      showToast(`Attached "${file.name}"`, 'success');
+      renderStudentView();
+    }
+
+    // -----------------------------------------------------------------------
+    // STEP 3: PRICE-FREE COMPONENT CATALOG + STICKY KIT DRAWER
+    // -----------------------------------------------------------------------
+    function renderStep3() {
+      const filteredComponents = COMPONENT_CATALOG.filter(item => {
+        const matchesBrand = state.selectedBrand === 'All' || item.brand === state.selectedBrand;
+        const matchesCat = state.selectedCategory === 'All' || item.category === state.selectedCategory;
+        const q = state.searchQuery.trim().toLowerCase();
+        const matchesQuery =
+          !q ||
+          item.name.toLowerCase().includes(q) ||
+          item.brand.toLowerCase().includes(q) ||
+          item.specs.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q);
+        return matchesBrand && matchesCat && matchesQuery;
+      });
+
+      const selectedEntries = Object.entries(state.selectedKit)
+        .filter(([, qty]) => qty > 0)
+        .map(([id, qty]) => {
+          const comp = COMPONENT_CATALOG.find(c => c.id === id);
+          return { ...comp, qty };
+        });
+
+      return `
+        <div class="space-y-5 animate-step">
+          <!-- Top Banner & "Engineers Recommend Components" Safety Toggle -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-mono font-semibold uppercase tracking-wider text-indigo-600">Step 3 of 4</span>
+                  <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                    Price-Free Specification Mode
+                  </span>
+                </div>
+                <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-1">Select Hardware Modules &amp; Sensors</h2>
+                <p class="text-sm text-slate-500">Pick the core boards and sensors you want. We bundle wiring, power protection, and enclosure into one unified engineering quote.</p>
+              </div>
+
+              <!-- Toggle Card -->
+              <label class="flex items-center justify-between gap-3 p-3.5 rounded-xl border cursor-pointer transition-all shrink-0 ${
+                state.letEngineersChoose
+                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                  : 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200'
+              }">
+                <div class="max-w-xs">
+                  <div class="text-xs font-bold">I'm not sure — Let your engineers recommend &amp; finalize my components</div>
+                  <div class="text-[11px] mt-0.5 ${state.letEngineersChoose ? 'text-indigo-100' : 'text-slate-500'}">
+                    Skip manual selection; our lab picks the best BOM from your specs
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  ${state.letEngineersChoose ? 'checked' : ''}
+                  onchange="state.letEngineersChoose = this.checked; renderStudentView();"
+                  class="w-5 h-5 accent-indigo-600 rounded cursor-pointer shrink-0"
+                />
+              </label>
+            </div>
+          </div>
+
+          ${state.letEngineersChoose ? `
+            <!-- Collapsed Assurance View -->
+            <div class="bg-white rounded-2xl border-2 border-indigo-200 p-6 sm:p-8 text-center space-y-3 shadow-sm">
+              <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900">Engineer-Curated Bill of Materials Enabled</h3>
+              <p class="text-sm text-slate-600 max-w-xl mx-auto">
+                No problem at all! Based on your <span class="font-semibold text-slate-800">${escapeHTML(state.domain)}</span> description, our Bengaluru lab engineers will select compatible controllers, sensors, and power regulation modules and include the finalized hardware architecture in your 24-hour quote.
+              </p>
+              <div class="pt-2">
+                <button
+                  type="button"
+                  onclick="state.letEngineersChoose = false; renderStudentView();"
+                  class="text-xs font-semibold text-indigo-600 hover:underline"
+                >
+                  Or switch back to browse the component catalog manually →
+                </button>
+              </div>
+            </div>
+          ` : `
+            <!-- Main Catalog Grid + Sticky Project Kit Drawer -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+              <!-- Left 8 Columns: Search, Brand Pills, Category Tabs & Component Cards -->
+              <div class="lg:col-span-8 space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-3.5">
+                  <!-- Search Bar -->
+                  <div class="relative">
+                    <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input
+                      type="text"
+                      value="${escapeHTML(state.searchQuery)}"
+                      oninput="state.searchQuery = this.value; renderStudentView();"
+                      placeholder="Search ESP32, Raspberry Pi, BME280, LoRa, BLDC, BMS, Ultrasonic..."
+                      class="w-full pl-10 pr-9 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    ${state.searchQuery ? `
+                      <button
+                        type="button"
+                        onclick="state.searchQuery = ''; renderStudentView();"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700"
+                      >✕</button>
+                    ` : ''}
+                  </div>
+
+                  <!-- Brand / Ecosystem Filter Pills -->
+                  <div>
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Filter by Ecosystem / Brand</div>
+                    <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                      ${BRAND_FILTERS.map(brand => {
+                        const active = state.selectedBrand === brand;
+                        return `
+                          <button
+                            type="button"
+                            onclick="state.selectedBrand = '${brand}'; renderStudentView();"
+                            class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-colors ${
+                              active
+                                ? 'bg-slate-900 text-white border-slate-900'
+                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                            }"
+                          >${brand}</button>
+                        `;
+                      }).join('')}
+                    </div>
+                  </div>
+
+                  <!-- Category Filter Tabs -->
+                  <div>
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Filter by Module Category</div>
+                    <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                      ${CATEGORY_FILTERS.map(cat => {
+                        const active = state.selectedCategory === cat;
+                        return `
+                          <button
+                            type="button"
+                            onclick="state.selectedCategory = '${cat}'; renderStudentView();"
+                            class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap border transition-colors ${
+                              active
+                                ? 'bg-indigo-600 text-white border-indigo-600'
+                                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                            }"
+                          >${cat}</button>
+                        `;
+                      }).join('')}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Results Count -->
+                <div class="flex items-center justify-between px-1 text-xs text-slate-500">
+                  <span>Showing <strong class="text-slate-800">${filteredComponents.length}</strong> hardware components (Zero individual pricing displayed)</span>
+                  ${(state.selectedBrand !== 'All' || state.selectedCategory !== 'All' || state.searchQuery) ? `
+                    <button
+                      type="button"
+                      onclick="state.selectedBrand = 'All'; state.selectedCategory = 'All'; state.searchQuery = ''; renderStudentView();"
+                      class="text-indigo-600 font-semibold hover:underline"
+                    >Reset Filters</button>
+                  ` : ''}
+                </div>
+
+                <!-- Component Cards Grid -->
+                ${filteredComponents.length === 0 ? `
+                  <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center">
+                    <p class="text-sm font-semibold text-slate-800">No catalog modules matched "${escapeHTML(state.searchQuery)}"</p>
+                    <p class="text-xs text-slate-500 mt-1">You can request any specialized sensor or industrial part in the "Request Unlisted / Custom Part" box on the right.</p>
+                  </div>
+                ` : `
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    ${filteredComponents.map(item => {
+                      const qty = state.selectedKit[item.id] || 0;
+                      return `
+                        <div class="bg-white rounded-2xl border p-4 flex flex-col justify-between gap-3 transition-all ${
+                          qty > 0 ? 'border-indigo-500 ring-2 ring-indigo-500/15 shadow-sm' : 'border-slate-200 hover:border-slate-300'
+                        }">
+                          <div>
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                              <span class="px-2 py-0.5 rounded-md text-[11px] font-bold bg-slate-100 text-slate-700">
+                                ${item.brand}
+                              </span>
+                              <span class="text-[11px] font-medium text-slate-400 truncate">${item.category}</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-slate-900 leading-snug">${item.name}</h3>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">${item.specs}</p>
+                          </div>
+
+                          <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-[11px] font-mono text-slate-400">Included in BOM Quote</span>
+                            ${qty === 0 ? `
+                              <button
+                                type="button"
+                                onclick="updateKitQty('${item.id}', 1)"
+                                class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-indigo-600 text-white text-xs font-semibold transition-colors"
+                              >
+                                + Add to Kit
+                              </button>
+                            ` : `
+                              <div class="inline-flex items-center bg-indigo-50 border border-indigo-200 rounded-xl overflow-hidden">
+                                <button
+                                  type="button"
+                                  onclick="updateKitQty('${item.id}', -1)"
+                                  class="px-2.5 py-1 text-indigo-700 hover:bg-indigo-100 font-bold text-sm"
+                                >−</button>
+                                <span class="px-2.5 py-1 text-xs font-bold text-indigo-950 font-mono">${qty}</span>
+                                <button
+                                  type="button"
+                                  onclick="updateKitQty('${item.id}', 1)"
+                                  class="px-2.5 py-1 text-indigo-700 hover:bg-indigo-100 font-bold text-sm"
+                                >+</button>
+                              </div>
+                            `}
+                          </div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                `}
+              </div>
+
+              <!-- Right 4 Columns: Sticky Selected Project Kit Drawer -->
+              <aside class="lg:col-span-4 lg:sticky lg:top-20 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-900">Selected Project Kit</h3>
+                    <p class="text-[11px] text-slate-500">Itemized hardware list for your quote</p>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700">
+                    ${getTotalKitUnits()} Items
+                  </span>
+                </div>
+
+                ${selectedEntries.length === 0 && state.customParts.length === 0 ? `
+                  <div class="py-6 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200 px-4">
+                    <p class="text-xs font-semibold text-slate-600">Your Project Kit is empty</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Add modules from the left catalog or request custom parts below.</p>
+                  </div>
+                ` : `
+                  <div class="space-y-2 max-h-72 overflow-y-auto pr-1">
+                    ${selectedEntries.map(item => `
+                      <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                        <div class="min-w-0">
+                          <div class="text-xs font-bold text-slate-800 truncate">${item.name}</div>
+                          <div class="text-[10px] text-slate-500">${item.brand}</div>
+                        </div>
+                        <div class="flex items-center gap-1 shrink-0">
+                          <button type="button" onclick="updateKitQty('${item.id}', -1)" class="w-6 h-6 rounded-lg bg-white border border-slate-200 text-xs font-bold hover:bg-slate-100">−</button>
+                          <span class="w-6 text-center text-xs font-mono font-bold">${item.qty}</span>
+                          <button type="button" onclick="updateKitQty('${item.id}', 1)" class="w-6 h-6 rounded-lg bg-white border border-slate-200 text-xs font-bold hover:bg-slate-100">+</button>
+                        </div>
+                      </div>
+                    `).join('')}
+
+                    ${state.customParts.map((part, idx) => `
+                      <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-amber-50/70 border border-amber-200">
+                        <div class="min-w-0">
+                          <div class="text-xs font-bold text-slate-800 truncate">${escapeHTML(part)}</div>
+                          <div class="text-[10px] text-amber-700 font-medium">Custom Unlisted Part Request</div>
+                        </div>
+                        <button
+                          type="button"
+                          onclick="removeCustomPart(${idx})"
+                          class="text-xs font-bold text-rose-600 hover:text-rose-800 px-1.5"
+                        >✕</button>
+                      </div>
+                    `).join('')}
+                  </div>
+                `}
+
+                <!-- Request Unlisted / Custom Part Input -->
+                <div class="pt-2 border-t border-slate-100">
+                  <label class="block text-xs font-semibold text-slate-700 mb-1.5">Request Unlisted / Custom Part</label>
+                  <div class="flex gap-2">
+                    <input
+                      type="text"
+                      value="${escapeHTML(state.customPartInput)}"
+                      oninput="state.customPartInput = this.value"
+                      onkeydown="if(event.key === 'Enter'){ event.preventDefault(); addCustomPart(); }"
+                      placeholder="e.g., NEMA 23 Stepper / pH Probe"
+                      class="flex-1 min-w-0 px-3 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <button
+                      type="button"
+                      onclick="addCustomPart()"
+                      class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shrink-0"
+                    >Add</button>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          `}
+
+          <!-- Footer Navigation -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 flex items-center justify-between gap-3 shadow-sm">
+            <button
+              type="button"
+              onclick="prevStep()"
+              class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors"
+            >
+              ← Back
+            </button>
+            <button
+              type="button"
+              onclick="nextStep()"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition-all"
+            >
+              <span>Continue to Reports, IEEE &amp; Viva Add-Ons</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateKitQty(id, delta) {
+      const current = state.selectedKit[id] || 0;
+      const next = Math.max(0, current + delta);
+      if (next === 0) {
+        delete state.selectedKit[id];
+      } else {
+        state.selectedKit[id] = next;
+      }
+      renderStudentView();
+    }
+
+    function addCustomPart() {
+      const val = state.customPartInput.trim();
+      if (!val) return;
+      state.customParts.push(val);
+      state.customPartInput = '';
+      showToast(`Added custom part: "${val}"`, 'success');
+      renderStudentView();
+    }
+
+    function removeCustomPart(idx) {
+      state.customParts.splice(idx, 1);
+      renderStudentView();
+    }
+
+    // -----------------------------------------------------------------------
+    // STEP 4: HIGH-MARGIN ACADEMIC ADD-ONS & CAMPUS ADVISOR CODE
+    // -----------------------------------------------------------------------
+    function renderStep4() {
+      const advisorInfo = getAdvisorInfo(state.appliedAdvisorCode);
+
+      return `
+        <div class="space-y-6 animate-step">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-8 space-y-6">
+            <div>
+              <span class="text-xs font-mono font-semibold uppercase tracking-wider text-indigo-600">Step 4 of 4</span>
+              <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">Academic Deliverables, IEEE Paper &amp; Viva Prep</h2>
+              <p class="text-sm text-slate-500">Select the documentation and evaluation decks your team needs. All selected items will be itemized cleanly in your unified quote.</p>
+            </div>
+
+            <!-- Base Deliverable Card (Always Included) -->
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="space-y-1">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+                  ✓ Base Deliverable (Included in Quote)
+                </div>
+                <h3 class="text-base font-bold">Core Hardware / Software Prototype Build</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  Fully assembled &amp; bench-tested prototype, cleanly commented source code, pin-to-pin circuit wiring schematic, and working demonstration video before final handover.
+                </p>
+              </div>
+              <span class="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs font-mono font-semibold text-emerald-400 shrink-0 self-start sm:self-center">
+                CORE PACKAGE
+              </span>
+            </div>
+
+            <!-- Interactive Academic Add-On Cards (NO PRICES SHOWN) -->
+            <div class="space-y-3">
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Optional Academic &amp; Viva Deliverables (Select all that apply)</label>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                ${ACADEMIC_ADDONS.map(addon => {
+                  const isPPT = addon.id === 'review_ppts';
+                  const unlockedFree = isPPT && Boolean(advisorInfo);
+                  const checked = unlockedFree || Boolean(state.selectedAddons[addon.id]);
+
+                  return `
+                    <div
+                      onclick="toggleAddon('${addon.id}')"
+                      class="p-4 rounded-2xl border cursor-pointer transition-all flex items-start gap-3.5 ${
+                        checked
+                          ? 'border-indigo-600 bg-indigo-50/50 ring-2 ring-indigo-600/15'
+                          : 'border-slate-200 bg-white hover:border-slate-300'
+                      }"
+                    >
+                      <input
+                        type="checkbox"
+                        ${checked ? 'checked' : ''}
+                        onclick="event.stopPropagation(); toggleAddon('${addon.id}');"
+                        class="mt-1 w-4 h-4 accent-indigo-600 rounded cursor-pointer shrink-0"
+                      />
+                      <div class="flex-1 min-w-0">
+                        <div class="flex flex-wrap items-center gap-2">
+                          <span class="text-sm font-bold text-slate-900">${addon.title}</span>
+                          ${unlockedFree ? `
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white">
+                              FREE via Advisor Code
+                            </span>
+                          ` : `
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                              addon.popular
+                                ? 'bg-indigo-600 text-white'
+                                : 'bg-slate-100 text-slate-700 border border-slate-200'
+                            }">
+                              ${addon.tag}
+                            </span>
+                          `}
+                        </div>
+                        <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">${addon.description}</p>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Campus Advisor / Referral Code Box -->
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 class="text-sm font-bold text-slate-900">Campus Advisor / Class Rep Referral Code</h3>
+                  <p class="text-xs text-slate-500">Have a code from your college tech club or class ambassador? Unlock <strong class="text-slate-700">Free Review 1, 2 &amp; Final Viva PPTs</strong>.</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 text-[11px]">
+                  <span class="text-slate-400">Try:</span>
+                  ${['RVCE-01', 'PES-ARJUN', 'BMS-07'].map(code => `
+                    <button
+                      type="button"
+                      onclick="state.advisorInput = '${code}'; applyAdvisorCode();"
+                      class="px-2 py-0.5 rounded bg-white border border-slate-200 font-mono font-semibold text-slate-700 hover:border-indigo-400"
+                    >${code}</button>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="flex flex-col sm:flex-row gap-2.5">
+                <input
+                  type="text"
+                  value="${escapeHTML(state.advisorInput)}"
+                  oninput="state.advisorInput = this.value"
+                  placeholder="Enter Campus Advisor Code (e.g., RVCE-01)"
+                  class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-mono uppercase focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                <button
+                  type="button"
+                  onclick="applyAdvisorCode()"
+                  class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold transition-colors shrink-0"
+                >
+                  Apply Code
+                </button>
+              </div>
+
+              ${advisorInfo ? `
+                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2 text-xs text-emerald-900 animate-step">
+                  <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shrink-0">✓</span>
+                    <span>
+                      <strong>Advisor Code Applied (${advisorInfo.code})!</strong> Free Review 1, 2 &amp; Final Viva PPTs unlocked on your final quote.
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="state.appliedAdvisorCode = ''; state.advisorInput = ''; renderStudentView();"
+                    class="text-emerald-700 hover:underline font-semibold shrink-0"
+                  >Remove</button>
+                </div>
+              ` : ''}
+            </div>
+
+            <!-- Final Review Summary Card -->
+            <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+              <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Submission Summary</span>
+                <span class="text-xs text-slate-500">24-Hour Engineer Feasibility &amp; Quote Guarantee</span>
+              </div>
+              <div class="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                <div>
+                  <div class="text-slate-400 font-medium">Student &amp; Campus</div>
+                  <div class="font-bold text-slate-900 mt-0.5">${escapeHTML(state.studentName || 'Not entered')}</div>
+                  <div class="text-slate-600">${escapeHTML(state.collegeName || 'Bengaluru')} (${state.universityType})</div>
+                </div>
+                <div>
+                  <div class="text-slate-400 font-medium">Project Scope</div>
+                  <div class="font-bold text-slate-900 mt-0.5 line-clamp-2">${escapeHTML(state.projectTitle || 'Untitled Project')}</div>
+                  <div class="text-indigo-600 font-semibold mt-0.5">${state.domain} • ${state.city}</div>
+                </div>
+                <div>
+                  <div class="text-slate-400 font-medium">Hardware Selection</div>
+                  <div class="font-bold text-slate-900 mt-0.5">
+                    ${state.letEngineersChoose ? 'Engineer-Recommended BOM' : `${getTotalKitUnits()} Selected Components`}
+                  </div>
+                  <div class="text-slate-600">Deadline: ${state.deadline}</div>
+                </div>
+                <div>
+                  <div class="text-slate-400 font-medium">Selected Add-Ons</div>
+                  <div class="font-bold text-slate-900 mt-0.5">
+                    ${ACADEMIC_ADDONS.filter(a => state.selectedAddons[a.id] || (a.id === 'review_ppts' && advisorInfo)).length} Academic Deliverables
+                  </div>
+                  <div class="text-emerald-700 font-semibold">
+                    ${advisorInfo ? `Advisor Code: ${advisorInfo.code}` : 'Standard Quote Queue'}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button Row -->
+            <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <button
+                type="button"
+                onclick="prevStep()"
+                class="inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors"
+              >
+                ← Back
+              </button>
+              <button
+                type="button"
+                onclick="submitProjectRequest()"
+                class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-md shadow-indigo-600/20 transition-all"
+              >
+                <span>Submit Request for 24-Hr Quote</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleAddon(id) {
+      if (id === 'review_ppts' && state.appliedAdvisorCode) {
+        showToast('Review 1, 2 & Final Viva PPTs are automatically unlocked FREE with your Advisor Code!', 'info');
+        return;
+      }
+      state.selectedAddons[id] = !state.selectedAddons[id];
+      renderStudentView();
+    }
+
+    function applyAdvisorCode() {
+      const code = state.advisorInput.trim().toUpperCase();
+      if (!code) {
+        showToast('Enter a Campus Advisor code (e.g., RVCE-01) first.', 'warning');
+        return;
+      }
+      state.appliedAdvisorCode = code;
+      state.selectedAddons.review_ppts = true;
+      showToast(`Advisor Code ${code} applied! Free Review & Viva PPTs unlocked.`, 'success');
+      renderStudentView();
+    }
+
+    function submitProjectRequest() {
+      if (!state.studentName.trim()) {
+        state.studentName = 'Pranav Kulkarni (Team of 4)';
+      }
+      if (!state.collegeName.trim()) {
+        state.collegeName = 'RVCE';
+      }
+      if (!state.projectTitle.trim()) {
+        state.projectTitle = 'Smart Campus IoT Energy & Fault Monitoring Prototype';
+      }
+      if (!state.coreObjective.trim()) {
+        state.coreObjective = 'Custom working prototype with real-time sensor telemetry, automated threshold alerts, and complete viva documentation.';
+      }
+
+      const randNum = Math.floor(104 + Math.random() * 890);
+      state.requestId = `BLR-2026-${randNum}`;
+      state.isSubmitted = true;
+
+      showToast(`Request ${state.requestId} dispatched to Admin Workbench!`, 'success');
+      renderStudentView();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // -----------------------------------------------------------------------
+    // CONFIRMATION SCREEN AFTER SUBMISSION
+    // -----------------------------------------------------------------------
+    function renderConfirmationScreen() {
+      const milestones = [
+        { step: '1', title: '24h Feasibility Review', desc: 'Lab engineer audits circuit & BOM compatibility', active: true },
+        { step: '2', title: 'Unified Quote Link', desc: 'Sent on WhatsApp with feasibility notes', active: false },
+        { step: '3', title: '50% UPI Advance', desc: 'Triggers SP Road component procurement', active: false },
+        { step: '4', title: 'Build & Video Demo', desc: 'Working prototype video shared for verification', active: false },
+        { step: '5', title: 'Final Handover', desc: 'Remaining 50% + hardware, code & viva prep', active: false }
+      ];
+
+      return `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10 text-center space-y-6 animate-step">
+          <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto">
+            <svg class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+
+          <div class="space-y-2 max-w-2xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 text-white font-mono text-xs font-bold">
+              REQUEST ID: ${state.requestId}
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Scoping Request Received!
+            </h2>
+            <p class="text-sm text-slate-600">
+              Your specifications for <strong class="text-slate-900">"${escapeHTML(state.projectTitle)}"</strong> have been routed to our Bengaluru engineering desk. Expect your feasibility review and unified quote within 24 hours.
+            </p>
+          </div>
+
+          <!-- 5-Stage Milestone Timeline -->
+          <div class="max-w-4xl mx-auto pt-2">
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 text-left">
+              ${milestones.map(m => `
+                <div class="p-3.5 rounded-xl border ${m.active ? 'border-indigo-600 bg-indigo-50/70' : 'border-slate-200 bg-slate-50/70'}">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center ${m.active ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'}">
+                      ${m.step}
+                    </span>
+                    <span class="text-xs font-bold text-slate-900">${m.title}</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 leading-snug">${m.desc}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Action Buttons: Jump Directly to Admin Ticket Preview -->
+          <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button
+              type="button"
+              onclick="switchView('admin')"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-md shadow-indigo-600/20 transition-all"
+            >
+              <span>Open Admin Ticket Preview (${state.requestId})</span>
+              <span>→</span>
+            </button>
+            <button
+              type="button"
+              onclick="state.isSubmitted = false; state.currentStep = 1; renderStudentView();"
+              class="w-full sm:w-auto px-5 py-3.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-colors"
+            >
+              Edit Student Submission
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // -----------------------------------------------------------------------
+    // 6. VIEW 2: ADMIN TICKET PREVIEW & MARGIN-PROTECTED QUOTE BUILDER
+    // -----------------------------------------------------------------------
+    function getAdminFinancials() {
+      const daysLeft = calculateDaysUntil(state.deadline);
+      const isRush = daysLeft >= 0 && daysLeft < 15;
+
+      // 1. Student-selected catalog components
+      const catalogBom = Object.entries(state.selectedKit)
+        .filter(([, qty]) => qty > 0)
+        .map(([id, qty]) => {
+          const comp = COMPONENT_CATALOG.find(c => c.id === id);
+          const unitCost = state.admin.costOverrides[id] !== undefined ? Number(state.admin.costOverrides[id]) : comp.internalCost;
+          return {
+            id: comp.id,
+            name: comp.name,
+            brand: comp.brand,
+            qty,
+            unitCost,
+            subtotal: qty * unitCost,
+            isExtra: false
+          };
+        });
+
+      // 2. Admin-added extra internal essentials (wires, enclosure, BMS, etc.)
+      const extraBom = state.admin.extraInternalItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        brand: 'Lab / SP Road',
+        qty: item.qty,
+        unitCost: Number(item.unitCost) || 0,
+        subtotal: item.qty * (Number(item.unitCost) || 0),
+        isExtra: true
+      }));
+
+      const allBom = [...catalogBom, ...extraBom];
+      const rawHardwareCost = allBom.reduce((sum, item) => sum + item.subtotal, 0);
+      const sourcingBuffer = Math.round(rawHardwareCost * 0.20);
+      const engineeringFee = Number(state.admin.engineeringFee) || 0;
+      const rushSurcharge = isRush && state.admin.applyRushFee ? (Number(state.admin.rushFeeAmount) || 0) : 0;
+
+      // Unified Prototype Package Price shown to student (hides raw sensor costs!)
+      const prototypeStudentPrice = rawHardwareCost + sourcingBuffer + engineeringFee + rushSurcharge;
+
+      // 3. Academic Add-Ons
+      const advisorInfo = getAdvisorInfo(state.appliedAdvisorCode);
+      const activeAddons = ACADEMIC_ADDONS.filter(addon => {
+        if (addon.id === 'review_ppts' && advisorInfo) return true;
+        return Boolean(state.selectedAddons[addon.id]);
+      }).map(addon => {
+        const basePrice = Number(state.admin.addonPrices[addon.id]) || 0;
+        const isFreeViaAdvisor = addon.id === 'review_ppts' && Boolean(advisorInfo);
+        return {
+          ...addon,
+          basePrice,
+          finalPrice: isFreeViaAdvisor ? 0 : basePrice,
+          isFreeViaAdvisor
+        };
+      });
+
+      const addonsTotal = activeAddons.reduce((sum, a) => sum + a.finalPrice, 0);
+      const totalStudentQuote = prototypeStudentPrice + addonsTotal;
+
+      // Internal cost calculation (Hardware + est. ~10% formatting/printing overhead on docs + Advisor commission)
+      const advisorCommission = advisorInfo
+        ? (state.projectCategory.includes('Mini') ? 500 : 1000)
+        : 0;
+      const docsInternalCost = Math.round(addonsTotal * 0.10);
+      const totalInternalCost = rawHardwareCost + docsInternalCost + advisorCommission;
+      const netProfit = totalStudentQuote - totalInternalCost;
+      const marginPercent = totalStudentQuote > 0 ? Math.round((netProfit / totalStudentQuote) * 100) : 0;
+
+      return {
+        daysLeft,
+        isRush,
+        allBom,
+        rawHardwareCost,
+        sourcingBuffer,
+        engineeringFee,
+        rushSurcharge,
+        prototypeStudentPrice,
+        activeAddons,
+        addonsTotal,
+        totalStudentQuote,
+        advisorInfo,
+        advisorCommission,
+        totalInternalCost,
+        netProfit,
+        marginPercent,
+        advanceAmount: Math.round(totalStudentQuote * 0.5),
+        finalAmount: totalStudentQuote - Math.round(totalStudentQuote * 0.5)
+      };
+    }
+
+    function renderAdminView() {
+      const adminContainer = document.getElementById('admin-view');
+      const fin = getAdminFinancials();
+
+      adminContainer.innerHTML = `
+        <div class="space-y-6 animate-step">
+          <!-- Top Admin Workbench Header -->
+          <div class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-md bg-indigo-600 font-mono text-xs font-bold">${state.requestId}</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                  state.isSubmitted
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                }">
+                  ${state.isSubmitted ? 'SUBMITTED TICKET — READY TO QUOTE' : 'LIVE SYNC PREVIEW (IN-PROGRESS DRAFT)'}
+                </span>
+                ${fin.isRush ? `
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                    ⚡ RUSH DEADLINE (${fin.daysLeft} DAYS LEFT)
+                  </span>
+                ` : `
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-800 text-slate-300">
+                    ${Math.max(fin.daysLeft, 0)} Days to Deadline
+                  </span>
+                `}
+              </div>
+              <h1 class="text-lg sm:text-2xl font-extrabold tracking-tight">
+                Admin Feasibility &amp; Margin-Protected Quote Builder
+              </h1>
+              <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
+                Audit student specs, add hidden SP Road hardware costs, and publish a unified quote without exposing raw sensor margins.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+              <button
+                type="button"
+                onclick="fillSampleStudentData()"
+                class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
+              >
+                Load Sample RVCE Order
+              </button>
+              <button
+                type="button"
+                onclick="openQuoteModal()"
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-sm transition-colors"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                Preview Student Quote Link
+              </button>
+            </div>
+          </div>
+
+          <!-- Two-Column Admin Split -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- LEFT COLUMN (5 Cols): Incoming Student Request Dossier -->
+            <div class="lg:col-span-5 space-y-5">
+              <!-- Student & College Card -->
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-500">1. Student &amp; Academic Dossier</span>
+                  <span class="text-xs font-semibold text-indigo-600">${state.city}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <div class="text-slate-400">Team Lead</div>
+                    <div class="font-bold text-slate-900 mt-0.5">${escapeHTML(state.studentName || 'Not specified yet')}</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-400">WhatsApp</div>
+                    <div class="font-mono font-semibold text-slate-800 mt-0.5">${escapeHTML(state.whatsapp || '+91 98450 XXXXX')}</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-400">College &amp; Board</div>
+                    <div class="font-bold text-slate-900 mt-0.5">${escapeHTML(state.collegeName || 'Not specified')}</div>
+                    <div class="text-slate-500">${state.universityType}</div>
+                  </div>
+                  <div>
+                    <div class="text-slate-400">Tier &amp; Domain</div>
+                    <div class="font-bold text-slate-900 mt-0.5">${state.domain}</div>
+                    <div class="text-slate-500">${state.projectCategory}</div>
+                  </div>
+                </div>
+
+                <!-- Project Title & Functional Description -->
+                <div class="pt-3 border-t border-slate-100 space-y-2.5">
+                  <div>
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Proposed Title</div>
+                    <div class="text-sm font-bold text-slate-900 mt-0.5">
+                      ${escapeHTML(state.projectTitle || 'Awaiting student project title...')}
+                    </div>
+                  </div>
+                  <div>
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Core Objective &amp; Workflow</div>
+                    <p class="text-xs text-slate-600 mt-0.5 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">
+                      ${escapeHTML(state.coreObjective || 'No functional description provided yet.')}
+                    </p>
+                  </div>
+                  ${state.inputsOutputs ? `
+                    <div>
+                      <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Expected Inputs &amp; Outputs</div>
+                      <p class="text-xs text-slate-600 mt-0.5 whitespace-pre-line bg-slate-50 p-3 rounded-xl border border-slate-100">${escapeHTML(state.inputsOutputs)}</p>
+                    </div>
+                  ` : ''}
+                  ${state.uploadedFile ? `
+                    <div class="flex items-center gap-2 p-2.5 rounded-xl bg-indigo-50 border border-indigo-200 text-xs">
+                      <span class="font-mono font-bold text-indigo-700">📎 ${escapeHTML(state.uploadedFile.name)}</span>
+                      <span class="text-slate-500">(${state.uploadedFile.size})</span>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+
+              <!-- Student Component Request & Custom Parts -->
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-500">2. Student Hardware Request</span>
+                  <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                    state.letEngineersChoose ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'
+                  }">
+                    ${state.letEngineersChoose ? 'Engineer BOM Requested' : `${getTotalKitUnits()} Items Selected`}
+                  </span>
+                </div>
+
+                ${state.letEngineersChoose ? `
+                  <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
+                    Student checked <strong>"Let your engineers recommend &amp; finalize my components"</strong>. Add recommended parts directly in the Internal BOM table on the right.
+                  </div>
+                ` : ''}
+
+                ${state.customParts.length > 0 ? `
+                  <div class="space-y-1.5">
+                    <div class="text-[11px] font-bold text-amber-700">Custom Unlisted Parts Requested by Student:</div>
+                    ${state.customParts.map(cp => `
+                      <div class="px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs font-semibold text-slate-800 flex items-center justify-between">
+                        <span>• ${escapeHTML(cp)}</span>
+                        <span class="text-[10px] font-mono text-amber-700">Source on SP Road</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+
+                <p class="text-[11px] text-slate-400">
+                  Tip: Use the Internal BOM Cost Sheet on the right to adjust wholesale SP Road unit rates or add hidden essentials (wires, 3S BMS, buck converters, enclosure).
+                </p>
+              </div>
+
+              <!-- Campus Advisor Attribution Card -->
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-2.5">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">3. Campus Advisor Attribution</span>
+                ${fin.advisorInfo ? `
+                  <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs font-extrabold text-emerald-900">Code: ${fin.advisorInfo.code}</span>
+                      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white">
+                        Payout: ${formatINR(fin.advisorCommission)} on 50% Advance
+                      </span>
+                    </div>
+                    <div class="text-xs text-emerald-800">${fin.advisorInfo.name} • ${fin.advisorInfo.college}</div>
+                    <div class="text-[11px] text-emerald-700">Student Benefit: Review 1, 2 &amp; Final Viva PPTs auto-discounted to ₹0.</div>
+                  </div>
+                ` : `
+                  <p class="text-xs text-slate-500">Direct organic lead (no Campus Advisor code applied — ₹0 commission payout).</p>
+                `}
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN (7 Cols): Admin Feasibility & Margin-Protected Quote Builder -->
+            <div class="lg:col-span-7 space-y-5">
+
+              <!-- Engineer's Feasibility & Architecture Note -->
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h2 class="text-sm font-bold text-slate-900">Engineer's Feasibility &amp; Architecture Note</h2>
+                    <p class="text-xs text-slate-500">Visible on the student's quote page to build trust and justify technical upgrades.</p>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700">PUBLIC ON QUOTE</span>
+                </div>
+                <textarea
+                  rows="4"
+                  oninput="state.admin.feasibilityNote = this.value"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >${escapeHTML(state.admin.feasibilityNote)}</textarea>
+              </div>
+
+              <!-- Internal SP Road BOM Cost Sheet (Admin-Only) -->
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h2 class="text-sm font-bold text-slate-900">Internal Bill of Materials (SP Road Wholesale Cost)</h2>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-50 text-rose-700 border border-rose-200">ADMIN ONLY</span>
+                    </div>
+                    <p class="text-xs text-slate-500">Individual sensor costs stay hidden from the student and roll into the unified prototype fee.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="addAdminInternalItem()"
+                    class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shrink-0 self-start"
+                  >
+                    + Add Hidden Essential
+                  </button>
+                </div>
+
+                ${fin.allBom.length === 0 ? `
+                  <div class="p-4 rounded-xl bg-slate-50 border border-dashed border-slate-200 text-center text-xs text-slate-500">
+                    No catalog parts selected by student yet. Click <strong>"+ Add Hidden Essential"</strong> above to add recommended hardware parts.
+                  </div>
+                ` : `
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr class="border-b border-slate-200 text-slate-400 font-semibold">
+                          <th class="py-2 pr-2">Component / Module</th>
+                          <th class="py-2 px-2 text-center">Qty</th>
+                          <th class="py-2 px-2 text-right">Unit Cost (₹)</th>
+                          <th class="py-2 pl-2 text-right">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100">
+                        ${fin.allBom.map(row => `
+                          <tr>
+                            <td class="py-2.5 pr-2">
+                              <div class="font-bold text-slate-800">${escapeHTML(row.name)}</div>
+                              <div class="text-[10px] text-slate-400">${escapeHTML(row.brand)}</div>
+                            </td>
+                            <td class="py-2.5 px-2 text-center font-mono font-bold">${row.qty}</td>
+                            <td class="py-2.5 px-2 text-right">
+                              <input
+                                type="number"
+                                min="0"
+                                step="10"
+                                value="${row.unitCost}"
+                                onchange="updateAdminBomCost('${row.id}', ${row.isExtra}, this.value)"
+                                class="w-20 px-2 py-1 rounded-lg border border-slate-300 text-right font-mono font-semibold text-slate-900"
+                              />
+                            </td>
+                            <td class="py-2.5 pl-2 text-right font-mono font-bold text-slate-800">${formatINR(row.subtotal)}</td>
+                          </tr>
+                        `).join('')}
+                      </tbody>
+                    </table>
+                  </div>
+                `}
+
+                <!-- Prototype Margin Controls -->
+                <div class="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="text-slate-500">Raw Hardware + 20% Buffer</div>
+                    <div class="font-mono font-bold text-slate-900 text-sm mt-0.5">
+                      ${formatINR(fin.rawHardwareCost)} + ${formatINR(fin.sourcingBuffer)}
+                    </div>
+                  </div>
+
+                  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <label class="block text-slate-500 mb-1">Build, Code &amp; Testing Fee (₹)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="250"
+                      value="${state.admin.engineeringFee}"
+                      onchange="state.admin.engineeringFee = Number(this.value); renderAdminView();"
+                      class="w-full px-2.5 py-1 rounded-lg border border-slate-300 bg-white font-mono font-bold text-slate-900"
+                    />
+                  </div>
+
+                  <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200">
+                    <div class="text-indigo-700 font-semibold">Student Prototype Line Item</div>
+                    <div class="font-mono font-extrabold text-indigo-950 text-base mt-0.5">
+                      ${formatINR(fin.prototypeStudentPrice)}
+                    </div>
+                    ${fin.isRush ? `
+                      <label class="flex items-center gap-1.5 mt-1 text-[11px] text-amber-800 font-medium cursor-pointer">
+                        <input
+                          type="checkbox"
+                          ${state.admin.applyRushFee ? 'checked' : ''}
+                          onchange="state.admin.applyRushFee = this.checked; renderAdminView();"
+                        />
+                        Includes ${formatINR(state.admin.rushFeeAmount)} Rush Fee
+                      </label>
+                    ` : ''}
+                  </div>
+                </div>
+              </div>
+
+              <!-- High-Margin Academic Add-On Pricing -->
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h2 class="text-sm font-bold text-slate-900">Academic Deliverables Pricing (75%–90% Margin)</h2>
+                    <p class="text-xs text-slate-500">Toggle or adjust standalone charges for reports, IEEE paper, PPTs, and viva coaching.</p>
+                  </div>
+                  <span class="font-mono text-xs font-bold text-emerald-700">Add-Ons: ${formatINR(fin.addonsTotal)}</span>
+                </div>
+
+                <div class="space-y-2">
+                  ${ACADEMIC_ADDONS.map(addon => {
+                    const isFreeViaAdvisor = addon.id === 'review_ppts' && Boolean(fin.advisorInfo);
+                    const active = isFreeViaAdvisor || Boolean(state.selectedAddons[addon.id]);
+                    const price = state.admin.addonPrices[addon.id];
+
+                    return `
+                      <div class="flex items-center justify-between gap-3 p-2.5 rounded-xl border ${active ? 'bg-white border-slate-200' : 'bg-slate-50/60 border-slate-100 opacity-60'}">
+                        <label class="flex items-center gap-2.5 cursor-pointer min-w-0">
+                          <input
+                            type="checkbox"
+                            ${active ? 'checked' : ''}
+                            onchange="toggleAdminAddon('${addon.id}')"
+                            class="w-4 h-4 accent-indigo-600 rounded"
+                          />
+                          <div class="min-w-0">
+                            <div class="text-xs font-bold text-slate-800 truncate">${addon.title}</div>
+                            ${isFreeViaAdvisor ? `<span class="text-[10px] font-bold text-emerald-600">Auto-Discounted FREE (${fin.advisorInfo.code})</span>` : ''}
+                          </div>
+                        </label>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                          <span class="text-xs text-slate-400">₹</span>
+                          <input
+                            type="number"
+                            min="0"
+                            step="100"
+                            value="${isFreeViaAdvisor ? 0 : price}"
+                            ${isFreeViaAdvisor ? 'disabled' : ''}
+                            onchange="state.admin.addonPrices['${addon.id}'] = Number(this.value); renderAdminView();"
+                            class="w-20 px-2 py-1 rounded-lg border border-slate-300 text-right font-mono text-xs font-bold text-slate-900 disabled:bg-emerald-50 disabled:text-emerald-700"
+                          />
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
+              <!-- Profit & Margin Summary Card -->
+              <div class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-md space-y-4">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <div>
+                    <div class="text-[11px] text-slate-400">Total Student Quote</div>
+                    <div class="text-lg sm:text-xl font-extrabold font-mono text-white mt-0.5">${formatINR(fin.totalStudentQuote)}</div>
+                  </div>
+                  <div>
+                    <div class="text-[11px] text-slate-400">Your Internal Costs</div>
+                    <div class="text-lg sm:text-xl font-bold font-mono text-rose-300 mt-0.5">${formatINR(fin.totalInternalCost)}</div>
+                  </div>
+                  <div>
+                    <div class="text-[11px] text-slate-400">Net Profit</div>
+                    <div class="text-lg sm:text-xl font-extrabold font-mono text-emerald-400 mt-0.5">${formatINR(fin.netProfit)}</div>
+                  </div>
+                  <div>
+                    <div class="text-[11px] text-slate-400">Gross Margin</div>
+                    <div class="text-lg sm:text-xl font-extrabold font-mono text-indigo-400 mt-0.5">${fin.marginPercent}%</div>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div class="text-xs text-slate-300">
+                    Milestone Split: <strong class="text-white">${formatINR(fin.advanceAmount)} (50% UPI Advance)</strong> + <strong class="text-white">${formatINR(fin.finalAmount)} (On Demo Video)</strong>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="openQuoteModal()"
+                    class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold transition-colors shrink-0"
+                  >
+                    Generate &amp; Preview Student Quote →
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateAdminBomCost(id, isExtra, newVal) {
+      const val = Math.max(0, Number(newVal) || 0);
+      if (isExtra) {
+        const item = state.admin.extraInternalItems.find(i => i.id === id);
+        if (item) item.unitCost = val;
+      } else {
+        state.admin.costOverrides[id] = val;
+      }
+      renderAdminView();
+    }
+
+    function addAdminInternalItem() {
+      const presets = [
+        { name: '3S 20A BMS + 3x 18650 Cells + Buck Converter', unitCost: 890 },
+        { name: 'Custom Laser-Cut Acrylic Chassis & Brass Standoffs', unitCost: 550 },
+        { name: '4-Channel Relay + Optocoupler Isolation Board', unitCost: 240 },
+        { name: 'Sensor Calibration & Cloud API Hosting Setup', unitCost: 400 }
+      ];
+      const pick = presets[state.admin.extraInternalItems.length % presets.length];
+      state.admin.extraInternalItems.push({
+        id: 'ext-' + Date.now(),
+        name: pick.name,
+        qty: 1,
+        unitCost: pick.unitCost
+      });
+      showToast(`Added internal BOM item: ${pick.name}`, 'info');
+      renderAdminView();
+    }
+
+    function toggleAdminAddon(id) {
+      if (id === 'review_ppts' && state.appliedAdvisorCode) {
+        showToast('PPTs remain unlocked FREE while an Advisor Code is active.', 'info');
+        return;
+      }
+      state.selectedAddons[id] = !state.selectedAddons[id];
+      renderAdminView();
+    }
+
+    // -----------------------------------------------------------------------
+    // 7. STUDENT-FACING UNIFIED QUOTE MODAL
+    // -----------------------------------------------------------------------
+    function openQuoteModal() {
+      const fin = getAdminFinancials();
+      const modal = document.getElementById('quote-modal');
+      const body = document.getElementById('quote-modal-body');
+
+      body.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-200">
+          <div>
+            <div class="text-xs text-slate-500">Prepared For</div>
+            <div class="text-base font-bold text-slate-900">${escapeHTML(state.studentName || 'Student Project Team')}</div>
+            <div class="text-xs text-slate-600">${escapeHTML(state.collegeName || 'Bengaluru')} • ${state.universityType}</div>
+          </div>
+          <div class="text-right">
+            <span class="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 font-mono text-xs font-bold">${state.requestId}</span>
+            <div class="text-xs text-slate-500 mt-1">Valid for 7 Days</div>
+          </div>
+        </div>
+
+        <!-- Project Title -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Approved Project Scope</div>
+          <div class="text-sm font-bold text-slate-900 mt-0.5">${escapeHTML(state.projectTitle || 'Custom Engineering Prototype')}</div>
+        </div>
+
+        <!-- Engineer Feasibility Note -->
+        <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-1.5">
+          <div class="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+            <span>🛠️ Lead Engineer Feasibility &amp; Architecture Review</span>
+          </div>
+          <p class="text-xs text-slate-700 whitespace-pre-line leading-relaxed">${escapeHTML(state.admin.feasibilityNote)}</p>
+        </div>
+
+        <!-- Unified Itemized Quote (Zero individual sensor prices!) -->
+        <div class="border border-slate-200 rounded-xl overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold">
+              <tr>
+                <th class="py-2.5 px-4">Deliverable Package</th>
+                <th class="py-2.5 px-4 text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr>
+                <td class="py-3 px-4">
+                  <div class="font-bold text-slate-900">Complete Working Prototype + Tested Code + Circuit Diagram</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">
+                    Includes all required controllers, sensors, power regulation, wiring &amp; assembly (${state.letEngineersChoose ? 'Engineer-curated BOM' : `${getTotalKitUnits()} modules`})
+                  </div>
+                </td>
+                <td class="py-3 px-4 text-right font-mono font-bold text-slate-900 align-top">
+                  ${formatINR(fin.prototypeStudentPrice)}
+                </td>
+              </tr>
+
+              ${fin.activeAddons.map(addon => `
+                <tr>
+                  <td class="py-3 px-4">
+                    <div class="font-bold text-slate-800">${addon.title}</div>
+                    ${addon.isFreeViaAdvisor ? `
+                      <div class="text-[11px] text-emerald-700 font-semibold">Unlocked FREE via Campus Advisor Code (${fin.advisorInfo.code})</div>
+                    ` : ''}
+                  </td>
+                  <td class="py-3 px-4 text-right font-mono font-bold ${addon.isFreeViaAdvisor ? 'text-emerald-600' : 'text-slate-800'} align-top">
+                    ${addon.isFreeViaAdvisor ? 'FREE (₹0)' : formatINR(addon.finalPrice)}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+            <tfoot class="bg-slate-900 text-white">
+              <tr>
+                <td class="py-3.5 px-4 font-bold text-sm">Total Unified Project Quote</td>
+                <td class="py-3.5 px-4 text-right font-mono font-extrabold text-base">${formatINR(fin.totalStudentQuote)}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Milestone Payment Split -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200">
+            <div class="font-bold text-emerald-900">Step 1: 50% Advance to Start Build</div>
+            <div class="text-lg font-extrabold font-mono text-emerald-800 mt-0.5">${formatINR(fin.advanceAmount)}</div>
+            <div class="text-[11px] text-emerald-700 mt-0.5">Initiates component sourcing &amp; circuit assembly</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="font-bold text-slate-900">Step 2: 50% Upon Working Video Demo</div>
+            <div class="text-lg font-extrabold font-mono text-slate-800 mt-0.5">${formatINR(fin.finalAmount)}</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">Paid before studio pickup / courier &amp; editable file release</div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button
+            type="button"
+            onclick="closeQuoteModal(); showToast('Quote link copied & ready to share via WhatsApp!', 'success');"
+            class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold"
+          >
+            Copy Quote Link for Student WhatsApp
+          </button>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeQuoteModal() {
+      document.getElementById('quote-modal').classList.add('hidden');
+    }
+
+    // -----------------------------------------------------------------------
+    // 8. INITIALIZE ON WINDOW LOAD
+    // -----------------------------------------------------------------------
+    window.onload = function () {
+      renderStudentView();
+    };
+  </script>
+</body>
+</html>
