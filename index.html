@@ -98,7 +98,7 @@
             Scope Your Custom College Project in 4 Steps
           </h1>
           <p class="text-sm text-slate-600 mt-1">
-            Submit your approved title, select components (no upfront retail clutter), and choose IEEE paper or editable report add-ons for an instant WhatsApp feasibility quote.
+            Submit your approved title, select components, and choose IEEE paper or editable report add-ons. Our engineers will review your specs and get back to you with a quote.
           </p>
         </div>
         <div class="flex items-center gap-2 shrink-0">
@@ -164,7 +164,7 @@
             <input id="studentNameInput" type="text" placeholder="e.g., Rohan Sharma (Team of 4)" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1.5">WhatsApp Number (For Quote & Demo) *</label>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Contact / WhatsApp Number *</label>
             <input id="phoneInput" type="tel" placeholder="+91 98450 XXXXX" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
           </div>
         </div>
@@ -300,7 +300,6 @@
           </div>
 
           <div id="catalogBrowserArea" class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left 2 Columns: Search + Brand Filter + Component Grid -->
             <div class="lg:col-span-2 space-y-4">
               <div class="flex flex-col sm:flex-row gap-2.5">
                 <input id="compSearchInput" type="text" oninput="renderCatalog()" placeholder="Search ESP32, LiDAR, MPU6050, 18650 BMS, Raspberry Pi..." class="flex-1 rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
@@ -315,14 +314,10 @@
                 </select>
               </div>
 
-              <!-- Brand Filter Pills -->
               <div id="brandFilterBar" class="flex flex-wrap gap-1.5"></div>
-
-              <!-- Component Cards Grid -->
               <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[480px] overflow-y-auto pr-1"></div>
             </div>
 
-            <!-- Right Column: Selected Project Kit Drawer -->
             <div class="bg-slate-50 rounded-2xl border border-slate-200 p-4 flex flex-col justify-between space-y-4 h-fit">
               <div>
                 <div class="flex items-center justify-between border-b border-slate-200 pb-2.5">
@@ -361,7 +356,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-          <!-- Included Core Deliverable -->
           <div class="p-4 rounded-xl border-2 border-emerald-500/40 bg-emerald-50/40 flex items-start gap-3">
             <input type="checkbox" checked disabled class="mt-1 w-4 h-4 accent-emerald-600" />
             <div>
@@ -373,7 +367,6 @@
             </div>
           </div>
 
-          <!-- Standard PDF Report -->
           <label class="p-4 rounded-xl border border-slate-200 hover:border-indigo-300 cursor-pointer flex items-start gap-3 transition">
             <input id="addonReportPdf" type="checkbox" checked class="mt-1 w-4 h-4 accent-indigo-600" />
             <div>
@@ -382,7 +375,6 @@
             </div>
           </label>
 
-          <!-- Editable Report Upgrade -->
           <label class="p-4 rounded-xl border border-slate-200 hover:border-indigo-300 cursor-pointer flex items-start gap-3 transition">
             <input id="addonReportEditable" type="checkbox" class="mt-1 w-4 h-4 accent-indigo-600" />
             <div>
@@ -394,7 +386,6 @@
             </div>
           </label>
 
-          <!-- IEEE Paper -->
           <label class="p-4 rounded-xl border border-slate-200 hover:border-indigo-300 cursor-pointer flex items-start gap-3 transition">
             <input id="addonIeee" type="checkbox" class="mt-1 w-4 h-4 accent-indigo-600" />
             <div>
@@ -403,7 +394,6 @@
             </div>
           </label>
 
-          <!-- Review & Final Viva PPTs -->
           <label class="p-4 rounded-xl border border-slate-200 hover:border-indigo-300 cursor-pointer flex items-start gap-3 transition">
             <input id="addonPpts" type="checkbox" checked class="mt-1 w-4 h-4 accent-indigo-600" />
             <div>
@@ -412,7 +402,6 @@
             </div>
           </label>
 
-          <!-- 1-on-1 Viva Walkthrough -->
           <label class="p-4 rounded-xl border border-slate-200 hover:border-indigo-300 cursor-pointer flex items-start gap-3 transition">
             <input id="addonViva" type="checkbox" class="mt-1 w-4 h-4 accent-indigo-600" />
             <div>
@@ -442,17 +431,17 @@
             ← Back
           </button>
           <button id="submitRequestBtn" type="button" onclick="submitProjectRequest()" class="px-7 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-md transition">
-            Submit & Send Dossier on WhatsApp ✓
+            Submit Project Request ✓
           </button>
         </div>
       </div>
 
-      <!-- SUBMISSION SUCCESS CARD -->
+      <!-- CLEAN ON-SITE SUBMISSION CONFIRMATION CARD (NO WHATSAPP REDIRECT FOR STUDENT) -->
       <div id="submissionSuccessPanel" class="hidden bg-white rounded-2xl border-2 border-emerald-500 p-6 sm:p-8 shadow-md text-center max-w-2xl mx-auto space-y-5">
         <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl font-bold mx-auto">✓</div>
-        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Project Dossier Saved & Ready!</h2>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Project Request Submitted!</h2>
         <p class="text-sm text-slate-600">
-          Your complete component list, academic add-ons, and estimated quote breakdown have been formatted for our Bengaluru engineering WhatsApp desk.
+          Thank you! Your project specifications, component kit, and deliverable preferences have been sent to our Bengaluru engineering desk. We will review feasibility and get back to you within 24 hours.
         </p>
 
         <div class="bg-slate-900 text-white rounded-xl p-4 flex items-center justify-between max-w-md mx-auto">
@@ -465,21 +454,13 @@
           </button>
         </div>
 
-        <!-- Direct WhatsApp Dispatch Button -->
-        <div class="flex flex-col sm:flex-row justify-center gap-3 pt-1">
-          <a id="directWhatsappDispatchBtn" href="#" target="_blank" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md transition flex items-center justify-center gap-2">
-            <span>📲 Send Full Dossier to WhatsApp Now</span>
-          </a>
-          <button type="button" onclick="copyFullWhatsappSummary()" class="px-5 py-3 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold">
-            Copy Full Summary
-          </button>
-        </div>
+        <p class="text-xs text-slate-500">Save this tracking code to check your engineer review notes and finalized quote anytime.</p>
 
         <div class="pt-2 flex flex-wrap justify-center gap-3 border-t border-slate-100">
-          <button type="button" onclick="openTrackWithGeneratedCode()" class="px-4 py-2 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold">
-            Open Quote Tracker →
+          <button type="button" onclick="openTrackWithGeneratedCode()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold">
+            Track Quote Status →
           </button>
-          <button type="button" onclick="resetFormForNew()" class="px-4 py-2 rounded-xl text-slate-500 hover:text-slate-800 text-xs font-semibold">
+          <button type="button" onclick="resetFormForNew()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold">
             Submit Another Project
           </button>
         </div>
@@ -493,7 +474,7 @@
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
         <div>
           <h2 class="text-xl font-extrabold text-slate-900">Track Your Project Quote & Status</h2>
-          <p class="text-xs sm:text-sm text-slate-500 mt-1">Enter the tracking code you received upon submission (e.g., <span class="mono font-semibold">BLR-2026-4821</span>) to view engineer feasibility notes and your itemized quote.</p>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">Enter the tracking code you received upon submission (e.g., <span class="mono font-semibold">BLR-2026-4821</span>) to view engineer feasibility notes and your confirmed quote.</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-2.5">
           <input id="trackCodeSearchInput" type="text" placeholder="Enter Tracking Code (e.g., BLR-2026-XXXX)" class="flex-1 uppercase mono rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
@@ -546,7 +527,6 @@
 
       <!-- ADMIN SUB-TAB A: ORDERS & QUOTE BUILDER -->
       <div id="adminOrdersPanel" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Left 4 Cols: Incoming Requests List -->
         <div class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-3 h-fit">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <h3 class="text-sm font-bold text-slate-900">Incoming Student Requests</h3>
@@ -557,10 +537,9 @@
           </div>
         </div>
 
-        <!-- Right 8 Cols: Active Ticket BOM & Margin Editor -->
         <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
           <div id="adminEmptySelection" class="py-16 text-center text-slate-400 text-sm">
-            Select a student request on the left to audit components, calculate SP Road margins, and publish a quote.
+            Select a student request on the left to audit components, view recommended pricing, and send the full dossier to your WhatsApp.
           </div>
 
           <div id="adminTicketEditor" class="hidden space-y-6">
@@ -573,9 +552,12 @@
                 <h3 id="edTitle" class="text-lg font-extrabold text-slate-900 mt-1">Project Title</h3>
                 <p id="edStudentInfo" class="text-xs text-slate-600 mt-0.5">Student Name • College • Domain</p>
               </div>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <a id="edSendToMyWhatsappLink" href="#" target="_blank" class="px-3 py-1.5 rounded-xl bg-navy-900 hover:bg-slate-800 text-white text-xs font-semibold">
+                  📲 Send Full Dossier to My WhatsApp
+                </a>
                 <a id="edWhatsappLink" href="#" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold">
-                  WhatsApp Student
+                  Reply to Student
                 </a>
                 <select id="edStatusSelect" class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs font-semibold bg-white">
                   <option value="New Request">New Request</option>
@@ -589,9 +571,10 @@
             </div>
 
             <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 space-y-1.5">
-              <div class="text-xs font-bold text-slate-700">Student Functional Requirements & Notes:</div>
+              <div class="text-xs font-bold text-slate-700">Student Functional Requirements & Selected Add-Ons:</div>
               <p id="edDescription" class="text-xs text-slate-600 whitespace-pre-line"></p>
-              <p id="edCustomParts" class="text-xs font-semibold text-indigo-700 pt-1"></p>
+              <p id="edAddonsSummary" class="text-xs font-semibold text-slate-800 pt-1"></p>
+              <p id="edCustomParts" class="text-xs font-semibold text-indigo-700"></p>
             </div>
 
             <!-- Internal BOM & SP Road Wholesale Cost Workbench -->
@@ -768,7 +751,7 @@
     // =========================================================================
     const SUPABASE_URL = 'https://uvkgomlzeyivczvkesdj.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CQNaUF-_rBtO_3312BuMJw_J2pdOTgN';
-    const OWNER_WHATSAPP_NUMBER = '917892672646'; // Your Bengaluru WhatsApp Desk Number (with 91 country code)
+    const OWNER_WHATSAPP_NUMBER = '917892672646';
 
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
@@ -811,7 +794,6 @@
     let selectedBrand = 'All';
     let selectedKit = [];
     let validatedAdvisorDiscount = 0;
-    let lastFormattedWhatsappText = '';
     let adminRequestsCache = [];
     let activeAdminRequest = null;
     let activeAdminBom = [];
@@ -858,7 +840,7 @@
         const phone = document.getElementById('phoneInput').value.trim();
         const college = document.getElementById('collegeInput').value.trim();
         if (!name || !phone || !college) {
-          showToast('Please enter your Name, WhatsApp Number, and College first.', true);
+          showToast('Please enter your Name, Contact Number, and College first.', true);
           return;
         }
       }
@@ -1060,28 +1042,25 @@
     }
 
     // =========================================================================
-    // 7. ACCURATE QUOTE CALCULATOR & WHATSAPP MESSAGE FORMATTER
+    // 7. ACCURATE QUOTE CALCULATOR & ADMIN WHATSAPP DOSSIER FORMATTER
     // =========================================================================
     function calculateAccurateEstimate(params) {
-      const { projectType, domain, deadline, kit, aiRecommend, customParts, addons, advisorDiscount } = params;
+      const { projectType, domain, deadline, kit, customParts, addons, advisorDiscount } = params;
       const isPureSoftware = domain.includes('Full-Stack') || (domain.includes('AI / ML') && kit.length === 0 && !customParts);
 
-      // 1. Internal SP Road Hardware Cost + 20% Buffer
       let rawPartsCost = kit.reduce((sum, item) => sum + ((item.defaultCost || 200) * (item.qty || 1)), 0);
       if (!isPureSoftware && rawPartsCost === 0) {
-        rawPartsCost = projectType.includes('Mini') ? 1400 : 2800; // Baseline kit if engineer recommends parts
+        rawPartsCost = projectType.includes('Mini') ? 1400 : 2800;
       }
-      if (customParts) rawPartsCost += 750; // Buffer for custom requested parts
+      if (customParts) rawPartsCost += 750;
       const hardwareBuffer = isPureSoftware ? 0 : Math.max(400, Math.round(rawPartsCost * 0.20));
       const totalInternalHardware = rawPartsCost + hardwareBuffer;
 
-      // 2. Engineering & Build Labor Fee by Project Tier
       let baseEngineeringFee = 8500;
       if (projectType.includes('Mini')) baseEngineeringFee = 4500;
       else if (projectType.includes('M.Tech')) baseEngineeringFee = 12000;
       else if (projectType.includes('Hackathon')) baseEngineeringFee = 7500;
 
-      // Rush order surcharge (< 15 days)
       let isRush = false;
       if (deadline) {
         const diffDays = Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
@@ -1089,11 +1068,9 @@
       }
       const rushFee = isRush ? 2000 : 0;
 
-      // Round prototype quote cleanly to nearest ₹500
       const rawProtoQuote = totalInternalHardware + baseEngineeringFee + rushFee;
       const prototypePrice = Math.ceil(rawProtoQuote / 500) * 500;
 
-      // 3. Academic Deliverables & Add-Ons Pricing
       let addonsPrice = 0;
       const addonLines = [];
       if (addons.report_pdf && addons.report_editable) {
@@ -1145,13 +1122,13 @@
     function buildNeatlyFormattedWhatsappMessage(data, est) {
       const componentsSection = data.ai_recommend_parts
         ? '• Engineer Recommended Kit (Team requested part selection)'
-        : (data.selected_components.length > 0
+        : (data.selected_components && data.selected_components.length > 0
             ? data.selected_components.map(c => `• ${c.name} (${c.brand}) × ${c.qty}`).join('\n')
             : '• No specific components selected');
 
       const customPartLine = data.custom_parts ? `\n• Custom Unlisted Part: ${data.custom_parts}` : '';
 
-      const addonsSection = est.addonLines.length > 0
+      const addonsSection = est.addonLines && est.addonLines.length > 0
         ? est.addonLines.map(a => `• ${a}`).join('\n')
         : '• Core Prototype & Code Only';
 
@@ -1161,7 +1138,7 @@
         ``,
         `*1. STUDENT & ACADEMIC DETAILS*`,
         `• *Name:* ${data.student_name}`,
-        `• *Student WhatsApp:* ${data.phone}`,
+        `• *Student Phone:* ${data.phone}`,
         `• *College:* ${data.college_name}`,
         `• *Curriculum:* ${data.university_type}`,
         `• *City / Hub:* ${data.city}`,
@@ -1181,20 +1158,21 @@
         `${addonsSection}`,
         data.advisor_code ? `• *Campus Advisor Code:* ${data.advisor_code}` : null,
         ``,
-        `*5. ESTIMATED PROJECT QUOTE (50/50 MILESTONE)*`,
-        `• Prototype & Engineering Build: ₹${est.prototypePrice.toLocaleString('en-IN')}`,
-        `• Academic Documentation & Viva Add-Ons: ₹${est.addonsPrice.toLocaleString('en-IN')}`,
-        est.discount > 0 ? `• Campus Advisor Discount: − ₹${est.discount.toLocaleString('en-IN')}` : null,
-        `*Total Estimated Quote: ₹${est.totalRecommendedQuote.toLocaleString('en-IN')}*`,
-        `• 50% Advance to Start: ₹${est.advance50.toLocaleString('en-IN')}`,
-        `• 50% on Live Demo Video: ₹${est.balance50.toLocaleString('en-IN')}`
+        `*5. RECOMMENDED QUOTE & PROFIT BREAKDOWN*`,
+        `• Internal SP Road Hardware + Buffer: ₹${(est.totalInternalHardware || 0).toLocaleString('en-IN')}`,
+        `• Prototype & Engineering Quote: ₹${(est.prototypePrice || 0).toLocaleString('en-IN')}`,
+        `• Academic Add-Ons Charge: ₹${(est.addonsPrice || 0).toLocaleString('en-IN')}`,
+        est.discount > 0 ? `• Advisor Discount: − ₹${est.discount.toLocaleString('en-IN')}` : null,
+        `*Recommended Student Quote: ₹${(est.totalRecommendedQuote || 0).toLocaleString('en-IN')}*`,
+        `• 50% Advance: ₹${(est.advance50 || 0).toLocaleString('en-IN')} | 50% Final: ₹${(est.balance50 || 0).toLocaleString('en-IN')}`,
+        `*Est. Net Profit: ₹${(est.estimatedNetProfit || 0).toLocaleString('en-IN')}*`
       ].filter(Boolean);
 
       return lines.join('\n');
     }
 
     // =========================================================================
-    // 8. CAMPUS ADVISOR CODE VALIDATION & FORM SUBMISSION
+    // 8. CAMPUS ADVISOR CODE VALIDATION & PURE ON-SITE FORM SUBMISSION
     // =========================================================================
     async function validateAdvisorCode() {
       const code = document.getElementById('advisorCodeInput').value.trim().toUpperCase();
@@ -1216,7 +1194,7 @@
       if (data && !error) {
         validatedAdvisorDiscount = 1500;
         msgEl.className = 'text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-lg';
-        msgEl.textContent = `✓ Code ${data.code} (${data.college_name}) verified! Free Review 1 & 2 PPTs (₹1,500 value) unlocked.`;
+        msgEl.textContent = `✓ Code ${data.code} (${data.college_name}) verified! Free Review 1 & 2 PPTs unlocked.`;
       } else {
         validatedAdvisorDiscount = 0;
         msgEl.className = 'text-xs font-semibold text-rose-600 bg-rose-50 border border-rose-200 px-3 py-2 rounded-lg';
@@ -1238,9 +1216,8 @@
       }
 
       btn.disabled = true;
-      btn.textContent = 'Saving & Preparing WhatsApp...';
+      btn.textContent = 'Submitting Request...';
 
-      // Auto-verify advisor code if typed without clicking Apply
       const rawCode = document.getElementById('advisorCodeInput').value.trim().toUpperCase();
       if (rawCode && validatedAdvisorDiscount === 0) {
         await validateAdvisorCode();
@@ -1298,39 +1275,24 @@
       const { error } = await db.from('project_requests').insert([payload]);
 
       btn.disabled = false;
-      btn.textContent = 'Submit & Send Dossier on WhatsApp ✓';
+      btn.textContent = 'Submit Project Request ✓';
 
       if (error) {
         console.error(error);
-        showToast('Database error: ' + error.message, true);
+        showToast('Submission error: ' + error.message, true);
         return;
       }
 
-      // Build formatted WhatsApp message & link
-      lastFormattedWhatsappText = buildNeatlyFormattedWhatsappMessage(payload, estimate);
-      const waUrl = `https://wa.me/${OWNER_WHATSAPP_NUMBER}?text=${encodeURIComponent(lastFormattedWhatsappText)}`;
-
       document.getElementById('generatedTrackingCode').textContent = trackingCode;
-      document.getElementById('directWhatsappDispatchBtn').href = waUrl;
-
       [1, 2, 3, 4].forEach(n => document.getElementById('stepPanel' + n).classList.add('hidden'));
       document.getElementById('submissionSuccessPanel').classList.remove('hidden');
-      showToast('Dossier saved! Opening WhatsApp to send details...');
-
-      // Automatically open WhatsApp with the full pre-filled dossier
-      window.open(waUrl, '_blank');
+      showToast('Project request submitted!');
     }
 
     function copyTrackingCode() {
       const code = document.getElementById('generatedTrackingCode').textContent;
       navigator.clipboard.writeText(code);
       showToast('Tracking code copied: ' + code);
-    }
-
-    function copyFullWhatsappSummary() {
-      if (!lastFormattedWhatsappText) return;
-      navigator.clipboard.writeText(lastFormattedWhatsappText);
-      showToast('Full formatted project & quote summary copied!');
     }
 
     function openTrackWithGeneratedCode() {
@@ -1354,7 +1316,7 @@
     }
 
     // =========================================================================
-    // 9. STUDENT TRACK QUOTE LOOKUP
+    // 9. STUDENT TRACK QUOTE LOOKUP (NEVER SHOWS UNCONFIRMED ESTIMATES)
     // =========================================================================
     async function lookupStudentQuote() {
       const code = document.getElementById('trackCodeSearchInput').value.trim().toUpperCase();
@@ -1388,11 +1350,10 @@
 
       const detailsBox = document.getElementById('trackQuoteDetailsBox');
       if (!quote) {
-        const est = req.estimated_quote_summary || {};
         detailsBox.innerHTML = `
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs sm:text-sm text-amber-900 space-y-1.5">
             <div><strong>Status: Under Engineer Feasibility Review.</strong></div>
-            <p>Our Bengaluru hardware & software lead is verifying your component list. ${est.totalRecommendedQuote ? `Initial System Estimate: <strong>₹${Number(est.totalRecommendedQuote).toLocaleString('en-IN')}</strong> (final confirmed quote will appear here shortly).` : ''}</p>
+            <p>Our Bengaluru engineering team is reviewing your project specifications and component kit. We will publish your confirmed quote here and notify you shortly.</p>
           </div>
         `;
       } else {
@@ -1554,7 +1515,7 @@
             <div class="text-xs font-bold text-slate-900 line-clamp-1">${r.title}</div>
             <div class="flex items-center justify-between text-[11px] text-slate-500">
               <span>${r.student_name} • ${r.college_name}</span>
-              ${estTotal ? `<span class="mono font-bold text-emerald-700">Est ₹${Number(estTotal).toLocaleString('en-IN')}</span>` : ''}
+              ${estTotal ? `<span class="mono font-bold text-emerald-700">Rec ₹${Number(estTotal).toLocaleString('en-IN')}</span>` : ''}
             </div>
           </button>
         `;
@@ -1577,6 +1538,24 @@
       document.getElementById('edDescription').textContent = activeAdminRequest.description;
       document.getElementById('edCustomParts').textContent = activeAdminRequest.custom_parts ? `Custom Unlisted Part Requested: ${activeAdminRequest.custom_parts}` : '';
 
+      const est = activeAdminRequest.estimated_quote_summary || calculateAccurateEstimate({
+        projectType: activeAdminRequest.project_type,
+        domain: activeAdminRequest.domain,
+        deadline: activeAdminRequest.deadline,
+        kit: activeAdminRequest.selected_components || [],
+        aiRecommend: activeAdminRequest.ai_recommend_parts,
+        customParts: activeAdminRequest.custom_parts,
+        addons: activeAdminRequest.addons || {},
+        advisorDiscount: activeAdminRequest.advisor_code ? 1500 : 0
+      });
+
+      document.getElementById('edAddonsSummary').textContent = `Requested Add-Ons: ${(est.addonLines || []).join(' | ') || 'Core Prototype Only'}`;
+
+      // Button 1: Send full dossier + recommended quote to YOUR WhatsApp
+      const ownerDossierMsg = buildNeatlyFormattedWhatsappMessage(activeAdminRequest, est);
+      document.getElementById('edSendToMyWhatsappLink').href = `https://wa.me/${OWNER_WHATSAPP_NUMBER}?text=${encodeURIComponent(ownerDossierMsg)}`;
+
+      // Button 2: Reply directly to the student on WhatsApp
       const cleanPhone = activeAdminRequest.phone.replace(/\D/g, '');
       const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
       document.getElementById('edWhatsappLink').href = `https://wa.me/${waPhone}?text=${encodeURIComponent(`Hi ${activeAdminRequest.student_name}, we reviewed your ProtoForge BLR project (${activeAdminRequest.tracking_code}). Check your confirmed quote on our website using your tracking code!`)}`;
@@ -1596,7 +1575,6 @@
         document.getElementById('edAdvancePaidCheck').checked = !!existingQuote.advance_paid;
         document.getElementById('edFinalPaidCheck').checked = !!existingQuote.final_paid;
       } else {
-        const est = activeAdminRequest.estimated_quote_summary || {};
         activeAdminBom = (activeAdminRequest.selected_components || []).map(c => ({
           name: c.name,
           qty: c.qty || 1,
@@ -1778,7 +1756,7 @@
         },
         privacy: {
           title: 'Privacy Policy',
-          body: `<p>We collect student names, WhatsApp numbers, college details, and project specifications solely to prepare technical feasibility quotes and deliver requested builds. Student project titles and personal contact details are never sold or shared with third parties.</p>`
+          body: `<p>We collect student names, contact numbers, college details, and project specifications solely to prepare technical feasibility quotes and deliver requested builds. Student project titles and personal contact details are never sold or shared with third parties.</p>`
         },
         refund: {
           title: 'Refund & Cancellation Policy',
