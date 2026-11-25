@@ -53,7 +53,7 @@
           <div class="flex items-center gap-2">
             <span class="font-bold text-base sm:text-lg tracking-tight">ProtoForge BLR</span>
             <span class="hidden sm:inline-block text-[11px] font-medium px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              Bengaluru Hardware & AI Lab
+              Bengaluru Hardware, VLSI & AI Lab
             </span>
           </div>
           <p class="text-[11px] text-slate-400 hidden sm:block">Custom VTU & Autonomous Engineering Projects — Built, Tested & Viva-Ready</p>
@@ -65,7 +65,7 @@
           New Project
         </button>
         <button id="navTrackBtn" onclick="switchView('track')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
-          Track Quote
+          Track Quote & Pay
         </button>
         <button id="navAdminBtn" onclick="handleAdminNavClick()" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-700 transition flex items-center gap-1.5">
           <span id="adminLockDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
@@ -98,7 +98,7 @@
             Scope Your Custom College Project in 4 Steps
           </h1>
           <p class="text-sm text-slate-600 mt-1">
-            Submit your approved title, select components, and choose IEEE paper or editable report add-ons. Our engineers will review your specs and get back to you with a quote.
+            Submit your project requirements and deliverables on-site. Our engineers will verify feasibility, connect with you on WhatsApp, and publish your quote & payment link here.
           </p>
         </div>
         <div class="flex items-center gap-2 shrink-0">
@@ -115,7 +115,7 @@
             <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">1</span>
             <span class="text-xs sm:text-sm font-bold text-slate-900">Academic Context</span>
           </div>
-          <p class="text-[11px] text-slate-500 mt-1 pl-8">Location & Deadline</p>
+          <p class="text-[11px] text-slate-500 mt-1 pl-8">College & Deadline</p>
         </button>
         <button onclick="goToStep(2)" id="stepTab2" class="step-tab text-left p-3 rounded-xl border border-slate-200 bg-white/70 hover:bg-white transition">
           <div class="flex items-center gap-2">
@@ -129,7 +129,7 @@
             <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 text-xs font-bold flex items-center justify-center">3</span>
             <span class="text-xs sm:text-sm font-bold text-slate-700">Component Kit</span>
           </div>
-          <p class="text-[11px] text-slate-500 mt-1 pl-8">Price-Free Catalog</p>
+          <p class="text-[11px] text-slate-500 mt-1 pl-8">Engineer Pick or Catalog</p>
         </button>
         <button onclick="goToStep(4)" id="stepTab4" class="step-tab text-left p-3 rounded-xl border border-slate-200 bg-white/70 hover:bg-white transition">
           <div class="flex items-center gap-2">
@@ -145,7 +145,7 @@
         <div class="border-b border-slate-100 pb-4">
           <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Step 1 of 4</span>
           <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">Academic Context & Submission Deadline</h2>
-          <p class="text-xs sm:text-sm text-slate-500">Helps us align circuit complexity, Bengaluru pickup/delivery, and university report formatting.</p>
+          <p class="text-xs sm:text-sm text-slate-500">Helps us align circuit/HDL complexity, delivery hub, and university report formatting.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -156,7 +156,11 @@
               <option value="Mysuru">Mysuru (Courier / Remote)</option>
               <option value="Mangaluru">Mangaluru (Courier / Remote)</option>
               <option value="Hubballi-Dharwad">Hubballi-Dharwad (Courier / Remote)</option>
-              <option value="Other City (Software / Docs Only)">Other City (Software / Docs Only)</option>
+              <option value="Belagavi">Belagavi (Courier / Remote)</option>
+              <option value="Tumakuru">Tumakuru (Courier / Remote)</option>
+              <option value="Kalaburagi / Ballari">Kalaburagi / Ballari (Courier / Remote)</option>
+              <option value="Shivamogga / Davangere">Shivamogga / Davangere (Courier / Remote)</option>
+              <option value="Other City (Software / VLSI / Docs)">Other City (Software / VLSI / Docs)</option>
             </select>
           </div>
           <div>
@@ -164,24 +168,41 @@
             <input id="studentNameInput" type="text" placeholder="e.g., Rohan Sharma (Team of 4)" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Contact / WhatsApp Number *</label>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">WhatsApp Number (For Project Group & Quote) *</label>
             <input id="phoneInput" type="tel" placeholder="+91 98450 XXXXX" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1.5">College / Institute Name *</label>
-          <input id="collegeInput" type="text" placeholder="Type your college name or tap a Bengaluru campus below..." class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+        <!-- SEARCHABLE KARNATAKA COLLEGES SELECTOR + CUSTOM ADD -->
+        <div class="relative" id="collegeSelectorWrapper">
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-semibold text-slate-700">College / Institute Name (Select from Karnataka List or Add Custom) *</label>
+            <span class="text-[11px] text-indigo-600 font-medium">120+ Karnataka Colleges Loaded</span>
+          </div>
+          <div class="relative">
+            <input id="collegeInput" type="text" autocomplete="off"
+              onfocus="openCollegeDropdown()"
+              oninput="filterCollegeDropdown()"
+              placeholder="Search your Karnataka college (e.g., RVCE, PES, BMS, NIE, SJCE, KLE, Sahyadri) or type any name..."
+              class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 pr-10 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+            <button type="button" onclick="toggleCollegeDropdown()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 text-xs font-bold">
+              ▼
+            </button>
+          </div>
+
+          <!-- Dropdown List -->
+          <div id="collegeDropdownList" class="hidden absolute z-30 mt-1.5 w-full bg-white border border-slate-300 rounded-xl shadow-xl max-h-64 overflow-y-auto divide-y divide-slate-100"></div>
+
           <div class="flex flex-wrap items-center gap-1.5 mt-2">
-            <span class="text-[11px] text-slate-400 mr-1">Popular BLR Campuses:</span>
-            <button type="button" onclick="setCollege('RV College of Engineering (RVCE)')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">RVCE</button>
-            <button type="button" onclick="setCollege('PES University')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">PES University</button>
-            <button type="button" onclick="setCollege('BMS College of Engineering (BMSCE)')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">BMSCE</button>
-            <button type="button" onclick="setCollege('MS Ramaiah Institute of Technology (MSRIT)')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">MSRIT</button>
-            <button type="button" onclick="setCollege('Dayananda Sagar College of Engineering')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">Dayananda Sagar</button>
-            <button type="button" onclick="setCollege('New Horizon College of Engineering')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">New Horizon</button>
-            <button type="button" onclick="setCollege('Nitte Meenakshi Institute of Technology (NMIT)')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">NMIT</button>
-            <button type="button" onclick="setCollege('RNS Institute of Technology (RNSIT)')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">RNSIT</button>
+            <span class="text-[11px] text-slate-400 mr-1">Quick Pick:</span>
+            <button type="button" onclick="selectCollegeItem('RV College of Engineering (RVCE), Bengaluru', 'Autonomous')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">RVCE</button>
+            <button type="button" onclick="selectCollegeItem('PES University, Bengaluru', 'Deemed University')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">PES University</button>
+            <button type="button" onclick="selectCollegeItem('BMS College of Engineering (BMSCE), Bengaluru', 'Autonomous')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">BMSCE</button>
+            <button type="button" onclick="selectCollegeItem('MS Ramaiah Institute of Technology (MSRIT), Bengaluru', 'Autonomous')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">MSRIT</button>
+            <button type="button" onclick="selectCollegeItem('Dayananda Sagar College of Engineering (DSCE), Bengaluru', 'Autonomous')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">Dayananda Sagar</button>
+            <button type="button" onclick="selectCollegeItem('JSS Science and Technology University (SJCE), Mysuru', 'Deemed University')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">SJCE Mysuru</button>
+            <button type="button" onclick="selectCollegeItem('KLE Technological University (BVB), Hubballi', 'Deemed University')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">KLE Tech Hubballi</button>
+            <button type="button" onclick="selectCollegeItem('NMAM Institute of Technology, Nitte', 'Deemed University')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">NMAMIT Nitte</button>
           </div>
         </div>
 
@@ -198,7 +219,7 @@
             </button>
             <button type="button" onclick="selectSingleOption('univGroup', this, 'Deemed University')" data-val="Deemed University" class="option-card p-3 rounded-xl border border-slate-200 hover:border-slate-300 text-left">
               <div class="text-xs sm:text-sm font-bold text-slate-900">Deemed University</div>
-              <div class="text-[11px] text-slate-500 mt-0.5">PES, Jain, Christ, Alliance</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">PES, Manipal, Jain, KLE</div>
             </button>
             <button type="button" onclick="selectSingleOption('univGroup', this, 'Diploma / Polytechnic')" data-val="Diploma / Polytechnic" class="option-card p-3 rounded-xl border border-slate-200 hover:border-slate-300 text-left">
               <div class="text-xs sm:text-sm font-bold text-slate-900">Diploma / Polytechnic</div>
@@ -223,6 +244,7 @@
               <option value="IoT & Embedded Systems">IoT & Embedded Systems</option>
               <option value="Robotics & Drones">Robotics & Drones</option>
               <option value="AI / ML & Computer Vision">AI / ML & Computer Vision</option>
+              <option value="VLSI & FPGA Design">VLSI & FPGA Design</option>
               <option value="Full-Stack Web / Mobile App">Full-Stack Web / Mobile App</option>
               <option value="Power Electronics & EV">Power Electronics & EV</option>
             </select>
@@ -247,7 +269,7 @@
           <div>
             <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Step 2 of 4</span>
             <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">Project Title & Functional Requirements</h2>
-            <p class="text-xs sm:text-sm text-slate-500">Explain what your prototype must do in plain words so our engineers can verify feasibility.</p>
+            <p class="text-xs sm:text-sm text-slate-500">Explain what your prototype or simulation must do so our engineers can verify feasibility.</p>
           </div>
           <button type="button" onclick="suggestSampleTitles()" class="px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold transition shrink-0">
             ✨ Suggest 3 Trending Titles
@@ -266,7 +288,7 @@
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1.5">How It Should Work (Inputs → Processing → Expected Output) *</label>
-          <textarea id="descInput" rows="5" placeholder="Describe:&#10;1. Sensors / Inputs (e.g., RFID card reader, INA219 current sensor, ultrasonic slot sensor)&#10;2. Controller / Logic (e.g., ESP32 calculates energy consumed and checks balance)&#10;3. Outputs (e.g., Relay switches charger on, OLED displays units, live telemetry pushed to web dashboard)" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+          <textarea id="descInput" rows="5" placeholder="Describe:&#10;1. Inputs / Sensors / Testbench (e.g., RFID reader & current sensor, or Verilog 32-bit instruction input)&#10;2. Controller / Architecture (e.g., ESP32 logic, or 5-stage pipelined RISC-V RTL in Vivado/ModelSim)&#10;3. Outputs (e.g., Relay control + live dashboard, or waveform timing & power/area synthesis report)" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
         </div>
 
         <div>
@@ -279,33 +301,64 @@
             ← Back
           </button>
           <button type="button" onclick="goToStep(3)" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition">
-            Next: Select Components →
+            Next: Component Selection →
           </button>
         </div>
       </div>
 
-      <!-- STEP 3 PANEL: PRICE-FREE COMPONENT CATALOG -->
+      <!-- STEP 3 PANEL: BIG "LET ENGINEERS CHOOSE" HERO CARD FIRST + OPTIONAL CATALOG BELOW -->
       <div id="stepPanel3" class="hidden space-y-5">
-        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-            <div>
-              <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Step 3 of 4</span>
-              <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-0.5">Price-Free Component Catalog</h2>
-              <p class="text-xs sm:text-sm text-slate-500">Pick the hardware modules you want in your build. You will receive one unified engineering quote after feasibility review.</p>
+        <!-- BIG PRIMARY OPTION IN THE CENTER RIGHT BELOW STEPPER -->
+        <div id="engineerChooseHeroCard" onclick="toggleRecommendCardClick(event)"
+          class="cursor-pointer rounded-2xl border-2 border-indigo-600 bg-gradient-to-r from-indigo-50 via-white to-indigo-50/60 p-6 sm:p-7 shadow-md transition hover:shadow-lg">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div class="flex items-start gap-4">
+              <input id="aiRecommendCheckbox" type="checkbox" checked onchange="toggleRecommendMode()" class="mt-1 w-6 h-6 accent-indigo-600 rounded cursor-pointer shrink-0" />
+              <div class="space-y-1.5">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-600 text-white">
+                    Recommended • Chosen by 85% of Teams
+                  </span>
+                  <span id="engineerPickActiveBadge" class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                    ✓ Active
+                  </span>
+                </div>
+                <h2 class="text-lg sm:text-2xl font-extrabold text-slate-900">
+                  Not sure which parts to pick? Let ProtoForge Engineers choose my parts
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-600 max-w-3xl">
+                  Skip manual part hunting. Based on your project title and working logic, our hardware & VLSI engineers will select the exact compatible sensors, boards, power regulators, or simulation tools and bundle them into one unified quote.
+                </p>
+              </div>
             </div>
-            <label class="flex items-center gap-2.5 bg-amber-50 border border-amber-200 px-3.5 py-2.5 rounded-xl cursor-pointer">
-              <input id="aiRecommendCheckbox" type="checkbox" onchange="toggleRecommendMode()" class="w-4 h-4 text-indigo-600 rounded" />
-              <span class="text-xs font-semibold text-amber-900">Not sure? Let your engineers choose my parts</span>
-            </label>
+            <button type="button" id="toggleCatalogBtn" onclick="setEngineerChooseState(false); event.stopPropagation();"
+              class="shrink-0 px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 shadow-sm transition">
+              Or Pick Specific Parts Manually ↓
+            </button>
+          </div>
+        </div>
+
+        <!-- SECONDARY / MANUAL COMPONENT CATALOG -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Optional Manual Catalog</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900">Select Specific Hardware / FPGA Modules Yourself</h3>
+              <p class="text-xs text-slate-500">Only needed if your project guide mandated specific sensor or board model numbers.</p>
+            </div>
+            <span id="manualModeHint" class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg">
+              Uncheck the box above to customize individual parts
+            </span>
           </div>
 
-          <div id="catalogBrowserArea" class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div id="catalogBrowserArea" class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-6 opacity-45 pointer-events-none transition">
             <div class="lg:col-span-2 space-y-4">
               <div class="flex flex-col sm:flex-row gap-2.5">
-                <input id="compSearchInput" type="text" oninput="renderCatalog()" placeholder="Search ESP32, LiDAR, MPU6050, 18650 BMS, Raspberry Pi..." class="flex-1 rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+                <input id="compSearchInput" type="text" oninput="renderCatalog()" placeholder="Search ESP32, FPGA, LiDAR, MPU6050, 18650 BMS, Raspberry Pi..." class="flex-1 rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
                 <select id="compCategorySelect" onchange="renderCatalog()" class="rounded-xl border border-slate-300 px-3 py-2 text-sm bg-white outline-none">
                   <option value="All">All Categories</option>
                   <option value="Controllers & SBCs">Controllers & SBCs</option>
+                  <option value="VLSI & FPGA Boards">VLSI & FPGA Boards</option>
                   <option value="Sensors">Sensors</option>
                   <option value="Motors & Actuators">Motors & Actuators</option>
                   <option value="Wireless & IoT">Wireless & IoT</option>
@@ -315,7 +368,7 @@
               </div>
 
               <div id="brandFilterBar" class="flex flex-wrap gap-1.5"></div>
-              <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[480px] overflow-y-auto pr-1"></div>
+              <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[440px] overflow-y-auto pr-1"></div>
             </div>
 
             <div class="bg-slate-50 rounded-2xl border border-slate-200 p-4 flex flex-col justify-between space-y-4 h-fit">
@@ -325,13 +378,13 @@
                   <span id="kitCountBadge" class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">0 items</span>
                 </div>
                 <div id="selectedKitList" class="mt-3 space-y-2 max-h-64 overflow-y-auto">
-                  <p class="text-xs text-slate-400 italic py-4 text-center">No components added yet. Tap "+ Add" on any module.</p>
+                  <p class="text-xs text-slate-400 italic py-4 text-center">Engineer auto-selection active, or tap "+ Add" on modules.</p>
                 </div>
               </div>
 
               <div class="border-t border-slate-200 pt-3 space-y-2">
                 <label class="block text-xs font-semibold text-slate-700">Need a niche / unlisted part?</label>
-                <input id="customPartsInput" type="text" placeholder="e.g., NEMA 23 Stepper, pH Sensor..." class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
+                <input id="customPartsInput" type="text" placeholder="e.g., Artix-7 FPGA, NEMA 23, pH Sensor..." class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
               </div>
             </div>
           </div>
@@ -360,10 +413,10 @@
             <input type="checkbox" checked disabled class="mt-1 w-4 h-4 accent-emerald-600" />
             <div>
               <div class="flex items-center gap-2">
-                <span class="text-sm font-bold text-slate-900">Core Prototype + Tested Code + Circuit Diagram</span>
+                <span class="text-sm font-bold text-slate-900">Core Prototype / RTL Simulation + Tested Code + Schematic</span>
                 <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Included</span>
               </div>
-              <p class="text-xs text-slate-600 mt-1">Fully assembled hardware / software prototype, commented source code, and pin-to-pin wiring schematic.</p>
+              <p class="text-xs text-slate-600 mt-1">Fully assembled hardware / Verilog RTL / software build, commented source code, and circuit/architecture diagram.</p>
             </div>
           </div>
 
@@ -390,7 +443,7 @@
             <input id="addonIeee" type="checkbox" class="mt-1 w-4 h-4 accent-indigo-600" />
             <div>
               <div class="text-sm font-bold text-slate-900">IEEE Conference Paper (Editable + PDF)</div>
-              <p class="text-xs text-slate-600 mt-1">Literature survey, architecture block diagram, result graphs, and IEEE double-column formatting.</p>
+              <p class="text-xs text-slate-600 mt-1">Literature survey, architecture block diagram, result graphs/waveforms, and IEEE double-column formatting.</p>
             </div>
           </label>
 
@@ -406,7 +459,7 @@
             <input id="addonViva" type="checkbox" class="mt-1 w-4 h-4 accent-indigo-600" />
             <div>
               <div class="text-sm font-bold text-slate-900">1-on-1 Live Viva & Code Walkthrough (40 Mins)</div>
-              <p class="text-xs text-slate-600 mt-1">Google Meet or in-person session covering circuit logic, code flow, and likely examiner questions.</p>
+              <p class="text-xs text-slate-600 mt-1">Google Meet or in-person session covering circuit/RTL logic, code flow, and likely examiner questions.</p>
             </div>
           </label>
         </div>
@@ -436,12 +489,12 @@
         </div>
       </div>
 
-      <!-- CLEAN ON-SITE SUBMISSION CONFIRMATION CARD (NO WHATSAPP REDIRECT FOR STUDENT) -->
+      <!-- CLEAN ON-SITE SUBMISSION CONFIRMATION CARD -->
       <div id="submissionSuccessPanel" class="hidden bg-white rounded-2xl border-2 border-emerald-500 p-6 sm:p-8 shadow-md text-center max-w-2xl mx-auto space-y-5">
         <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl font-bold mx-auto">✓</div>
         <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Project Request Submitted!</h2>
         <p class="text-sm text-slate-600">
-          Thank you! Your project specifications, component kit, and deliverable preferences have been sent to our Bengaluru engineering desk. We will review feasibility and get back to you within 24 hours.
+          Thank you! Our engineering lead will review your requirements, message you on WhatsApp to finalize technical details, and unlock your quote & payment link on the <strong>Track Quote</strong> tab.
         </p>
 
         <div class="bg-slate-900 text-white rounded-xl p-4 flex items-center justify-between max-w-md mx-auto">
@@ -454,11 +507,11 @@
           </button>
         </div>
 
-        <p class="text-xs text-slate-500">Save this tracking code to check your engineer review notes and finalized quote anytime.</p>
+        <p class="text-xs text-slate-500">Once your 50% advance is confirmed, we will create your dedicated project WhatsApp group with your team.</p>
 
         <div class="pt-2 flex flex-wrap justify-center gap-3 border-t border-slate-100">
           <button type="button" onclick="openTrackWithGeneratedCode()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold">
-            Track Quote Status →
+            Track Quote & Payment Status →
           </button>
           <button type="button" onclick="resetFormForNew()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold">
             Submit Another Project
@@ -468,13 +521,13 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- VIEW 2: STUDENT QUOTE TRACKER (PUBLIC LOOKUP BY TRACKING CODE)        -->
+    <!-- VIEW 2: STUDENT QUOTE TRACKER & WEBSITE UPI PAYMENT                   -->
     <!-- ===================================================================== -->
     <section id="trackView" class="hidden max-w-3xl mx-auto space-y-6">
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
         <div>
-          <h2 class="text-xl font-extrabold text-slate-900">Track Your Project Quote & Status</h2>
-          <p class="text-xs sm:text-sm text-slate-500 mt-1">Enter the tracking code you received upon submission (e.g., <span class="mono font-semibold">BLR-2026-4821</span>) to view engineer feasibility notes and your confirmed quote.</p>
+          <h2 class="text-xl font-extrabold text-slate-900">Track Your Project Quote & Milestone Payment</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">Enter your tracking code (e.g., <span class="mono font-semibold">BLR-2026-4821</span>) to view engineer feasibility notes, confirmed pricing, and your UPI payment QR.</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-2.5">
           <input id="trackCodeSearchInput" type="text" placeholder="Enter Tracking Code (e.g., BLR-2026-XXXX)" class="flex-1 uppercase mono rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
@@ -539,7 +592,7 @@
 
         <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
           <div id="adminEmptySelection" class="py-16 text-center text-slate-400 text-sm">
-            Select a student request on the left to audit components, view recommended pricing, and send the full dossier to your WhatsApp.
+            Select a student request on the left to audit components, publish quotes, and copy WhatsApp group templates.
           </div>
 
           <div id="adminTicketEditor" class="hidden space-y-6">
@@ -553,12 +606,12 @@
                 <p id="edStudentInfo" class="text-xs text-slate-600 mt-0.5">Student Name • College • Domain</p>
               </div>
               <div class="flex flex-wrap items-center gap-2">
-                <a id="edSendToMyWhatsappLink" href="#" target="_blank" class="px-3 py-1.5 rounded-xl bg-navy-900 hover:bg-slate-800 text-white text-xs font-semibold">
-                  📲 Send Full Dossier to My WhatsApp
-                </a>
                 <a id="edWhatsappLink" href="#" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold">
-                  Reply to Student
+                  Chat on WhatsApp
                 </a>
+                <button type="button" onclick="copyWhatsappGroupTemplate()" class="px-3 py-1.5 rounded-xl bg-navy-900 hover:bg-slate-800 text-white text-xs font-semibold">
+                  📋 Copy Group Name & Welcome
+                </button>
                 <select id="edStatusSelect" class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs font-semibold bg-white">
                   <option value="New Request">New Request</option>
                   <option value="Quote Sent">Quote Sent</option>
@@ -571,10 +624,11 @@
             </div>
 
             <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 space-y-1.5">
-              <div class="text-xs font-bold text-slate-700">Student Functional Requirements & Selected Add-Ons:</div>
+              <div class="text-xs font-bold text-slate-700">Student Functional Requirements, Parts & Add-Ons:</div>
               <p id="edDescription" class="text-xs text-slate-600 whitespace-pre-line"></p>
-              <p id="edAddonsSummary" class="text-xs font-semibold text-slate-800 pt-1"></p>
-              <p id="edCustomParts" class="text-xs font-semibold text-indigo-700"></p>
+              <p id="edPartsSummaryAdmin" class="text-xs font-semibold text-indigo-700 pt-1"></p>
+              <p id="edAddonsSummary" class="text-xs font-semibold text-slate-800"></p>
+              <p id="edCustomParts" class="text-xs font-semibold text-amber-800"></p>
             </div>
 
             <!-- Internal BOM & SP Road Wholesale Cost Workbench -->
@@ -601,7 +655,7 @@
               <h4 class="text-sm font-bold text-indigo-950">Margin-Protected Quote Builder</h4>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label class="block text-[11px] font-semibold text-slate-700 mb-1">Prototype + Hardware Quote (₹)</label>
+                  <label class="block text-[11px] font-semibold text-slate-700 mb-1">Prototype / RTL + Hardware Quote (₹)</label>
                   <input id="edProtoPrice" type="number" oninput="recalcAdminMargin()" value="13500" class="mono w-full rounded-xl border border-slate-300 px-3 py-2 text-sm bg-white font-bold" />
                 </div>
                 <div>
@@ -647,7 +701,7 @@
 
             <div class="flex justify-end gap-3">
               <button type="button" onclick="saveAndPublishQuote()" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-sm transition">
-                Save & Publish Quote to Student ✓
+                Save & Publish Quote + Payment QR ✓
               </button>
             </div>
           </div>
@@ -659,7 +713,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
             <h3 class="text-lg font-bold text-slate-900">Campus Advisor & Class Rep Codes</h3>
-            <p class="text-xs text-slate-500">Add unique referral codes for Bangalore student leads. Commission unlocks when the student's 50% advance clears.</p>
+            <p class="text-xs text-slate-500">Add unique referral codes for Karnataka student leads. Commission unlocks when the student's 50% advance clears.</p>
           </div>
         </div>
 
@@ -732,7 +786,7 @@
   <footer class="bg-white border-t border-slate-200 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
       <div>
-        <span class="font-bold text-slate-800">ProtoForge BLR</span> — Custom Prototyping & Academic Documentation Desk, Bengaluru, Karnataka.
+        <span class="font-bold text-slate-800">ProtoForge BLR</span> — Custom Prototyping, VLSI & Academic Documentation Desk, Bengaluru, Karnataka.
       </div>
       <div class="flex flex-wrap items-center gap-4 font-medium">
         <button onclick="openPolicy('about')" class="hover:text-indigo-600">About & Contact</button>
@@ -747,16 +801,155 @@
   <!-- APPLICATION LOGIC -->
   <script>
     // =========================================================================
-    // 1. SUPABASE & OWNER WHATSAPP CONFIGURATION
+    // 1. SUPABASE & OWNER PAYMENT / WHATSAPP CONFIGURATION
     // =========================================================================
     const SUPABASE_URL = 'https://uvkgomlzeyivczvkesdj.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CQNaUF-_rBtO_3312BuMJw_J2pdOTgN';
-    const OWNER_WHATSAPP_NUMBER = '917892672646';
+    const OWNER_UPI_ID = '7892672646@ybl'; // Update to your preferred PhonePe/GPay/Paytm UPI ID
+    const OWNER_MERCHANT_NAME = 'ProtoForge BLR';
 
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
     // =========================================================================
-    // 2. PRICE-FREE COMPONENT CATALOG DATA
+    // 2. COMPREHENSIVE KARNATAKA ENGINEERING & POLYTECHNIC COLLEGES LIST
+    // =========================================================================
+    const KARNATAKA_COLLEGES = [
+      // Bengaluru (Autonomous, VTU, Deemed)
+      { name: 'RV College of Engineering (RVCE), Bengaluru', univ: 'Autonomous' },
+      { name: 'BMS College of Engineering (BMSCE), Bengaluru', univ: 'Autonomous' },
+      { name: 'MS Ramaiah Institute of Technology (MSRIT), Bengaluru', univ: 'Autonomous' },
+      { name: 'PES University (Ring Road Campus), Bengaluru', univ: 'Deemed University' },
+      { name: 'PES University (Electronic City Campus), Bengaluru', univ: 'Deemed University' },
+      { name: 'Dayananda Sagar College of Engineering (DSCE), Bengaluru', univ: 'Autonomous' },
+      { name: 'Dayananda Sagar Academy of Technology & Management (DSATM), Bengaluru', univ: 'Autonomous' },
+      { name: 'Dayananda Sagar University (DSU), Harohalli / Bengaluru', univ: 'Deemed University' },
+      { name: 'Bangalore Institute of Technology (BIT), Bengaluru', univ: 'VTU Affiliated' },
+      { name: 'RNS Institute of Technology (RNSIT), Bengaluru', univ: 'Autonomous' },
+      { name: 'BMS Institute of Technology and Management (BMSIT&M), Yelahanka', univ: 'Autonomous' },
+      { name: 'Nitte Meenakshi Institute of Technology (NMIT), Yelahanka', univ: 'Autonomous' },
+      { name: 'New Horizon College of Engineering (NHCE), Marathahalli', univ: 'Autonomous' },
+      { name: 'CMR Institute of Technology (CMRIT), ITPL Bengaluru', univ: 'Autonomous' },
+      { name: 'CMR University (School of Engineering & Technology), Bengaluru', univ: 'Deemed University' },
+      { name: 'Sir M. Visvesvaraya Institute of Technology (Sir MVIT), Bengaluru', univ: 'VTU Affiliated' },
+      { name: 'BNM Institute of Technology (BNMIT), Banashankari', univ: 'Autonomous' },
+      { name: 'JSS Academy of Technical Education (JSSATE), Bengaluru', univ: 'VTU Affiliated' },
+      { name: 'Dr. Ambedkar Institute of Technology (Dr. AIT), Bengaluru', univ: 'Autonomous' },
+      { name: 'UVCE (University Visvesvaraya College of Engineering), Bengaluru', univ: 'Autonomous' },
+      { name: 'M.S. Ramaiah University of Applied Sciences (MSRUAS), Bengaluru', univ: 'Deemed University' },
+      { name: 'REVA University, Yelahanka Bengaluru', univ: 'Deemed University' },
+      { name: 'JAIN (Deemed-to-be University) — Faculty of Engineering, Kanakapura', univ: 'Deemed University' },
+      { name: 'CHRIST (Deemed to be University) — Kengeri Campus, Bengaluru', univ: 'Deemed University' },
+      { name: 'Alliance University — College of Engineering, Anekal', univ: 'Deemed University' },
+      { name: 'Presidency University, Yelahanka Bengaluru', univ: 'Deemed University' },
+      { name: 'Garden City University, Bengaluru', univ: 'Deemed University' },
+      { name: 'Chanakya University, Devanahalli Bengaluru', univ: 'Deemed University' },
+      { name: 'RV Institute of Technology and Management (RVITM), JP Nagar', univ: 'VTU Affiliated' },
+      { name: 'Global Academy of Technology (GAT), Rajarajeshwari Nagar', univ: 'Autonomous' },
+      { name: 'Acharya Institute of Technology (AIT), Soldevanahalli', univ: 'VTU Affiliated' },
+      { name: 'Sapthagiri College of Engineering, Hesaraghatta Road', univ: 'VTU Affiliated' },
+      { name: 'SJB Institute of Technology (SJBIT), Kengeri', univ: 'Autonomous' },
+      { name: 'Don Bosco Institute of Technology (DBIT), Kumbalgodu', univ: 'VTU Affiliated' },
+      { name: 'Rajarajeswari College of Engineering (RRCE), Mysuru Road', univ: 'Autonomous' },
+      { name: 'ACS College of Engineering, Kambipura Bengaluru', univ: 'VTU Affiliated' },
+      { name: 'Cambridge Institute of Technology (CIT), KR Puram', univ: 'Autonomous' },
+      { name: 'East Point College of Engineering and Technology, Avalahalli', univ: 'VTU Affiliated' },
+      { name: 'Mvj College of Engineering (MVJCE), Whitefield', univ: 'Autonomous' },
+      { name: 'The Oxford College of Engineering, Bommanahalli', univ: 'VTU Affiliated' },
+      { name: 'AMC Engineering College, Bannerghatta Road', univ: 'Autonomous' },
+      { name: 'T. John Institute of Technology (TJIT), Bannerghatta Road', univ: 'VTU Affiliated' },
+      { name: 'Jyothy Institute of Technology (JIT), Tataguni', univ: 'VTU Affiliated' },
+      { name: 'KS Institute of Technology (KSIT), Kanakapura Road', univ: 'VTU Affiliated' },
+      { name: 'KS School of Engineering and Management (KSSEM), Bengaluru', univ: 'VTU Affiliated' },
+      { name: 'City Engineering College, Kanakapura Road', univ: 'VTU Affiliated' },
+      { name: 'Vemana Institute of Technology, Koramangala', univ: 'VTU Affiliated' },
+      { name: 'Atria Institute of Technology, Hebbal', univ: 'Autonomous' },
+      { name: 'HKBK College of Engineering, Nagawara', univ: 'VTU Affiliated' },
+      { name: 'HKE / Sambhram Institute of Technology, Vidyaranyapura', univ: 'VTU Affiliated' },
+      { name: 'Presidency / Nagarjuna College of Engineering & Technology (NCET), Devanahalli', univ: 'Autonomous' },
+      { name: 'Sri Venkateshwara College of Engineering (SVCE), Vidyanagar', univ: 'VTU Affiliated' },
+      { name: 'Brindavan College of Engineering, Yelahanka', univ: 'VTU Affiliated' },
+      { name: 'East West Institute of Technology (EWIT), Magadi Road', univ: 'VTU Affiliated' },
+      { name: 'Vivekananda Institute of Technology (VKIT), Kumbalgodu', univ: 'VTU Affiliated' },
+      { name: 'Sai Vidya Institute of Technology (SVIT), Rajanukunte', univ: 'VTU Affiliated' },
+      { name: 'SJC Institute of Technology (SJCIT), Chikkaballapur', univ: 'Autonomous' },
+      { name: 'Sea College of Engineering and Technology, KR Puram', univ: 'VTU Affiliated' },
+      { name: 'Gopalan College of Engineering and Management, Whitefield', univ: 'VTU Affiliated' },
+      { name: 'Alpha College of Engineering, Hennur Bagalur Road', univ: 'VTU Affiliated' },
+      { name: 'Impact College of Engineering and Applied Sciences, Sahakarnagar', univ: 'VTU Affiliated' },
+      { name: 'KNS Institute of Technology, Yelahanka', univ: 'VTU Affiliated' },
+      { name: 'Adichunchanagiri / BGS School of Architecture & Engineering, Bengaluru', univ: 'VTU Affiliated' },
+      { name: 'Government SKSJ Technological Institute, KR Circle Bengaluru', univ: 'VTU Affiliated' },
+      // Mysuru & Mandya Region
+      { name: 'JSS Science and Technology University (SJCE), Mysuru', univ: 'Deemed University' },
+      { name: 'The National Institute of Engineering (NIE), Mysuru', univ: 'Autonomous' },
+      { name: 'Vidyavardhaka College of Engineering (VVCE), Mysuru', univ: 'Autonomous' },
+      { name: 'GSSS Institute of Engineering and Technology for Women, Mysuru', univ: 'Autonomous' },
+      { name: 'ATME College of Engineering, Mysuru', univ: 'VTU Affiliated' },
+      { name: 'Maharaja Institute of Technology (MIT), Mysuru', univ: 'Autonomous' },
+      { name: 'NIE Institute of Technology (NIEIT), Mysuru', univ: 'VTU Affiliated' },
+      { name: 'PES College of Engineering (PESCE), Mandya', univ: 'Autonomous' },
+      { name: 'BGS Institute of Technology (BGSIT), BG Nagar Mandya', univ: 'Autonomous' },
+      // Mangaluru, Udupi & Coastal Karnataka
+      { name: 'Manipal Institute of Technology (MIT), Manipal', univ: 'Deemed University' },
+      { name: 'NITK Surathkal (National Institute of Technology Karnataka)', univ: 'Autonomous' },
+      { name: 'NMAM Institute of Technology, Nitte', univ: 'Deemed University' },
+      { name: 'St Joseph Engineering College (SJEC), Vamanjoor Mangaluru', univ: 'Autonomous' },
+      { name: 'Sahyadri College of Engineering & Management, Mangaluru', univ: 'Autonomous' },
+      { name: 'Canara Engineering College, Bantwal Mangaluru', univ: 'VTU Affiliated' },
+      { name: 'PA College of Engineering (PACE), Mangaluru', univ: 'VTU Affiliated' },
+      { name: 'Srinivas Institute of Technology, Valachil Mangaluru', univ: 'VTU Affiliated' },
+      { name: 'Shri Madhwa Vadiraja Institute of Technology & Management, Bantakal Udupi', univ: 'VTU Affiliated' },
+      { name: 'Moodlakatte Institute of Technology, Kundapura', univ: 'VTU Affiliated' },
+      { name: 'Vivekananda College of Engineering & Technology (VCET), Puttur', univ: 'VTU Affiliated' },
+      { name: 'KVG College of Engineering, Sullia', univ: 'VTU Affiliated' },
+      // Hubballi, Dharwad & Belagavi Region
+      { name: 'KLE Technological University (BVB), Hubballi', univ: 'Deemed University' },
+      { name: 'SDM College of Engineering and Technology (SDMCET), Dharwad', univ: 'Autonomous' },
+      { name: 'KLE Institute of Technology (KLEIT), Hubballi', univ: 'VTU Affiliated' },
+      { name: 'Jain College of Engineering & Technology, Hubballi', univ: 'VTU Affiliated' },
+      { name: 'KLS Gogte Institute of Technology (GIT), Belagavi', univ: 'Autonomous' },
+      { name: 'KLE Dr. M.S. Sheshgiri College of Engineering and Technology, Belagavi', univ: 'Autonomous' },
+      { name: 'Angadi Institute of Technology and Management, Belagavi', univ: 'VTU Affiliated' },
+      { name: 'Jain College of Engineering (JCE), Belagavi', univ: 'VTU Affiliated' },
+      { name: 'Maratha Mandal Engineering College, Belagavi', univ: 'VTU Affiliated' },
+      { name: 'SGBIT (S.G. Balekundri Institute of Technology), Belagavi', univ: 'VTU Affiliated' },
+      { name: 'Hirasugar Institute of Technology, Nidasoshi Belagavi', univ: 'VTU Affiliated' },
+      { name: 'BLDEA V.P. Dr. P.G. Halakatti College of Engineering, Vijayapura', univ: 'Autonomous' },
+      { name: 'Basaveshwar Engineering College (BEC), Bagalkot', univ: 'Autonomous' },
+      // Tumakuru, Hassan, Shivamogga, Davangere & Central Karnataka
+      { name: 'Siddaganga Institute of Technology (SIT), Tumakuru', univ: 'Autonomous' },
+      { name: 'Sri Siddhartha Institute of Technology (SSIT), Tumakuru', univ: 'Deemed University' },
+      { name: 'Kalpataru Institute of Technology (KIT), Tiptur', univ: 'VTU Affiliated' },
+      { name: 'Shridevi Institute of Engineering and Technology, Tumakuru', univ: 'VTU Affiliated' },
+      { name: 'Malnad College of Engineering (MCE), Hassan', univ: 'Autonomous' },
+      { name: 'Rajeev Institute of Technology (RIT), Hassan', univ: 'VTU Affiliated' },
+      { name: 'Navkis College of Engineering, Hassan', univ: 'VTU Affiliated' },
+      { name: 'JNN College of Engineering (JNNCE), Shivamogga', univ: 'Autonomous' },
+      { name: 'PES Institute of Technology and Management (PESITM), Shivamogga', univ: 'VTU Affiliated' },
+      { name: 'GM Institute of Technology (GMIT), Davangere', univ: 'Autonomous' },
+      { name: 'BIET (Bapuji Institute of Engineering and Technology), Davangere', univ: 'Autonomous' },
+      { name: 'UBDT College of Engineering, Davangere', univ: 'VTU Affiliated' },
+      { name: 'SJM Institute of Technology (SJMIT), Chitradurga', univ: 'VTU Affiliated' },
+      { name: 'Adichunchanagiri Institute of Technology (AIT), Chikkamagaluru', univ: 'VTU Affiliated' },
+      // Kalaburagi, Ballari, Raichur & Bidar Region
+      { name: 'PDA College of Engineering, Kalaburagi', univ: 'Autonomous' },
+      { name: 'Sharnbasva University — Faculty of Engineering, Kalaburagi', univ: 'Deemed University' },
+      { name: 'Appa Institute of Engineering and Technology, Kalaburagi', univ: 'VTU Affiliated' },
+      { name: 'Rao Bahadur Y Mahabaleswarappa Engineering College (RYMEC), Ballari', univ: 'Autonomous' },
+      { name: 'Ballari Institute of Technology and Management (BITM), Ballari', univ: 'Autonomous' },
+      { name: 'Guru Nanak Dev Engineering College (GNDEC), Bidar', univ: 'Autonomous' },
+      { name: 'Bheemanna Khandre Institute of Technology (BKIT), Bhalki Bidar', univ: 'VTU Affiliated' },
+      { name: 'SLN College of Engineering, Raichur', univ: 'VTU Affiliated' },
+      // Major Polytechnics
+      { name: 'MEI Polytechnic, Rajajinagar Bengaluru', univ: 'Diploma / Polytechnic' },
+      { name: 'PV Polytechnic, Malleshwaram Bengaluru', univ: 'Diploma / Polytechnic' },
+      { name: 'Acharya Polytechnic, Soldevanahalli Bengaluru', univ: 'Diploma / Polytechnic' },
+      { name: 'Dayananda Sagar Institute of Technology (Polytechnic), Bengaluru', univ: 'Diploma / Polytechnic' },
+      { name: 'Government Polytechnic, KR Circle Bengaluru', univ: 'Diploma / Polytechnic' }
+    ];
+
+    // =========================================================================
+    // 3. PRICE-FREE COMPONENT & FPGA CATALOG DATA
     // =========================================================================
     const CATALOG_ITEMS = [
       { id: 'esp32', brand: 'Espressif', category: 'Controllers & SBCs', name: 'ESP32-WROOM-32 DevKit V1', spec: 'Dual-core 240MHz, Wi-Fi + BLE, 3.3V logic', defaultCost: 340 },
@@ -768,6 +961,8 @@
       { id: 'rpi_cam', brand: 'Raspberry Pi', category: 'Displays & Cameras', name: 'Pi Camera Module V2 (8MP)', spec: 'Sony IMX219 sensor for OpenCV / YOLO', defaultCost: 1150 },
       { id: 'stm32', brand: 'STM32', category: 'Controllers & SBCs', name: 'STM32F103C8T6 Blue Pill', spec: 'ARM Cortex-M3 72MHz, CAN/SPI/I2C', defaultCost: 240 },
       { id: 'jetson', brand: 'NVIDIA', category: 'Controllers & SBCs', name: 'Jetson Orin Nano / Jetson Kit', spec: 'CUDA GPU acceleration for real-time vision', defaultCost: 22000 },
+      { id: 'fpga_spartan', brand: 'AMD / Xilinx', category: 'VLSI & FPGA Boards', name: 'Xilinx Spartan-6 / Spartan-7 FPGA Dev Board', spec: 'Verilog/VHDL hardware synthesis & JTAG programmer', defaultCost: 4200 },
+      { id: 'fpga_artix', brand: 'AMD / Xilinx', category: 'VLSI & FPGA Boards', name: 'Artix-7 / Basys 3 Compatible FPGA Kit', spec: 'Vivado RTL, RISC-V core & DSP hardware implementation', defaultCost: 6800 },
       { id: 'mpu6050', brand: 'Bosch & TI', category: 'Sensors', name: 'MPU6050 6-Axis Accelerometer + Gyro', spec: 'I2C motion tracking & gesture sensing', defaultCost: 130 },
       { id: 'bme280', brand: 'Bosch & TI', category: 'Sensors', name: 'BME280 Temp, Humidity & Pressure', spec: 'High-precision I2C/SPI weather sensor', defaultCost: 260 },
       { id: 'ina219', brand: 'Bosch & TI', category: 'Sensors', name: 'INA219 Bidirectional DC Current Sensor', spec: 'I2C high-side voltage/power monitor', defaultCost: 160 },
@@ -787,7 +982,7 @@
     ];
 
     // =========================================================================
-    // 3. STATE VARIABLES
+    // 4. STATE VARIABLES
     // =========================================================================
     let currentStep = 1;
     let selectedUniversity = 'VTU Affiliated';
@@ -799,13 +994,81 @@
     let activeAdminBom = [];
 
     // =========================================================================
-    // 4. INITIALIZATION
+    // 5. INITIALIZATION & COLLEGE DROPDOWN HANDLERS
     // =========================================================================
     window.addEventListener('DOMContentLoaded', async () => {
       renderBrandPills();
       renderCatalog();
+      toggleRecommendMode();
       await checkAdminAuthState();
+
+      document.addEventListener('click', (e) => {
+        const wrapper = document.getElementById('collegeSelectorWrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+          document.getElementById('collegeDropdownList').classList.add('hidden');
+        }
+      });
     });
+
+    function openCollegeDropdown() {
+      filterCollegeDropdown();
+      document.getElementById('collegeDropdownList').classList.remove('hidden');
+    }
+
+    function toggleCollegeDropdown() {
+      const list = document.getElementById('collegeDropdownList');
+      if (list.classList.contains('hidden')) openCollegeDropdown();
+      else list.classList.add('hidden');
+    }
+
+    function filterCollegeDropdown() {
+      const rawVal = document.getElementById('collegeInput').value.trim();
+      const q = rawVal.toLowerCase();
+      const list = document.getElementById('collegeDropdownList');
+
+      const matches = KARNATAKA_COLLEGES.filter(c =>
+        !q || c.name.toLowerCase().includes(q) || c.univ.toLowerCase().includes(q)
+      );
+
+      let html = '';
+      if (rawVal.length > 1) {
+        const safeRaw = rawVal.replace(/'/g, "\\'");
+        html += `
+          <button type="button" onclick="selectCollegeItem('${safeRaw}', null)"
+            class="w-full text-left px-3.5 py-2.5 bg-indigo-50/70 hover:bg-indigo-100 text-xs font-bold text-indigo-700 flex items-center justify-between">
+            <span>➕ Use "${rawVal}"</span>
+            <span class="text-[10px] uppercase tracking-wider bg-indigo-600 text-white px-2 py-0.5 rounded">Custom Entry</span>
+          </button>
+        `;
+      }
+
+      if (matches.length === 0 && !rawVal) {
+        html += `<div class="px-3.5 py-3 text-xs text-slate-400">Start typing your college name...</div>`;
+      } else {
+        html += matches.map(c => {
+          const safeName = c.name.replace(/'/g, "\\'");
+          return `
+            <button type="button" onclick="selectCollegeItem('${safeName}', '${c.univ}')"
+              class="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 text-xs flex items-center justify-between gap-2 transition">
+              <span class="font-medium text-slate-800">${c.name}</span>
+              <span class="text-[10px] shrink-0 px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold">${c.univ}</span>
+            </button>
+          `;
+        }).join('');
+      }
+
+      list.innerHTML = html;
+      list.classList.remove('hidden');
+    }
+
+    function selectCollegeItem(name, univ) {
+      document.getElementById('collegeInput').value = name;
+      document.getElementById('collegeDropdownList').classList.add('hidden');
+      if (univ) {
+        const btn = document.querySelector(`#univGroup button[data-val="${univ}"]`);
+        if (btn) selectSingleOption('univGroup', btn, univ);
+      }
+    }
 
     function showToast(msg, isError = false) {
       const banner = document.getElementById('toastBanner');
@@ -819,7 +1082,7 @@
     }
 
     // =========================================================================
-    // 5. NAVIGATION & STEPPER LOGIC
+    // 6. NAVIGATION & STEPPER LOGIC
     // =========================================================================
     function switchView(viewName) {
       ['studentView', 'trackView', 'adminView'].forEach(id => document.getElementById(id).classList.add('hidden'));
@@ -840,7 +1103,7 @@
         const phone = document.getElementById('phoneInput').value.trim();
         const college = document.getElementById('collegeInput').value.trim();
         if (!name || !phone || !college) {
-          showToast('Please enter your Name, Contact Number, and College first.', true);
+          showToast('Please enter your Name, WhatsApp Number, and College first.', true);
           return;
         }
       }
@@ -870,10 +1133,6 @@
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function setCollege(name) {
-      document.getElementById('collegeInput').value = name;
     }
 
     function selectSingleOption(groupId, btn, val) {
@@ -910,6 +1169,11 @@
           'Multi-Modal Crop Leaf Disease Diagnosis & Yield Advisory App',
           'Automated Driver Drowsiness & Distraction Alert System with Telemetry'
         ],
+        'VLSI & FPGA Design': [
+          'Low-Power 32-Bit RISC-V Processor Core Design & FPGA Verification in Verilog',
+          'Hardware-Accelerated AES-256 Cryptographic Engine on Xilinx Artix-7 FPGA',
+          'High-Speed Radix-4 Booth Multiplier & MAC Unit for Edge DSP Applications'
+        ],
         'Full-Stack Web / Mobile App': [
           'Decentralized Academic Credential & Project Verification Portal',
           'AI-Assisted Smart Campus Energy & Lab Equipment Booking Platform',
@@ -934,10 +1198,46 @@
     }
 
     // =========================================================================
-    // 6. PRICE-FREE COMPONENT CATALOG LOGIC
+    // 7. STEP 3: ENGINEER AUTO-PICK CARD + PRICE-FREE COMPONENT CATALOG
     // =========================================================================
+    function toggleRecommendCardClick(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+      const cb = document.getElementById('aiRecommendCheckbox');
+      cb.checked = !cb.checked;
+      toggleRecommendMode();
+    }
+
+    function setEngineerChooseState(isAuto) {
+      const cb = document.getElementById('aiRecommendCheckbox');
+      cb.checked = isAuto;
+      toggleRecommendMode();
+    }
+
+    function toggleRecommendMode() {
+      const checked = document.getElementById('aiRecommendCheckbox').checked;
+      const heroCard = document.getElementById('engineerChooseHeroCard');
+      const badge = document.getElementById('engineerPickActiveBadge');
+      const toggleBtn = document.getElementById('toggleCatalogBtn');
+      const manualHint = document.getElementById('manualModeHint');
+      const browser = document.getElementById('catalogBrowserArea');
+
+      if (checked) {
+        heroCard.className = 'cursor-pointer rounded-2xl border-2 border-indigo-600 bg-gradient-to-r from-indigo-50 via-white to-indigo-50/60 p-6 sm:p-7 shadow-md transition';
+        badge.classList.remove('hidden');
+        toggleBtn.textContent = 'Or Pick Specific Parts Manually ↓';
+        manualHint.textContent = 'Uncheck the box above to customize individual parts';
+        browser.classList.add('opacity-45', 'pointer-events-none');
+      } else {
+        heroCard.className = 'cursor-pointer rounded-2xl border border-slate-300 bg-white p-6 sm:p-7 shadow-sm transition hover:border-indigo-400';
+        badge.classList.add('hidden');
+        toggleBtn.textContent = 'Switch Back to Engineer Pick ↑';
+        manualHint.textContent = 'Manual selection unlocked — tap "+ Add to Kit" below';
+        browser.classList.remove('opacity-45', 'pointer-events-none');
+      }
+    }
+
     function renderBrandPills() {
-      const brands = ['All', 'Espressif', 'Arduino', 'Raspberry Pi', 'STM32', 'NVIDIA', 'Bosch & TI', 'Waveshare', 'Power & Lithium', 'Generic'];
+      const brands = ['All', 'Espressif', 'Arduino', 'Raspberry Pi', 'AMD / Xilinx', 'STM32', 'NVIDIA', 'Bosch & TI', 'Waveshare', 'Power & Lithium', 'Generic'];
       document.getElementById('brandFilterBar').innerHTML = brands.map(b => `
         <button type="button" onclick="selectedBrand='${b}'; renderBrandPills(); renderCatalog();"
           class="text-xs px-3 py-1.5 rounded-full font-semibold transition ${selectedBrand === b ? 'bg-navy-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
@@ -1035,25 +1335,28 @@
       `).join('');
     }
 
-    function toggleRecommendMode() {
-      const checked = document.getElementById('aiRecommendCheckbox').checked;
-      document.getElementById('catalogBrowserArea').classList.toggle('opacity-40', checked);
-      document.getElementById('catalogBrowserArea').classList.toggle('pointer-events-none', checked);
+    // =========================================================================
+    // 8. ACCURATE QUOTE CALCULATOR & PLAIN-TEXT COMPONENT FORMATTER
+    // =========================================================================
+    function formatComponentsSummary(aiRecommend, kit) {
+      if (aiRecommend || !kit || kit.length === 0) {
+        return 'Engineer Recommended Kit (Team asked engineers to select parts)';
+      }
+      return kit.map(c => `${c.name} (${c.brand}) x${c.qty}`).join(', ');
     }
 
-    // =========================================================================
-    // 7. ACCURATE QUOTE CALCULATOR & ADMIN WHATSAPP DOSSIER FORMATTER
-    // =========================================================================
     function calculateAccurateEstimate(params) {
       const { projectType, domain, deadline, kit, customParts, addons, advisorDiscount } = params;
-      const isPureSoftware = domain.includes('Full-Stack') || (domain.includes('AI / ML') && kit.length === 0 && !customParts);
+      const isSimulationOrSoftware = domain.includes('Full-Stack')
+        || (domain.includes('VLSI') && kit.length === 0 && !customParts)
+        || (domain.includes('AI / ML') && kit.length === 0 && !customParts);
 
       let rawPartsCost = kit.reduce((sum, item) => sum + ((item.defaultCost || 200) * (item.qty || 1)), 0);
-      if (!isPureSoftware && rawPartsCost === 0) {
+      if (!isSimulationOrSoftware && rawPartsCost === 0) {
         rawPartsCost = projectType.includes('Mini') ? 1400 : 2800;
       }
       if (customParts) rawPartsCost += 750;
-      const hardwareBuffer = isPureSoftware ? 0 : Math.max(400, Math.round(rawPartsCost * 0.20));
+      const hardwareBuffer = isSimulationOrSoftware ? 0 : Math.max(400, Math.round(rawPartsCost * 0.20));
       const totalInternalHardware = rawPartsCost + hardwareBuffer;
 
       let baseEngineeringFee = 8500;
@@ -1119,60 +1422,8 @@
       };
     }
 
-    function buildNeatlyFormattedWhatsappMessage(data, est) {
-      const componentsSection = data.ai_recommend_parts
-        ? '• Engineer Recommended Kit (Team requested part selection)'
-        : (data.selected_components && data.selected_components.length > 0
-            ? data.selected_components.map(c => `• ${c.name} (${c.brand}) × ${c.qty}`).join('\n')
-            : '• No specific components selected');
-
-      const customPartLine = data.custom_parts ? `\n• Custom Unlisted Part: ${data.custom_parts}` : '';
-
-      const addonsSection = est.addonLines && est.addonLines.length > 0
-        ? est.addonLines.map(a => `• ${a}`).join('\n')
-        : '• Core Prototype & Code Only';
-
-      const lines = [
-        `*NEW PROJECT DOSSIER — PROTOFORGE BLR*`,
-        `*Tracking ID:* ${data.tracking_code}`,
-        ``,
-        `*1. STUDENT & ACADEMIC DETAILS*`,
-        `• *Name:* ${data.student_name}`,
-        `• *Student Phone:* ${data.phone}`,
-        `• *College:* ${data.college_name}`,
-        `• *Curriculum:* ${data.university_type}`,
-        `• *City / Hub:* ${data.city}`,
-        `• *Deadline:* ${data.deadline || 'Flexible'}${est.isRush ? ' (PRIORITY RUSH <15 DAYS)' : ''}`,
-        ``,
-        `*2. PROJECT SCOPE & REQUIREMENTS*`,
-        `• *Tier:* ${data.project_type}`,
-        `• *Domain:* ${data.domain}`,
-        `• *Title:* ${data.title}`,
-        `• *Working Logic:* ${data.description}`,
-        ``,
-        `*3. SELECTED COMPONENT KIT*`,
-        `${componentsSection}${customPartLine}`,
-        ``,
-        `*4. ACADEMIC DELIVERABLES & ADD-ONS*`,
-        `• Core Working Prototype + Tested Code + Circuit Diagram (Included)`,
-        `${addonsSection}`,
-        data.advisor_code ? `• *Campus Advisor Code:* ${data.advisor_code}` : null,
-        ``,
-        `*5. RECOMMENDED QUOTE & PROFIT BREAKDOWN*`,
-        `• Internal SP Road Hardware + Buffer: ₹${(est.totalInternalHardware || 0).toLocaleString('en-IN')}`,
-        `• Prototype & Engineering Quote: ₹${(est.prototypePrice || 0).toLocaleString('en-IN')}`,
-        `• Academic Add-Ons Charge: ₹${(est.addonsPrice || 0).toLocaleString('en-IN')}`,
-        est.discount > 0 ? `• Advisor Discount: − ₹${est.discount.toLocaleString('en-IN')}` : null,
-        `*Recommended Student Quote: ₹${(est.totalRecommendedQuote || 0).toLocaleString('en-IN')}*`,
-        `• 50% Advance: ₹${(est.advance50 || 0).toLocaleString('en-IN')} | 50% Final: ₹${(est.balance50 || 0).toLocaleString('en-IN')}`,
-        `*Est. Net Profit: ₹${(est.estimatedNetProfit || 0).toLocaleString('en-IN')}*`
-      ].filter(Boolean);
-
-      return lines.join('\n');
-    }
-
     // =========================================================================
-    // 8. CAMPUS ADVISOR CODE VALIDATION & PURE ON-SITE FORM SUBMISSION
+    // 9. CAMPUS ADVISOR CODE VALIDATION & FORM SUBMISSION
     // =========================================================================
     async function validateAdvisorCode() {
       const code = document.getElementById('advisorCodeInput').value.trim().toUpperCase();
@@ -1231,6 +1482,8 @@
       const deadline = document.getElementById('deadlineInput').value || null;
       const aiRecommend = document.getElementById('aiRecommendCheckbox').checked;
       const customParts = document.getElementById('customPartsInput').value.trim();
+      const effectiveKit = aiRecommend ? [] : selectedKit;
+      const componentsSummaryText = formatComponentsSummary(aiRecommend, effectiveKit);
 
       const addonsObj = {
         report_pdf: document.getElementById('addonReportPdf').checked,
@@ -1244,7 +1497,7 @@
         projectType,
         domain,
         deadline,
-        kit: selectedKit,
+        kit: effectiveKit,
         aiRecommend,
         customParts,
         addons: addonsObj,
@@ -1263,7 +1516,8 @@
         title: title,
         description: fullDescription,
         ai_recommend_parts: aiRecommend,
-        selected_components: selectedKit,
+        selected_components: effectiveKit,
+        components_summary: componentsSummaryText,
         custom_parts: customParts,
         addons: addonsObj,
         advisor_code: validatedAdvisorDiscount > 0 ? rawCode : null,
@@ -1310,13 +1564,14 @@
       validatedAdvisorDiscount = 0;
       document.getElementById('advisorCodeInput').value = '';
       document.getElementById('advisorStatusMsg').classList.add('hidden');
+      setEngineerChooseState(true);
       renderCatalog();
       renderSelectedKit();
       goToStep(1);
     }
 
     // =========================================================================
-    // 9. STUDENT TRACK QUOTE LOOKUP (NEVER SHOWS UNCONFIRMED ESTIMATES)
+    // 10. STUDENT TRACK QUOTE LOOKUP & WEBSITE UPI PAYMENT QR
     // =========================================================================
     async function lookupStudentQuote() {
       const code = document.getElementById('trackCodeSearchInput').value.trim().toUpperCase();
@@ -1353,11 +1608,15 @@
         detailsBox.innerHTML = `
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs sm:text-sm text-amber-900 space-y-1.5">
             <div><strong>Status: Under Engineer Feasibility Review.</strong></div>
-            <p>Our Bengaluru engineering team is reviewing your project specifications and component kit. We will publish your confirmed quote here and notify you shortly.</p>
+            <p>Our Bengaluru engineering team is reviewing your project specifications and component requirements. We will connect with you on WhatsApp and unlock your confirmed quote & UPI payment link here shortly.</p>
           </div>
         `;
       } else {
-        const balance = Number(quote.total_amount) - Number(quote.advance_amount);
+        const advanceAmt = Number(quote.advance_amount);
+        const balanceAmt = Number(quote.total_amount) - advanceAmt;
+        const upiPayUri = `upi://pay?pa=${encodeURIComponent(OWNER_UPI_ID)}&pn=${encodeURIComponent(OWNER_MERCHANT_NAME)}&am=${advanceAmt}&cu=INR&tn=${encodeURIComponent(req.tracking_code + ' 50% Advance')}`;
+        const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiPayUri)}`;
+
         detailsBox.innerHTML = `
           <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1.5">
             <div class="text-xs font-bold text-slate-800">Engineer's Feasibility & Architecture Note:</div>
@@ -1366,7 +1625,7 @@
 
           <div class="border border-slate-200 rounded-xl overflow-hidden text-xs sm:text-sm">
             <div class="flex justify-between px-4 py-3 border-b border-slate-100">
-              <span class="text-slate-600">Complete Working Prototype + Tested Code + Circuit Diagram</span>
+              <span class="text-slate-600">Complete Working Prototype / RTL + Tested Code + Schematic</span>
               <span class="mono font-bold">₹${Number(quote.prototype_price).toLocaleString('en-IN')}</span>
             </div>
             <div class="flex justify-between px-4 py-3 border-b border-slate-100">
@@ -1388,19 +1647,31 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div class="p-3.5 rounded-xl border ${quote.advance_paid ? 'border-emerald-300 bg-emerald-50' : 'border-indigo-200 bg-indigo-50/50'}">
               <div class="font-bold text-slate-900">Milestone 1: 50% Advance to Start</div>
-              <div class="mono text-base font-extrabold text-indigo-700 mt-0.5">₹${Number(quote.advance_amount).toLocaleString('en-IN')}</div>
-              <div class="mt-1 font-semibold ${quote.advance_paid ? 'text-emerald-700' : 'text-slate-500'}">
-                ${quote.advance_paid ? '✓ Paid — Component Procurement Active' : 'Pending — Required to begin build'}
+              <div class="mono text-base font-extrabold text-indigo-700 mt-0.5">₹${advanceAmt.toLocaleString('en-IN')}</div>
+              <div class="mt-1 font-semibold ${quote.advance_paid ? 'text-emerald-700' : 'text-slate-600'}">
+                ${quote.advance_paid ? '✓ Paid — Project WhatsApp Group Active' : 'Pending — Scan UPI QR below to initiate build'}
               </div>
             </div>
             <div class="p-3.5 rounded-xl border ${quote.final_paid ? 'border-emerald-300 bg-emerald-50' : 'border-slate-200 bg-slate-50'}">
               <div class="font-bold text-slate-900">Milestone 2: 50% on Working Demo Video</div>
-              <div class="mono text-base font-extrabold text-slate-900 mt-0.5">₹${balance.toLocaleString('en-IN')}</div>
+              <div class="mono text-base font-extrabold text-slate-900 mt-0.5">₹${balanceAmt.toLocaleString('en-IN')}</div>
               <div class="mt-1 font-semibold ${quote.final_paid ? 'text-emerald-700' : 'text-slate-500'}">
                 ${quote.final_paid ? '✓ Paid — Handover Complete' : 'Due after live demo verification'}
               </div>
             </div>
           </div>
+
+          ${!quote.advance_paid ? `
+            <div class="bg-white border-2 border-indigo-600 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-5">
+              <img src="${qrImgUrl}" alt="UPI Payment QR" class="w-36 h-36 rounded-xl border border-slate-200 p-1.5 bg-white shrink-0" />
+              <div class="space-y-2 text-center sm:text-left">
+                <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700">Official Website UPI Checkout</span>
+                <h4 class="text-base font-extrabold text-slate-900">Pay ₹${advanceAmt.toLocaleString('en-IN')} (50% Advance) via GPay / PhonePe / Paytm</h4>
+                <p class="text-xs text-slate-600">Scan the QR code or pay to UPI ID: <span class="mono font-bold text-slate-900">${OWNER_UPI_ID}</span> with reference <span class="mono font-bold">${req.tracking_code}</span>.</p>
+                <p class="text-[11px] text-emerald-700 font-semibold">Once paid, share the screenshot on WhatsApp—we will create your dedicated project WhatsApp group immediately.</p>
+              </div>
+            </div>
+          ` : ''}
         `;
       }
 
@@ -1408,7 +1679,7 @@
     }
 
     // =========================================================================
-    // 10. PASSWORD-PROTECTED ADMIN AUTH & WORKBENCH
+    // 11. PASSWORD-PROTECTED ADMIN AUTH & WORKBENCH
     // =========================================================================
     async function checkAdminAuthState() {
       const { data: { session } } = await db.auth.getSession();
@@ -1533,9 +1804,12 @@
       document.getElementById('edTrackingCode').textContent = activeAdminRequest.tracking_code;
       document.getElementById('edDeadlineBadge').textContent = activeAdminRequest.deadline ? `Deadline: ${activeAdminRequest.deadline}` : 'No fixed deadline';
       document.getElementById('edTitle').textContent = activeAdminRequest.title;
-      document.getElementById('edStudentInfo').textContent = `${activeAdminRequest.student_name} (${activeAdminRequest.phone}) • ${activeAdminRequest.college_name} • ${activeAdminRequest.project_type}`;
+      document.getElementById('edStudentInfo').textContent = `${activeAdminRequest.student_name} (${activeAdminRequest.phone}) • ${activeAdminRequest.college_name} • ${activeAdminRequest.domain}`;
       document.getElementById('edStatusSelect').value = activeAdminRequest.status;
       document.getElementById('edDescription').textContent = activeAdminRequest.description;
+
+      const partsSummary = activeAdminRequest.components_summary || formatComponentsSummary(activeAdminRequest.ai_recommend_parts, activeAdminRequest.selected_components);
+      document.getElementById('edPartsSummaryAdmin').textContent = `Components: ${partsSummary}`;
       document.getElementById('edCustomParts').textContent = activeAdminRequest.custom_parts ? `Custom Unlisted Part Requested: ${activeAdminRequest.custom_parts}` : '';
 
       const est = activeAdminRequest.estimated_quote_summary || calculateAccurateEstimate({
@@ -1551,14 +1825,9 @@
 
       document.getElementById('edAddonsSummary').textContent = `Requested Add-Ons: ${(est.addonLines || []).join(' | ') || 'Core Prototype Only'}`;
 
-      // Button 1: Send full dossier + recommended quote to YOUR WhatsApp
-      const ownerDossierMsg = buildNeatlyFormattedWhatsappMessage(activeAdminRequest, est);
-      document.getElementById('edSendToMyWhatsappLink').href = `https://wa.me/${OWNER_WHATSAPP_NUMBER}?text=${encodeURIComponent(ownerDossierMsg)}`;
-
-      // Button 2: Reply directly to the student on WhatsApp
       const cleanPhone = activeAdminRequest.phone.replace(/\D/g, '');
       const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
-      document.getElementById('edWhatsappLink').href = `https://wa.me/${waPhone}?text=${encodeURIComponent(`Hi ${activeAdminRequest.student_name}, we reviewed your ProtoForge BLR project (${activeAdminRequest.tracking_code}). Check your confirmed quote on our website using your tracking code!`)}`;
+      document.getElementById('edWhatsappLink').href = `https://wa.me/${waPhone}?text=${encodeURIComponent(`Hi ${activeAdminRequest.student_name}, this is ProtoForge BLR regarding your project "${activeAdminRequest.title}" (${activeAdminRequest.tracking_code}). We have reviewed your requirements—let's finalize the scope and quote!`)}`;
 
       const { data: existingQuote } = await db
         .from('quotes')
@@ -1594,6 +1863,27 @@
 
       renderAdminBomRows();
       recalcAdminMargin();
+    }
+
+    function copyWhatsappGroupTemplate() {
+      if (!activeAdminRequest) return;
+      const shortId = activeAdminRequest.tracking_code.split('-').pop();
+      const shortTitle = activeAdminRequest.title.slice(0, 35);
+      const groupName = `PF-${shortId} | ${activeAdminRequest.student_name} — ${shortTitle}`;
+      const welcomeText = [
+        `*Group Name:* ${groupName}`,
+        ``,
+        `*Welcome Message to Paste in Group:*`,
+        `Welcome to your ProtoForge BLR project workspace!`,
+        `• *Tracking ID:* ${activeAdminRequest.tracking_code}`,
+        `• *Project:* ${activeAdminRequest.title}`,
+        `• *Target Deadline:* ${activeAdminRequest.deadline || 'As discussed'}`,
+        ``,
+        `We will share component sourcing updates, circuit/code progress, and live bench demo videos right here.`
+      ].join('\n');
+
+      navigator.clipboard.writeText(welcomeText);
+      showToast('Copied WhatsApp Group Name & Welcome Message!');
     }
 
     function renderAdminBomRows() {
@@ -1644,6 +1934,8 @@
       const discount = Number(document.getElementById('edDiscountPrice').value || 0);
       const totalQuote = Math.max(0, proto + addons - discount);
       const advance = Math.round(totalQuote / 2);
+      const advancePaid = document.getElementById('edAdvancePaidCheck').checked;
+      const finalPaid = document.getElementById('edFinalPaidCheck').checked;
 
       const quotePayload = {
         request_id: activeAdminRequest.id,
@@ -1656,8 +1948,8 @@
         discount_amount: discount,
         total_amount: totalQuote,
         advance_amount: advance,
-        advance_paid: document.getElementById('edAdvancePaidCheck').checked,
-        final_paid: document.getElementById('edFinalPaidCheck').checked,
+        advance_paid: advancePaid,
+        final_paid: finalPaid,
         updated_at: new Date().toISOString()
       };
 
@@ -1672,6 +1964,8 @@
 
       let newStatus = document.getElementById('edStatusSelect').value;
       if (newStatus === 'New Request') newStatus = 'Quote Sent';
+      if (advancePaid && newStatus === 'Quote Sent') newStatus = 'Advance Paid';
+      if (finalPaid) newStatus = 'Delivered';
 
       await db
         .from('project_requests')
@@ -1679,12 +1973,12 @@
         .eq('id', activeAdminRequest.id);
 
       document.getElementById('edStatusSelect').value = newStatus;
-      showToast('Quote published! Student can view it via ' + activeAdminRequest.tracking_code);
+      showToast('Quote & UPI QR published for ' + activeAdminRequest.tracking_code);
       loadAdminRequests();
     }
 
     // =========================================================================
-    // 11. CAMPUS ADVISORS MANAGER
+    // 12. CAMPUS ADVISORS MANAGER
     // =========================================================================
     async function loadAdminAdvisors() {
       const { data } = await db.from('campus_advisors').select('*').order('code');
@@ -1730,7 +2024,7 @@
     }
 
     // =========================================================================
-    // 12. MODALS & COMPLIANCE POLICIES
+    // 13. MODALS & COMPLIANCE POLICIES
     // =========================================================================
     function closeModal(id) {
       document.getElementById(id).classList.add('hidden');
@@ -1740,27 +2034,27 @@
       const content = {
         about: {
           title: 'About ProtoForge BLR & Contact',
-          body: `<p><strong>ProtoForge BLR</strong> is a Bengaluru-based custom hardware prototyping, embedded systems, AI/software development, and academic documentation consultancy serving VTU, Autonomous, and Diploma engineering students.</p>
+          body: `<p><strong>ProtoForge BLR</strong> is a Bengaluru-based custom hardware prototyping, VLSI/FPGA design, embedded systems, AI/software development, and academic documentation consultancy serving VTU, Autonomous, and Diploma engineering students across Karnataka.</p>
                  <p><strong>Location:</strong> Bengaluru, Karnataka, India</p>
                  <p><strong>Support Email:</strong> harshan20051@gmail.com</p>`
         },
         pricing: {
           title: 'Pricing & 50/50 Milestone Structure',
           body: `<p>Every project is custom-scoped based on required components, engineering hours, and optional academic documentation (College Reports, IEEE Papers, Review PPTs, and Viva Prep).</p>
-                 <p><strong>Milestone 1 (50% Advance):</strong> Payable upon quote approval to initiate component procurement and prototyping.</p>
+                 <p><strong>Milestone 1 (50% Advance):</strong> Payable via UPI QR on the Track Quote page upon quote approval to initiate component procurement and prototyping.</p>
                  <p><strong>Milestone 2 (50% Handover):</strong> Payable after a live working video demonstration prior to physical/digital delivery.</p>`
         },
         terms: {
           title: 'Terms & Conditions',
-          body: `<p>Prototypes and documentation provided by ProtoForge BLR are intended as educational reference models and technical mentorship aids. Students are responsible for understanding the circuit logic, source code, and report contents prior to academic evaluation.</p>`
+          body: `<p>Prototypes, RTL simulations, and documentation provided by ProtoForge BLR are intended as educational reference models and technical mentorship aids. Students are responsible for understanding the circuit/code logic and report contents prior to academic evaluation.</p>`
         },
         privacy: {
           title: 'Privacy Policy',
-          body: `<p>We collect student names, contact numbers, college details, and project specifications solely to prepare technical feasibility quotes and deliver requested builds. Student project titles and personal contact details are never sold or shared with third parties.</p>`
+          body: `<p>We collect student names, WhatsApp numbers, college details, and project specifications solely to prepare technical feasibility quotes, coordinate via project WhatsApp groups, and deliver requested builds. Student data is never sold or shared with third parties.</p>`
         },
         refund: {
           title: 'Refund & Cancellation Policy',
-          body: `<p>Orders cancelled before component procurement begins are eligible for a 100% refund of the advance. Once custom hardware components are purchased or custom code/report drafting has commenced, the 50% advance covers procured parts and engineering effort and is non-refundable.</p>`
+          body: `<p>Orders cancelled before component procurement begins are eligible for a 100% refund of the advance. Once custom hardware components are purchased or custom RTL/code/report drafting has commenced, the 50% advance covers procured parts and engineering effort and is non-refundable.</p>`
         }
       };
 
