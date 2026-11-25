@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ProtoForge BLR — Custom College Engineering Projects & IEEE Documentation</title>
+  <title>ProtoForge BLR — Custom College Engineering Projects, VLSI & IEEE Documentation</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Supabase JS v2 -->
@@ -44,30 +44,33 @@
 
   <!-- TOP NAVIGATION BAR -->
   <header class="bg-navy-900 text-white border-b border-slate-800 sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
       <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('student')">
-        <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-lg shadow-sm">
+        <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
           PF
         </div>
         <div>
           <div class="flex items-center gap-2">
             <span class="font-bold text-base sm:text-lg tracking-tight">ProtoForge BLR</span>
-            <span class="hidden sm:inline-block text-[11px] font-medium px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span class="hidden md:inline-block text-[11px] font-medium px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
               Bengaluru Hardware, VLSI & AI Lab
             </span>
           </div>
-          <p class="text-[11px] text-slate-400 hidden sm:block">Custom VTU & Autonomous Engineering Projects — Built, Tested & Viva-Ready</p>
+          <p class="text-[11px] text-slate-400 hidden lg:block">Custom VTU & Autonomous Engineering Projects — Built, Tested & Viva-Ready</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <button id="navStudentBtn" onclick="switchView('student')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-indigo-600 text-white transition">
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <button id="navStudentBtn" onclick="switchView('student')" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-indigo-600 text-white transition">
           New Project
         </button>
-        <button id="navTrackBtn" onclick="switchView('track')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
-          Track Quote & Pay
+        <button id="navTrackBtn" onclick="switchView('track')" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          Track Quote
         </button>
-        <button id="navAdminBtn" onclick="handleAdminNavClick()" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-700 transition flex items-center gap-1.5">
+        <button id="navPartnerBtn" onclick="switchView('partner')" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-emerald-300 hover:text-white hover:bg-slate-800 border border-emerald-500/30 transition">
+          Campus Partner
+        </button>
+        <button id="navAdminBtn" onclick="handleAdminNavClick()" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-700 transition flex items-center gap-1.5">
           <span id="adminLockDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
           <span id="adminNavLabel">Admin</span>
         </button>
@@ -98,12 +101,15 @@
             Scope Your Custom College Project in 4 Steps
           </h1>
           <p class="text-sm text-slate-600 mt-1">
-            Submit your project requirements and deliverables on-site. Our engineers will verify feasibility, connect with you on WhatsApp, and publish your quote & payment link here.
+            Submit your project requirements and deliverables on-site. Our engineers will verify feasibility, connect with you on WhatsApp, and publish your quote & UPI payment QR here.
           </p>
         </div>
-        <div class="flex items-center gap-2 shrink-0">
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button onclick="switchView('partner')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 transition">
+            Earn ₹500–₹1,000/Team as Campus Partner
+          </button>
           <button onclick="switchView('track')" class="px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-300 text-slate-700 hover:bg-slate-50 transition">
-            Already Submitted? Track Quote →
+            Track Quote →
           </button>
         </div>
       </div>
@@ -169,7 +175,7 @@
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1.5">WhatsApp Number (For Project Group & Quote) *</label>
-            <input id="phoneInput" type="tel" placeholder="+91 98450 XXXXX" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+            <input id="phoneInput" type="tel" onchange="recheckAdvisorOnPhoneChange()" placeholder="+91 98450 XXXXX" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
           </div>
         </div>
 
@@ -181,28 +187,27 @@
           </div>
           <div class="relative">
             <input id="collegeInput" type="text" autocomplete="off"
-              onfocus="openCollegeDropdown()"
-              oninput="filterCollegeDropdown()"
+              onfocus="openCollegeDropdown('collegeInput', 'collegeDropdownList', 'student')"
+              oninput="filterCollegeDropdown('collegeInput', 'collegeDropdownList', 'student')"
               placeholder="Search your Karnataka college (e.g., RVCE, PES, BMS, NIE, SJCE, KLE, Sahyadri) or type any name..."
               class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 pr-10 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
-            <button type="button" onclick="toggleCollegeDropdown()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 text-xs font-bold">
+            <button type="button" onclick="toggleCollegeDropdown('collegeInput', 'collegeDropdownList', 'student')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 text-xs font-bold">
               ▼
             </button>
           </div>
 
-          <!-- Dropdown List -->
           <div id="collegeDropdownList" class="hidden absolute z-30 mt-1.5 w-full bg-white border border-slate-300 rounded-xl shadow-xl max-h-64 overflow-y-auto divide-y divide-slate-100"></div>
 
           <div class="flex flex-wrap items-center gap-1.5 mt-2">
             <span class="text-[11px] text-slate-400 mr-1">Quick Pick:</span>
-            <button type="button" onclick="selectCollegeItem('RV College of Engineering (RVCE), Bengaluru', 'Autonomous')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">RVCE</button>
-            <button type="button" onclick="selectCollegeItem('PES University, Bengaluru', 'Deemed University')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">PES University</button>
-            <button type="button" onclick="selectCollegeItem('BMS College of Engineering (BMSCE), Bengaluru', 'Autonomous')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">BMSCE</button>
-            <button type="button" onclick="selectCollegeItem('MS Ramaiah Institute of Technology (MSRIT), Bengaluru', 'Autonomous')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">MSRIT</button>
-            <button type="button" onclick="selectCollegeItem('Dayananda Sagar College of Engineering (DSCE), Bengaluru', 'Autonomous')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">Dayananda Sagar</button>
-            <button type="button" onclick="selectCollegeItem('JSS Science and Technology University (SJCE), Mysuru', 'Deemed University')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">SJCE Mysuru</button>
-            <button type="button" onclick="selectCollegeItem('KLE Technological University (BVB), Hubballi', 'Deemed University')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">KLE Tech Hubballi</button>
-            <button type="button" onclick="selectCollegeItem('NMAM Institute of Technology, Nitte', 'Deemed University')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">NMAMIT Nitte</button>
+            <button type="button" onclick="selectCollegeItem('RV College of Engineering (RVCE), Bengaluru', 'Autonomous', 'student')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">RVCE</button>
+            <button type="button" onclick="selectCollegeItem('PES University (Ring Road Campus), Bengaluru', 'Deemed University', 'student')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">PES University</button>
+            <button type="button" onclick="selectCollegeItem('BMS College of Engineering (BMSCE), Bengaluru', 'Autonomous', 'student')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">BMSCE</button>
+            <button type="button" onclick="selectCollegeItem('MS Ramaiah Institute of Technology (MSRIT), Bengaluru', 'Autonomous', 'student')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">MSRIT</button>
+            <button type="button" onclick="selectCollegeItem('Dayananda Sagar College of Engineering (DSCE), Bengaluru', 'Autonomous', 'student')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">Dayananda Sagar</button>
+            <button type="button" onclick="selectCollegeItem('JSS Science and Technology University (SJCE), Mysuru', 'Deemed University', 'student')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">SJCE Mysuru</button>
+            <button type="button" onclick="selectCollegeItem('KLE Technological University (BVB), Hubballi', 'Deemed University', 'student')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">KLE Tech Hubballi</button>
+            <button type="button" onclick="selectCollegeItem('NMAM Institute of Technology, Nitte', 'Deemed University', 'student')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium transition">NMAMIT Nitte</button>
           </div>
         </div>
 
@@ -308,7 +313,6 @@
 
       <!-- STEP 3 PANEL: BIG "LET ENGINEERS CHOOSE" HERO CARD FIRST + OPTIONAL CATALOG BELOW -->
       <div id="stepPanel3" class="hidden space-y-5">
-        <!-- BIG PRIMARY OPTION IN THE CENTER RIGHT BELOW STEPPER -->
         <div id="engineerChooseHeroCard" onclick="toggleRecommendCardClick(event)"
           class="cursor-pointer rounded-2xl border-2 border-indigo-600 bg-gradient-to-r from-indigo-50 via-white to-indigo-50/60 p-6 sm:p-7 shadow-md transition hover:shadow-lg">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
@@ -338,7 +342,6 @@
           </div>
         </div>
 
-        <!-- SECONDARY / MANUAL COMPONENT CATALOG -->
         <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
             <div>
@@ -464,16 +467,24 @@
           </label>
         </div>
 
-        <!-- Campus Advisor Code Box -->
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <label class="block text-xs font-bold text-slate-800">Campus Advisor / Class Rep Code (Optional)</label>
-            <p class="text-[11px] text-slate-500">Enter a valid campus lead code to unlock FREE Review 1 & 2 PPTs on your final quote.</p>
+        <!-- Campus Advisor / Partner Code Box -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-800">Campus Partner / Advisor Referral Code (Optional)</label>
+              <p class="text-[11px] text-slate-500">Apply a verified campus lead code for <strong>₹500–₹1,000 instant discount</strong> on your project quote.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input id="advisorCodeInput" type="text" placeholder="e.g., RVCE-ROHAN" class="uppercase mono rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white w-40 focus:ring-2 focus:ring-indigo-500 outline-none" />
+              <button type="button" onclick="validateAdvisorCode()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold transition">
+                Apply Code
+              </button>
+            </div>
           </div>
-          <div class="flex items-center gap-2">
-            <input id="advisorCodeInput" type="text" placeholder="e.g., RVCE-01" class="uppercase mono rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white w-36 focus:ring-2 focus:ring-indigo-500 outline-none" />
-            <button type="button" onclick="validateAdvisorCode()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold transition">
-              Apply Code
+          <div class="pt-2 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+            <span class="text-slate-500">Note: Self-referral on your own first project is locked. Refer 1 other team to unlock ₹500 UPI cashback.</span>
+            <button type="button" onclick="switchView('partner')" class="font-bold text-indigo-600 hover:underline">
+              Want your own code & ₹500/team cashback? Become a Campus Partner →
             </button>
           </div>
         </div>
@@ -494,7 +505,7 @@
         <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl font-bold mx-auto">✓</div>
         <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Project Request Submitted!</h2>
         <p class="text-sm text-slate-600">
-          Thank you! Our engineering lead will review your requirements, message you on WhatsApp to finalize technical details, and unlock your quote & payment link on the <strong>Track Quote</strong> tab.
+          Thank you! Our engineering lead will review your requirements, message you on WhatsApp to finalize technical details, and unlock your quote & UPI payment link on the <strong>Track Quote</strong> tab.
         </p>
 
         <div class="bg-slate-900 text-white rounded-xl p-4 flex items-center justify-between max-w-md mx-auto">
@@ -554,7 +565,166 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- VIEW 3: PASSWORD-PROTECTED ADMIN WORKBENCH                            -->
+    <!-- VIEW 3: CAMPUS PARTNER REGISTRATION & TIER TRACKER                    -->
+    <!-- ===================================================================== -->
+    <section id="partnerView" class="hidden space-y-6">
+      <!-- Hero & Tier Rules Banner -->
+      <div class="bg-navy-900 text-white rounded-2xl p-6 sm:p-7 shadow-md space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-2">
+              ● Limited to 3 Campus Leads Per College
+            </span>
+            <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">
+              Become a ProtoForge BLR Campus Partner
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
+              Help final-year & mini-project teams in your college get reliable hardware/VLSI builds while unlocking instant discounts for them and direct UPI payouts for you.
+            </p>
+          </div>
+        </div>
+
+        <!-- 3 Count-Based Progression Tiers -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
+          <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-300">Tier 1 • Starter Partner</span>
+              <span class="mono text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-200">1–2 Teams</span>
+            </div>
+            <div class="text-base font-extrabold text-white">₹500 Off + ₹500 Cashback</div>
+            <p class="text-xs text-slate-400">Your batchmates get ₹500 off their quote, and you receive ₹500 via UPI as soon as their 50% advance clears.</p>
+          </div>
+
+          <div class="bg-slate-800/80 border border-emerald-500/40 rounded-xl p-4 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">Tier 2 • Campus Lead</span>
+              <span class="mono text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200">3–4 Teams</span>
+            </div>
+            <div class="text-base font-extrabold text-white">₹750 Off + ₹750 Cashback</div>
+            <p class="text-xs text-slate-400">Automatically unlocks after 3 converted teams + Official ProtoForge Campus Lead Certificate for your resume.</p>
+          </div>
+
+          <div class="bg-slate-800/80 border border-amber-500/40 rounded-xl p-4 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-300">Tier 3 • Campus Ambassador</span>
+              <span class="mono text-[11px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-200">5+ Teams</span>
+            </div>
+            <div class="text-base font-extrabold text-white">₹1,000 Off + ₹1,000/Team</div>
+            <p class="text-xs text-slate-400">Unlocks after 5 converted teams + ₹2,500 bonus discount on your own Final Year Major Project.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- LEFT 7 COLS: PARTNER APPLICATION FORM -->
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-5">
+          <div class="border-b border-slate-100 pb-3.5">
+            <h2 class="text-lg font-extrabold text-slate-900">Apply for Your Campus Referral Code</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Applications are reviewed within 2 hours. Once approved, your code activates immediately.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Your Full Name *</label>
+              <input id="partNameInput" type="text" oninput="autoSuggestPartnerCode()" placeholder="e.g., Rohan Kulkarni" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">WhatsApp Number *</label>
+              <input id="partPhoneInput" type="tel" placeholder="+91 98450 XXXXX" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+            </div>
+          </div>
+
+          <!-- Searchable Karnataka College Selector for Partner -->
+          <div class="relative" id="partnerCollegeWrapper">
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Your College (Karnataka List or Custom) *</label>
+            <div class="relative">
+              <input id="partCollegeInput" type="text" autocomplete="off"
+                onfocus="openCollegeDropdown('partCollegeInput', 'partCollegeDropdownList', 'partner')"
+                oninput="filterCollegeDropdown('partCollegeInput', 'partCollegeDropdownList', 'partner'); autoSuggestPartnerCode();"
+                placeholder="Search your college to check available partner spots..."
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 pr-10 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+              <button type="button" onclick="toggleCollegeDropdown('partCollegeInput', 'partCollegeDropdownList', 'partner')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 text-xs font-bold">
+                ▼
+              </button>
+            </div>
+            <div id="partCollegeDropdownList" class="hidden absolute z-30 mt-1.5 w-full bg-white border border-slate-300 rounded-xl shadow-xl max-h-60 overflow-y-auto divide-y divide-slate-100"></div>
+            <p id="collegeSpotsBanner" class="hidden text-xs font-semibold mt-2 px-3 py-2 rounded-lg"></p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Branch & Semester *</label>
+              <input id="partBranchInput" type="text" placeholder="e.g., ECE - 7th Sem / CSE - 6th Sem" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Campus Role *</label>
+              <select id="partRoleInput" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                <option value="Class Representative (CR)">Class Representative (CR)</option>
+                <option value="IEEE / Technical Club Lead">IEEE / Technical Club Lead</option>
+                <option value="Project Batch Coordinator">Project Batch Coordinator</option>
+                <option value="Student Member">Student Member</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Preferred Referral Code *</label>
+              <input id="partDesiredCodeInput" type="text" placeholder="e.g., RVCE-ROHAN" class="uppercase mono w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Your UPI ID (For Cashback Payouts) *</label>
+              <input id="partUpiInput" type="text" placeholder="e.g., rohan@okicici / 98450XXXXX@ybl" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />
+            </div>
+          </div>
+
+          <!-- Anti-Abuse Policy Checkbox -->
+          <label class="bg-amber-50/80 border border-amber-200 rounded-xl p-3.5 flex items-start gap-2.5 cursor-pointer">
+            <input id="partTermsCheck" type="checkbox" class="mt-0.5 w-4 h-4 accent-indigo-600 shrink-0" />
+            <span class="text-xs text-amber-950 leading-relaxed">
+              I understand the <strong>Fair-Play & Anti-Self-Referral Rules</strong>: I cannot apply my own code upfront on my own single project. My code discounts & UPI payouts unlock when referred teams pay their 50% advance.
+            </span>
+          </label>
+
+          <button id="submitPartnerBtn" type="button" onclick="registerCampusPartner()" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-sm transition">
+            Submit Campus Partner Application →
+          </button>
+
+          <div id="partnerRegSuccessBox" class="hidden bg-emerald-50 border border-emerald-300 rounded-xl p-4 space-y-2 text-xs text-emerald-950">
+            <div class="font-extrabold text-sm text-emerald-800">✓ Application Submitted for Review!</div>
+            <p>Your requested code <span id="regConfirmedCode" class="mono font-bold bg-white px-2 py-0.5 rounded border border-emerald-300">CODE</span> has been logged. Our team will verify your college slot and activate it shortly.</p>
+          </div>
+        </div>
+
+        <!-- RIGHT 5 COLS: PARTNER STATUS & EARNINGS CHECKER -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+            <div>
+              <h3 class="text-base font-extrabold text-slate-900">Already Registered? Check Partner Dashboard</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Enter your Referral Code or registered WhatsApp number to check approval status, converted teams, and UPI earnings.</p>
+            </div>
+            <div class="flex gap-2">
+              <input id="partnerLookupInput" type="text" placeholder="Code or 10-digit WhatsApp" class="flex-1 uppercase mono rounded-xl border border-slate-300 px-3.5 py-2 text-xs focus:ring-2 focus:ring-indigo-500 outline-none" />
+              <button type="button" onclick="lookupPartnerDashboard()" class="px-4 py-2 rounded-xl bg-navy-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+                Check
+              </button>
+            </div>
+
+            <div id="partnerDashboardResult" class="hidden pt-2 border-t border-slate-100 space-y-3"></div>
+          </div>
+
+          <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5 space-y-2.5 text-xs text-slate-600">
+            <h4 class="font-bold text-slate-900 text-sm">How Cashback & Tier Upgrades Work</h4>
+            <p>• <strong>Step 1:</strong> Share your approved code with project teams in your college.</p>
+            <p>• <strong>Step 2:</strong> When they enter your code in Step 4, their quote is automatically discounted by ₹500 (or ₹750 / ₹1,000 as you level up).</p>
+            <p>• <strong>Step 3:</strong> Once their 50% advance clears, your converted team count increments and your UPI payout is released the same day.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 4: PASSWORD-PROTECTED ADMIN WORKBENCH                            -->
     <!-- ===================================================================== -->
     <section id="adminView" class="hidden space-y-6">
       <div class="bg-navy-900 text-white rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -569,8 +739,9 @@
           <button onclick="switchAdminSubTab('orders')" id="subTabOrdersBtn" class="px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold">
             Project Requests
           </button>
-          <button onclick="switchAdminSubTab('advisors')" id="subTabAdvisorsBtn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold">
-            Campus Advisors
+          <button onclick="switchAdminSubTab('advisors')" id="subTabAdvisorsBtn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5">
+            <span>Campus Partners</span>
+            <span id="pendingPartnersBadge" class="hidden px-1.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-navy-950">0</span>
           </button>
           <button onclick="logoutAdmin()" class="px-3.5 py-2 rounded-xl bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 text-xs font-semibold">
             Sign Out
@@ -663,7 +834,7 @@
                   <input id="edAddonsPrice" type="number" oninput="recalcAdminMargin()" value="5000" class="mono w-full rounded-xl border border-slate-300 px-3 py-2 text-sm bg-white font-bold" />
                 </div>
                 <div>
-                  <label class="block text-[11px] font-semibold text-slate-700 mb-1">Advisor / Promo Discount (₹)</label>
+                  <label class="block text-[11px] font-semibold text-slate-700 mb-1">Campus Partner Discount (₹)</label>
                   <input id="edDiscountPrice" type="number" oninput="recalcAdminMargin()" value="0" class="mono w-full rounded-xl border border-slate-300 px-3 py-2 text-sm bg-white font-bold text-emerald-700" />
                 </div>
               </div>
@@ -690,7 +861,7 @@
               <div class="flex flex-wrap items-center gap-4 pt-1">
                 <label class="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
                   <input id="edAdvancePaidCheck" type="checkbox" class="w-4 h-4 accent-emerald-600" />
-                  50% Advance Received
+                  50% Advance Received (Unlocks Partner Tier & Cashback)
                 </label>
                 <label class="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
                   <input id="edFinalPaidCheck" type="checkbox" class="w-4 h-4 accent-emerald-600" />
@@ -708,38 +879,58 @@
         </div>
       </div>
 
-      <!-- ADMIN SUB-TAB B: CAMPUS ADVISORS -->
-      <div id="adminAdvisorsPanel" class="hidden bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
-          <div>
-            <h3 class="text-lg font-bold text-slate-900">Campus Advisor & Class Rep Codes</h3>
-            <p class="text-xs text-slate-500">Add unique referral codes for Karnataka student leads. Commission unlocks when the student's 50% advance clears.</p>
+      <!-- ADMIN SUB-TAB B: CAMPUS PARTNERS & APPROVALS -->
+      <div id="adminAdvisorsPanel" class="hidden space-y-6">
+        <!-- Pending Self-Serve Applications -->
+        <div id="pendingPartnersCard" class="hidden bg-amber-50/70 rounded-2xl border-2 border-amber-300 p-5 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base font-extrabold text-amber-950">Pending Campus Partner Applications</h3>
+              <p class="text-xs text-amber-800">Review self-registered students below and click Approve to activate their referral code.</p>
+            </div>
           </div>
+          <div id="pendingPartnersList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 bg-slate-50 p-4 rounded-xl border border-slate-200">
-          <input id="newAdvCode" type="text" placeholder="Code (e.g., MSRIT-01)" class="uppercase mono rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
-          <input id="newAdvName" type="text" placeholder="Advisor Name" class="rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
-          <input id="newAdvCollege" type="text" placeholder="College Name" class="rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
-          <input id="newAdvUpi" type="text" placeholder="UPI ID (Optional)" class="rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
-          <button type="button" onclick="createCampusAdvisor()" class="rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2">
-            + Add Advisor
-          </button>
-        </div>
+        <!-- Active & All Partners Ledger -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Campus Partners, Tiers & UPI Payout Ledger</h3>
+              <p class="text-xs text-slate-500">Converted count & tier levels update automatically when a referred project's 50% Advance is marked Paid.</p>
+            </div>
+            <button onclick="loadAdminAdvisors()" class="text-xs font-semibold text-indigo-600 hover:underline self-start">↻ Refresh Ledger</button>
+          </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr class="border-b border-slate-200 text-slate-500">
-                <th class="py-2.5 px-3">Code</th>
-                <th class="py-2.5 px-3">Advisor Name</th>
-                <th class="py-2.5 px-3">College</th>
-                <th class="py-2.5 px-3">UPI ID</th>
-                <th class="py-2.5 px-3">Status</th>
-              </tr>
-            </thead>
-            <tbody id="advisorsTableBody" class="divide-y divide-slate-100"></tbody>
-          </table>
+          <!-- Quick Manual Add Bar -->
+          <div class="grid grid-cols-1 sm:grid-cols-6 gap-2 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <input id="newAdvCode" type="text" placeholder="Code (MSRIT-01)" class="uppercase mono rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
+            <input id="newAdvName" type="text" placeholder="Partner Name" class="rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
+            <input id="newAdvPhone" type="tel" placeholder="WhatsApp Number" class="rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
+            <input id="newAdvCollege" type="text" placeholder="College Name" class="rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
+            <input id="newAdvUpi" type="text" placeholder="UPI ID" class="rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
+            <button type="button" onclick="createCampusAdvisor()" class="rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2">
+              + Direct Add
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-slate-200 text-slate-500">
+                  <th class="py-2.5 px-3">Code</th>
+                  <th class="py-2.5 px-3">Partner & Phone</th>
+                  <th class="py-2.5 px-3">College & Branch</th>
+                  <th class="py-2.5 px-3">Converted</th>
+                  <th class="py-2.5 px-3">Current Tier</th>
+                  <th class="py-2.5 px-3">Unlocked Payout</th>
+                  <th class="py-2.5 px-3">UPI ID</th>
+                  <th class="py-2.5 px-3">Action</th>
+                </tr>
+              </thead>
+              <tbody id="advisorsTableBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -801,12 +992,13 @@
   <!-- APPLICATION LOGIC -->
   <script>
     // =========================================================================
-    // 1. SUPABASE & OWNER PAYMENT / WHATSAPP CONFIGURATION
+    // 1. SUPABASE & OWNER PAYMENT / PARTNER CONFIGURATION
     // =========================================================================
     const SUPABASE_URL = 'https://uvkgomlzeyivczvkesdj.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CQNaUF-_rBtO_3312BuMJw_J2pdOTgN';
     const OWNER_UPI_ID = '7892672646@ybl'; // Update to your preferred PhonePe/GPay/Paytm UPI ID
     const OWNER_MERCHANT_NAME = 'ProtoForge BLR';
+    const MAX_PARTNERS_PER_COLLEGE = 3;
 
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
@@ -814,138 +1006,136 @@
     // 2. COMPREHENSIVE KARNATAKA ENGINEERING & POLYTECHNIC COLLEGES LIST
     // =========================================================================
     const KARNATAKA_COLLEGES = [
-      // Bengaluru (Autonomous, VTU, Deemed)
-      { name: 'RV College of Engineering (RVCE), Bengaluru', univ: 'Autonomous' },
-      { name: 'BMS College of Engineering (BMSCE), Bengaluru', univ: 'Autonomous' },
-      { name: 'MS Ramaiah Institute of Technology (MSRIT), Bengaluru', univ: 'Autonomous' },
-      { name: 'PES University (Ring Road Campus), Bengaluru', univ: 'Deemed University' },
-      { name: 'PES University (Electronic City Campus), Bengaluru', univ: 'Deemed University' },
-      { name: 'Dayananda Sagar College of Engineering (DSCE), Bengaluru', univ: 'Autonomous' },
-      { name: 'Dayananda Sagar Academy of Technology & Management (DSATM), Bengaluru', univ: 'Autonomous' },
-      { name: 'Dayananda Sagar University (DSU), Harohalli / Bengaluru', univ: 'Deemed University' },
-      { name: 'Bangalore Institute of Technology (BIT), Bengaluru', univ: 'VTU Affiliated' },
-      { name: 'RNS Institute of Technology (RNSIT), Bengaluru', univ: 'Autonomous' },
-      { name: 'BMS Institute of Technology and Management (BMSIT&M), Yelahanka', univ: 'Autonomous' },
-      { name: 'Nitte Meenakshi Institute of Technology (NMIT), Yelahanka', univ: 'Autonomous' },
-      { name: 'New Horizon College of Engineering (NHCE), Marathahalli', univ: 'Autonomous' },
-      { name: 'CMR Institute of Technology (CMRIT), ITPL Bengaluru', univ: 'Autonomous' },
-      { name: 'CMR University (School of Engineering & Technology), Bengaluru', univ: 'Deemed University' },
-      { name: 'Sir M. Visvesvaraya Institute of Technology (Sir MVIT), Bengaluru', univ: 'VTU Affiliated' },
-      { name: 'BNM Institute of Technology (BNMIT), Banashankari', univ: 'Autonomous' },
-      { name: 'JSS Academy of Technical Education (JSSATE), Bengaluru', univ: 'VTU Affiliated' },
-      { name: 'Dr. Ambedkar Institute of Technology (Dr. AIT), Bengaluru', univ: 'Autonomous' },
-      { name: 'UVCE (University Visvesvaraya College of Engineering), Bengaluru', univ: 'Autonomous' },
-      { name: 'M.S. Ramaiah University of Applied Sciences (MSRUAS), Bengaluru', univ: 'Deemed University' },
-      { name: 'REVA University, Yelahanka Bengaluru', univ: 'Deemed University' },
-      { name: 'JAIN (Deemed-to-be University) — Faculty of Engineering, Kanakapura', univ: 'Deemed University' },
-      { name: 'CHRIST (Deemed to be University) — Kengeri Campus, Bengaluru', univ: 'Deemed University' },
-      { name: 'Alliance University — College of Engineering, Anekal', univ: 'Deemed University' },
-      { name: 'Presidency University, Yelahanka Bengaluru', univ: 'Deemed University' },
-      { name: 'Garden City University, Bengaluru', univ: 'Deemed University' },
-      { name: 'Chanakya University, Devanahalli Bengaluru', univ: 'Deemed University' },
-      { name: 'RV Institute of Technology and Management (RVITM), JP Nagar', univ: 'VTU Affiliated' },
-      { name: 'Global Academy of Technology (GAT), Rajarajeshwari Nagar', univ: 'Autonomous' },
-      { name: 'Acharya Institute of Technology (AIT), Soldevanahalli', univ: 'VTU Affiliated' },
-      { name: 'Sapthagiri College of Engineering, Hesaraghatta Road', univ: 'VTU Affiliated' },
-      { name: 'SJB Institute of Technology (SJBIT), Kengeri', univ: 'Autonomous' },
-      { name: 'Don Bosco Institute of Technology (DBIT), Kumbalgodu', univ: 'VTU Affiliated' },
-      { name: 'Rajarajeswari College of Engineering (RRCE), Mysuru Road', univ: 'Autonomous' },
-      { name: 'ACS College of Engineering, Kambipura Bengaluru', univ: 'VTU Affiliated' },
-      { name: 'Cambridge Institute of Technology (CIT), KR Puram', univ: 'Autonomous' },
-      { name: 'East Point College of Engineering and Technology, Avalahalli', univ: 'VTU Affiliated' },
-      { name: 'Mvj College of Engineering (MVJCE), Whitefield', univ: 'Autonomous' },
-      { name: 'The Oxford College of Engineering, Bommanahalli', univ: 'VTU Affiliated' },
-      { name: 'AMC Engineering College, Bannerghatta Road', univ: 'Autonomous' },
-      { name: 'T. John Institute of Technology (TJIT), Bannerghatta Road', univ: 'VTU Affiliated' },
-      { name: 'Jyothy Institute of Technology (JIT), Tataguni', univ: 'VTU Affiliated' },
-      { name: 'KS Institute of Technology (KSIT), Kanakapura Road', univ: 'VTU Affiliated' },
-      { name: 'KS School of Engineering and Management (KSSEM), Bengaluru', univ: 'VTU Affiliated' },
-      { name: 'City Engineering College, Kanakapura Road', univ: 'VTU Affiliated' },
-      { name: 'Vemana Institute of Technology, Koramangala', univ: 'VTU Affiliated' },
-      { name: 'Atria Institute of Technology, Hebbal', univ: 'Autonomous' },
-      { name: 'HKBK College of Engineering, Nagawara', univ: 'VTU Affiliated' },
-      { name: 'HKE / Sambhram Institute of Technology, Vidyaranyapura', univ: 'VTU Affiliated' },
-      { name: 'Presidency / Nagarjuna College of Engineering & Technology (NCET), Devanahalli', univ: 'Autonomous' },
-      { name: 'Sri Venkateshwara College of Engineering (SVCE), Vidyanagar', univ: 'VTU Affiliated' },
-      { name: 'Brindavan College of Engineering, Yelahanka', univ: 'VTU Affiliated' },
-      { name: 'East West Institute of Technology (EWIT), Magadi Road', univ: 'VTU Affiliated' },
-      { name: 'Vivekananda Institute of Technology (VKIT), Kumbalgodu', univ: 'VTU Affiliated' },
-      { name: 'Sai Vidya Institute of Technology (SVIT), Rajanukunte', univ: 'VTU Affiliated' },
-      { name: 'SJC Institute of Technology (SJCIT), Chikkaballapur', univ: 'Autonomous' },
-      { name: 'Sea College of Engineering and Technology, KR Puram', univ: 'VTU Affiliated' },
-      { name: 'Gopalan College of Engineering and Management, Whitefield', univ: 'VTU Affiliated' },
-      { name: 'Alpha College of Engineering, Hennur Bagalur Road', univ: 'VTU Affiliated' },
-      { name: 'Impact College of Engineering and Applied Sciences, Sahakarnagar', univ: 'VTU Affiliated' },
-      { name: 'KNS Institute of Technology, Yelahanka', univ: 'VTU Affiliated' },
-      { name: 'Adichunchanagiri / BGS School of Architecture & Engineering, Bengaluru', univ: 'VTU Affiliated' },
-      { name: 'Government SKSJ Technological Institute, KR Circle Bengaluru', univ: 'VTU Affiliated' },
-      // Mysuru & Mandya Region
-      { name: 'JSS Science and Technology University (SJCE), Mysuru', univ: 'Deemed University' },
-      { name: 'The National Institute of Engineering (NIE), Mysuru', univ: 'Autonomous' },
-      { name: 'Vidyavardhaka College of Engineering (VVCE), Mysuru', univ: 'Autonomous' },
-      { name: 'GSSS Institute of Engineering and Technology for Women, Mysuru', univ: 'Autonomous' },
-      { name: 'ATME College of Engineering, Mysuru', univ: 'VTU Affiliated' },
-      { name: 'Maharaja Institute of Technology (MIT), Mysuru', univ: 'Autonomous' },
-      { name: 'NIE Institute of Technology (NIEIT), Mysuru', univ: 'VTU Affiliated' },
-      { name: 'PES College of Engineering (PESCE), Mandya', univ: 'Autonomous' },
-      { name: 'BGS Institute of Technology (BGSIT), BG Nagar Mandya', univ: 'Autonomous' },
+      { name: 'RV College of Engineering (RVCE), Bengaluru', univ: 'Autonomous', codePrefix: 'RVCE' },
+      { name: 'BMS College of Engineering (BMSCE), Bengaluru', univ: 'Autonomous', codePrefix: 'BMSCE' },
+      { name: 'MS Ramaiah Institute of Technology (MSRIT), Bengaluru', univ: 'Autonomous', codePrefix: 'MSRIT' },
+      { name: 'PES University (Ring Road Campus), Bengaluru', univ: 'Deemed University', codePrefix: 'PES' },
+      { name: 'PES University (Electronic City Campus), Bengaluru', univ: 'Deemed University', codePrefix: 'PESEC' },
+      { name: 'Dayananda Sagar College of Engineering (DSCE), Bengaluru', univ: 'Autonomous', codePrefix: 'DSCE' },
+      { name: 'Dayananda Sagar Academy of Technology & Management (DSATM), Bengaluru', univ: 'Autonomous', codePrefix: 'DSATM' },
+      { name: 'Dayananda Sagar University (DSU), Harohalli / Bengaluru', univ: 'Deemed University', codePrefix: 'DSU' },
+      { name: 'Bangalore Institute of Technology (BIT), Bengaluru', univ: 'VTU Affiliated', codePrefix: 'BIT' },
+      { name: 'RNS Institute of Technology (RNSIT), Bengaluru', univ: 'Autonomous', codePrefix: 'RNSIT' },
+      { name: 'BMS Institute of Technology and Management (BMSIT&M), Yelahanka', univ: 'Autonomous', codePrefix: 'BMSIT' },
+      { name: 'Nitte Meenakshi Institute of Technology (NMIT), Yelahanka', univ: 'Autonomous', codePrefix: 'NMIT' },
+      { name: 'New Horizon College of Engineering (NHCE), Marathahalli', univ: 'Autonomous', codePrefix: 'NHCE' },
+      { name: 'CMR Institute of Technology (CMRIT), ITPL Bengaluru', univ: 'Autonomous', codePrefix: 'CMRIT' },
+      { name: 'CMR University (School of Engineering & Technology), Bengaluru', univ: 'Deemed University', codePrefix: 'CMRU' },
+      { name: 'Sir M. Visvesvaraya Institute of Technology (Sir MVIT), Bengaluru', univ: 'VTU Affiliated', codePrefix: 'MVIT' },
+      { name: 'BNM Institute of Technology (BNMIT), Banashankari', univ: 'Autonomous', codePrefix: 'BNMIT' },
+      { name: 'JSS Academy of Technical Education (JSSATE), Bengaluru', univ: 'VTU Affiliated', codePrefix: 'JSSATE' },
+      { name: 'Dr. Ambedkar Institute of Technology (Dr. AIT), Bengaluru', univ: 'Autonomous', codePrefix: 'DRAIT' },
+      { name: 'UVCE (University Visvesvaraya College of Engineering), Bengaluru', univ: 'Autonomous', codePrefix: 'UVCE' },
+      { name: 'M.S. Ramaiah University of Applied Sciences (MSRUAS), Bengaluru', univ: 'Deemed University', codePrefix: 'MSRUAS' },
+      { name: 'REVA University, Yelahanka Bengaluru', univ: 'Deemed University', codePrefix: 'REVA' },
+      { name: 'JAIN (Deemed-to-be University) — Faculty of Engineering, Kanakapura', univ: 'Deemed University', codePrefix: 'JAIN' },
+      { name: 'CHRIST (Deemed to be University) — Kengeri Campus, Bengaluru', univ: 'Deemed University', codePrefix: 'CHRIST' },
+      { name: 'Alliance University — College of Engineering, Anekal', univ: 'Deemed University', codePrefix: 'ALLIANCE' },
+      { name: 'Presidency University, Yelahanka Bengaluru', univ: 'Deemed University', codePrefix: 'PRES' },
+      { name: 'Garden City University, Bengaluru', univ: 'Deemed University', codePrefix: 'GCU' },
+      { name: 'Chanakya University, Devanahalli Bengaluru', univ: 'Deemed University', codePrefix: 'CHANAKYA' },
+      { name: 'RV Institute of Technology and Management (RVITM), JP Nagar', univ: 'VTU Affiliated', codePrefix: 'RVITM' },
+      { name: 'Global Academy of Technology (GAT), Rajarajeshwari Nagar', univ: 'Autonomous', codePrefix: 'GAT' },
+      { name: 'Acharya Institute of Technology (AIT), Soldevanahalli', univ: 'VTU Affiliated', codePrefix: 'AIT' },
+      { name: 'Sapthagiri College of Engineering, Hesaraghatta Road', univ: 'VTU Affiliated', codePrefix: 'SCE' },
+      { name: 'SJB Institute of Technology (SJBIT), Kengeri', univ: 'Autonomous', codePrefix: 'SJBIT' },
+      { name: 'Don Bosco Institute of Technology (DBIT), Kumbalgodu', univ: 'VTU Affiliated', codePrefix: 'DBIT' },
+      { name: 'Rajarajeswari College of Engineering (RRCE), Mysuru Road', univ: 'Autonomous', codePrefix: 'RRCE' },
+      { name: 'ACS College of Engineering, Kambipura Bengaluru', univ: 'VTU Affiliated', codePrefix: 'ACSCE' },
+      { name: 'Cambridge Institute of Technology (CIT), KR Puram', univ: 'Autonomous', codePrefix: 'CIT' },
+      { name: 'East Point College of Engineering and Technology, Avalahalli', univ: 'VTU Affiliated', codePrefix: 'EPCET' },
+      { name: 'MVJ College of Engineering (MVJCE), Whitefield', univ: 'Autonomous', codePrefix: 'MVJCE' },
+      { name: 'The Oxford College of Engineering, Bommanahalli', univ: 'VTU Affiliated', codePrefix: 'OXFORD' },
+      { name: 'AMC Engineering College, Bannerghatta Road', univ: 'Autonomous', codePrefix: 'AMCEC' },
+      { name: 'T. John Institute of Technology (TJIT), Bannerghatta Road', univ: 'VTU Affiliated', codePrefix: 'TJIT' },
+      { name: 'Jyothy Institute of Technology (JIT), Tataguni', univ: 'VTU Affiliated', codePrefix: 'JIT' },
+      { name: 'KS Institute of Technology (KSIT), Kanakapura Road', univ: 'VTU Affiliated', codePrefix: 'KSIT' },
+      { name: 'KS School of Engineering and Management (KSSEM), Bengaluru', univ: 'VTU Affiliated', codePrefix: 'KSSEM' },
+      { name: 'City Engineering College, Kanakapura Road', univ: 'VTU Affiliated', codePrefix: 'CEC' },
+      { name: 'Vemana Institute of Technology, Koramangala', univ: 'VTU Affiliated', codePrefix: 'VEMANA' },
+      { name: 'Atria Institute of Technology, Hebbal', univ: 'Autonomous', codePrefix: 'ATRIA' },
+      { name: 'HKBK College of Engineering, Nagawara', univ: 'VTU Affiliated', codePrefix: 'HKBK' },
+      { name: 'Sambhram Institute of Technology, Vidyaranyapura', univ: 'VTU Affiliated', codePrefix: 'SAMBHRAM' },
+      { name: 'Nagarjuna College of Engineering & Technology (NCET), Devanahalli', univ: 'Autonomous', codePrefix: 'NCET' },
+      { name: 'Sri Venkateshwara College of Engineering (SVCE), Vidyanagar', univ: 'VTU Affiliated', codePrefix: 'SVCE' },
+      { name: 'Brindavan College of Engineering, Yelahanka', univ: 'VTU Affiliated', codePrefix: 'BCE' },
+      { name: 'East West Institute of Technology (EWIT), Magadi Road', univ: 'VTU Affiliated', codePrefix: 'EWIT' },
+      { name: 'Vivekananda Institute of Technology (VKIT), Kumbalgodu', univ: 'VTU Affiliated', codePrefix: 'VKIT' },
+      { name: 'Sai Vidya Institute of Technology (SVIT), Rajanukunte', univ: 'VTU Affiliated', codePrefix: 'SVIT' },
+      { name: 'SJC Institute of Technology (SJCIT), Chikkaballapur', univ: 'Autonomous', codePrefix: 'SJCIT' },
+      { name: 'Sea College of Engineering and Technology, KR Puram', univ: 'VTU Affiliated', codePrefix: 'SEACET' },
+      { name: 'Gopalan College of Engineering and Management, Whitefield', univ: 'VTU Affiliated', codePrefix: 'GCEM' },
+      { name: 'Alpha College of Engineering, Hennur Bagalur Road', univ: 'VTU Affiliated', codePrefix: 'ALPHA' },
+      { name: 'Impact College of Engineering and Applied Sciences, Sahakarnagar', univ: 'VTU Affiliated', codePrefix: 'ICEAS' },
+      { name: 'KNS Institute of Technology, Yelahanka', univ: 'VTU Affiliated', codePrefix: 'KNSIT' },
+      { name: 'Government SKSJ Technological Institute, KR Circle Bengaluru', univ: 'VTU Affiliated', codePrefix: 'SKSJTI' },
+      // Mysuru & Mandya
+      { name: 'JSS Science and Technology University (SJCE), Mysuru', univ: 'Deemed University', codePrefix: 'SJCE' },
+      { name: 'The National Institute of Engineering (NIE), Mysuru', univ: 'Autonomous', codePrefix: 'NIE' },
+      { name: 'Vidyavardhaka College of Engineering (VVCE), Mysuru', univ: 'Autonomous', codePrefix: 'VVCE' },
+      { name: 'GSSS Institute of Engineering and Technology for Women, Mysuru', univ: 'Autonomous', codePrefix: 'GSSSIETW' },
+      { name: 'ATME College of Engineering, Mysuru', univ: 'VTU Affiliated', codePrefix: 'ATME' },
+      { name: 'Maharaja Institute of Technology (MIT), Mysuru', univ: 'Autonomous', codePrefix: 'MITM' },
+      { name: 'NIE Institute of Technology (NIEIT), Mysuru', univ: 'VTU Affiliated', codePrefix: 'NIEIT' },
+      { name: 'PES College of Engineering (PESCE), Mandya', univ: 'Autonomous', codePrefix: 'PESCE' },
+      { name: 'BGS Institute of Technology (BGSIT), BG Nagar Mandya', univ: 'Autonomous', codePrefix: 'BGSIT' },
       // Mangaluru, Udupi & Coastal Karnataka
-      { name: 'Manipal Institute of Technology (MIT), Manipal', univ: 'Deemed University' },
-      { name: 'NITK Surathkal (National Institute of Technology Karnataka)', univ: 'Autonomous' },
-      { name: 'NMAM Institute of Technology, Nitte', univ: 'Deemed University' },
-      { name: 'St Joseph Engineering College (SJEC), Vamanjoor Mangaluru', univ: 'Autonomous' },
-      { name: 'Sahyadri College of Engineering & Management, Mangaluru', univ: 'Autonomous' },
-      { name: 'Canara Engineering College, Bantwal Mangaluru', univ: 'VTU Affiliated' },
-      { name: 'PA College of Engineering (PACE), Mangaluru', univ: 'VTU Affiliated' },
-      { name: 'Srinivas Institute of Technology, Valachil Mangaluru', univ: 'VTU Affiliated' },
-      { name: 'Shri Madhwa Vadiraja Institute of Technology & Management, Bantakal Udupi', univ: 'VTU Affiliated' },
-      { name: 'Moodlakatte Institute of Technology, Kundapura', univ: 'VTU Affiliated' },
-      { name: 'Vivekananda College of Engineering & Technology (VCET), Puttur', univ: 'VTU Affiliated' },
-      { name: 'KVG College of Engineering, Sullia', univ: 'VTU Affiliated' },
-      // Hubballi, Dharwad & Belagavi Region
-      { name: 'KLE Technological University (BVB), Hubballi', univ: 'Deemed University' },
-      { name: 'SDM College of Engineering and Technology (SDMCET), Dharwad', univ: 'Autonomous' },
-      { name: 'KLE Institute of Technology (KLEIT), Hubballi', univ: 'VTU Affiliated' },
-      { name: 'Jain College of Engineering & Technology, Hubballi', univ: 'VTU Affiliated' },
-      { name: 'KLS Gogte Institute of Technology (GIT), Belagavi', univ: 'Autonomous' },
-      { name: 'KLE Dr. M.S. Sheshgiri College of Engineering and Technology, Belagavi', univ: 'Autonomous' },
-      { name: 'Angadi Institute of Technology and Management, Belagavi', univ: 'VTU Affiliated' },
-      { name: 'Jain College of Engineering (JCE), Belagavi', univ: 'VTU Affiliated' },
-      { name: 'Maratha Mandal Engineering College, Belagavi', univ: 'VTU Affiliated' },
-      { name: 'SGBIT (S.G. Balekundri Institute of Technology), Belagavi', univ: 'VTU Affiliated' },
-      { name: 'Hirasugar Institute of Technology, Nidasoshi Belagavi', univ: 'VTU Affiliated' },
-      { name: 'BLDEA V.P. Dr. P.G. Halakatti College of Engineering, Vijayapura', univ: 'Autonomous' },
-      { name: 'Basaveshwar Engineering College (BEC), Bagalkot', univ: 'Autonomous' },
-      // Tumakuru, Hassan, Shivamogga, Davangere & Central Karnataka
-      { name: 'Siddaganga Institute of Technology (SIT), Tumakuru', univ: 'Autonomous' },
-      { name: 'Sri Siddhartha Institute of Technology (SSIT), Tumakuru', univ: 'Deemed University' },
-      { name: 'Kalpataru Institute of Technology (KIT), Tiptur', univ: 'VTU Affiliated' },
-      { name: 'Shridevi Institute of Engineering and Technology, Tumakuru', univ: 'VTU Affiliated' },
-      { name: 'Malnad College of Engineering (MCE), Hassan', univ: 'Autonomous' },
-      { name: 'Rajeev Institute of Technology (RIT), Hassan', univ: 'VTU Affiliated' },
-      { name: 'Navkis College of Engineering, Hassan', univ: 'VTU Affiliated' },
-      { name: 'JNN College of Engineering (JNNCE), Shivamogga', univ: 'Autonomous' },
-      { name: 'PES Institute of Technology and Management (PESITM), Shivamogga', univ: 'VTU Affiliated' },
-      { name: 'GM Institute of Technology (GMIT), Davangere', univ: 'Autonomous' },
-      { name: 'BIET (Bapuji Institute of Engineering and Technology), Davangere', univ: 'Autonomous' },
-      { name: 'UBDT College of Engineering, Davangere', univ: 'VTU Affiliated' },
-      { name: 'SJM Institute of Technology (SJMIT), Chitradurga', univ: 'VTU Affiliated' },
-      { name: 'Adichunchanagiri Institute of Technology (AIT), Chikkamagaluru', univ: 'VTU Affiliated' },
-      // Kalaburagi, Ballari, Raichur & Bidar Region
-      { name: 'PDA College of Engineering, Kalaburagi', univ: 'Autonomous' },
-      { name: 'Sharnbasva University — Faculty of Engineering, Kalaburagi', univ: 'Deemed University' },
-      { name: 'Appa Institute of Engineering and Technology, Kalaburagi', univ: 'VTU Affiliated' },
-      { name: 'Rao Bahadur Y Mahabaleswarappa Engineering College (RYMEC), Ballari', univ: 'Autonomous' },
-      { name: 'Ballari Institute of Technology and Management (BITM), Ballari', univ: 'Autonomous' },
-      { name: 'Guru Nanak Dev Engineering College (GNDEC), Bidar', univ: 'Autonomous' },
-      { name: 'Bheemanna Khandre Institute of Technology (BKIT), Bhalki Bidar', univ: 'VTU Affiliated' },
-      { name: 'SLN College of Engineering, Raichur', univ: 'VTU Affiliated' },
-      // Major Polytechnics
-      { name: 'MEI Polytechnic, Rajajinagar Bengaluru', univ: 'Diploma / Polytechnic' },
-      { name: 'PV Polytechnic, Malleshwaram Bengaluru', univ: 'Diploma / Polytechnic' },
-      { name: 'Acharya Polytechnic, Soldevanahalli Bengaluru', univ: 'Diploma / Polytechnic' },
-      { name: 'Dayananda Sagar Institute of Technology (Polytechnic), Bengaluru', univ: 'Diploma / Polytechnic' },
-      { name: 'Government Polytechnic, KR Circle Bengaluru', univ: 'Diploma / Polytechnic' }
+      { name: 'Manipal Institute of Technology (MIT), Manipal', univ: 'Deemed University', codePrefix: 'MIT' },
+      { name: 'NITK Surathkal (National Institute of Technology Karnataka)', univ: 'Autonomous', codePrefix: 'NITK' },
+      { name: 'NMAM Institute of Technology, Nitte', univ: 'Deemed University', codePrefix: 'NMAMIT' },
+      { name: 'St Joseph Engineering College (SJEC), Vamanjoor Mangaluru', univ: 'Autonomous', codePrefix: 'SJEC' },
+      { name: 'Sahyadri College of Engineering & Management, Mangaluru', univ: 'Autonomous', codePrefix: 'SAHYADRI' },
+      { name: 'Canara Engineering College, Bantwal Mangaluru', univ: 'VTU Affiliated', codePrefix: 'CEC' },
+      { name: 'PA College of Engineering (PACE), Mangaluru', univ: 'VTU Affiliated', codePrefix: 'PACE' },
+      { name: 'Srinivas Institute of Technology, Valachil Mangaluru', univ: 'VTU Affiliated', codePrefix: 'SITM' },
+      { name: 'Shri Madhwa Vadiraja Institute of Technology & Management, Bantakal Udupi', univ: 'VTU Affiliated', codePrefix: 'SMVITM' },
+      { name: 'Moodlakatte Institute of Technology, Kundapura', univ: 'VTU Affiliated', codePrefix: 'MITK' },
+      { name: 'Vivekananda College of Engineering & Technology (VCET), Puttur', univ: 'VTU Affiliated', codePrefix: 'VCET' },
+      { name: 'KVG College of Engineering, Sullia', univ: 'VTU Affiliated', codePrefix: 'KVGCE' },
+      // Hubballi, Dharwad & Belagavi
+      { name: 'KLE Technological University (BVB), Hubballi', univ: 'Deemed University', codePrefix: 'KLETU' },
+      { name: 'SDM College of Engineering and Technology (SDMCET), Dharwad', univ: 'Autonomous', codePrefix: 'SDMCET' },
+      { name: 'KLE Institute of Technology (KLEIT), Hubballi', univ: 'VTU Affiliated', codePrefix: 'KLEIT' },
+      { name: 'Jain College of Engineering & Technology, Hubballi', univ: 'VTU Affiliated', codePrefix: 'JCETH' },
+      { name: 'KLS Gogte Institute of Technology (GIT), Belagavi', univ: 'Autonomous', codePrefix: 'GIT' },
+      { name: 'KLE Dr. M.S. Sheshgiri College of Engineering and Technology, Belagavi', univ: 'Autonomous', codePrefix: 'KLEMSSCET' },
+      { name: 'Angadi Institute of Technology and Management, Belagavi', univ: 'VTU Affiliated', codePrefix: 'AITM' },
+      { name: 'Jain College of Engineering (JCE), Belagavi', univ: 'VTU Affiliated', codePrefix: 'JCE' },
+      { name: 'Maratha Mandal Engineering College, Belagavi', univ: 'VTU Affiliated', codePrefix: 'MMEC' },
+      { name: 'SGBIT (S.G. Balekundri Institute of Technology), Belagavi', univ: 'VTU Affiliated', codePrefix: 'SGBIT' },
+      { name: 'Hirasugar Institute of Technology, Nidasoshi Belagavi', univ: 'VTU Affiliated', codePrefix: 'HIT' },
+      { name: 'BLDEA V.P. Dr. P.G. Halakatti College of Engineering, Vijayapura', univ: 'Autonomous', codePrefix: 'BLDEA' },
+      { name: 'Basaveshwar Engineering College (BEC), Bagalkot', univ: 'Autonomous', codePrefix: 'BEC' },
+      // Tumakuru, Hassan, Shivamogga & Davangere
+      { name: 'Siddaganga Institute of Technology (SIT), Tumakuru', univ: 'Autonomous', codePrefix: 'SIT' },
+      { name: 'Sri Siddhartha Institute of Technology (SSIT), Tumakuru', univ: 'Deemed University', codePrefix: 'SSIT' },
+      { name: 'Kalpataru Institute of Technology (KIT), Tiptur', univ: 'VTU Affiliated', codePrefix: 'KIT' },
+      { name: 'Shridevi Institute of Engineering and Technology, Tumakuru', univ: 'VTU Affiliated', codePrefix: 'SIET' },
+      { name: 'Malnad College of Engineering (MCE), Hassan', univ: 'Autonomous', codePrefix: 'MCE' },
+      { name: 'Rajeev Institute of Technology (RIT), Hassan', univ: 'VTU Affiliated', codePrefix: 'RIT' },
+      { name: 'Navkis College of Engineering, Hassan', univ: 'VTU Affiliated', codePrefix: 'NCE' },
+      { name: 'JNN College of Engineering (JNNCE), Shivamogga', univ: 'Autonomous', codePrefix: 'JNNCE' },
+      { name: 'PES Institute of Technology and Management (PESITM), Shivamogga', univ: 'VTU Affiliated', codePrefix: 'PESITM' },
+      { name: 'GM Institute of Technology (GMIT), Davangere', univ: 'Autonomous', codePrefix: 'GMIT' },
+      { name: 'BIET (Bapuji Institute of Engineering and Technology), Davangere', univ: 'Autonomous', codePrefix: 'BIET' },
+      { name: 'UBDT College of Engineering, Davangere', univ: 'VTU Affiliated', codePrefix: 'UBDT' },
+      { name: 'SJM Institute of Technology (SJMIT), Chitradurga', univ: 'VTU Affiliated', codePrefix: 'SJMIT' },
+      { name: 'Adichunchanagiri Institute of Technology (AIT), Chikkamagaluru', univ: 'VTU Affiliated', codePrefix: 'AITCKM' },
+      // Kalaburagi, Ballari, Raichur & Bidar
+      { name: 'PDA College of Engineering, Kalaburagi', univ: 'Autonomous', codePrefix: 'PDA' },
+      { name: 'Sharnbasva University — Faculty of Engineering, Kalaburagi', univ: 'Deemed University', codePrefix: 'SHARNBASVA' },
+      { name: 'Appa Institute of Engineering and Technology, Kalaburagi', univ: 'VTU Affiliated', codePrefix: 'AIET' },
+      { name: 'Rao Bahadur Y Mahabaleswarappa Engineering College (RYMEC), Ballari', univ: 'Autonomous', codePrefix: 'RYMEC' },
+      { name: 'Ballari Institute of Technology and Management (BITM), Ballari', univ: 'Autonomous', codePrefix: 'BITM' },
+      { name: 'Guru Nanak Dev Engineering College (GNDEC), Bidar', univ: 'Autonomous', codePrefix: 'GNDEC' },
+      { name: 'Bheemanna Khandre Institute of Technology (BKIT), Bhalki Bidar', univ: 'VTU Affiliated', codePrefix: 'BKIT' },
+      { name: 'SLN College of Engineering, Raichur', univ: 'VTU Affiliated', codePrefix: 'SLNCE' },
+      // Polytechnics
+      { name: 'MEI Polytechnic, Rajajinagar Bengaluru', univ: 'Diploma / Polytechnic', codePrefix: 'MEIP' },
+      { name: 'PV Polytechnic, Malleshwaram Bengaluru', univ: 'Diploma / Polytechnic', codePrefix: 'PVP' },
+      { name: 'Acharya Polytechnic, Soldevanahalli Bengaluru', univ: 'Diploma / Polytechnic', codePrefix: 'APOLY' },
+      { name: 'Dayananda Sagar Institute of Technology (Polytechnic), Bengaluru', univ: 'Diploma / Polytechnic', codePrefix: 'DSITP' },
+      { name: 'Government Polytechnic, KR Circle Bengaluru', univ: 'Diploma / Polytechnic', codePrefix: 'GPTBLR' }
     ];
 
     // =========================================================================
@@ -982,19 +1172,80 @@
     ];
 
     // =========================================================================
-    // 4. STATE VARIABLES
+    // 4. STATE VARIABLES & TIER CALCULATION HELPERS
     // =========================================================================
     let currentStep = 1;
     let selectedUniversity = 'VTU Affiliated';
     let selectedBrand = 'All';
     let selectedKit = [];
     let validatedAdvisorDiscount = 0;
+    let validatedAdvisorCode = null;
     let adminRequestsCache = [];
     let activeAdminRequest = null;
     let activeAdminBom = [];
+    let partnerCollegeSpotsRemaining = MAX_PARTNERS_PER_COLLEGE;
+
+    function normalizePhone10(raw) {
+      if (!raw) return '';
+      const digits = String(raw).replace(/\D/g, '');
+      return digits.length >= 10 ? digits.slice(-10) : digits;
+    }
+
+    function computeTierDetails(convertedCount) {
+      if (convertedCount >= 5) {
+        return {
+          tierName: 'Campus Ambassador',
+          badgeClass: 'bg-amber-100 text-amber-800 border-amber-300',
+          studentDiscount: 1000,
+          partnerPayoutPerTeam: 1000,
+          ownProjectBonus: 2500,
+          nextTierText: 'Max Tier Unlocked (+₹2,500 own-project bonus)'
+        };
+      }
+      if (convertedCount >= 3) {
+        return {
+          tierName: 'Campus Lead',
+          badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+          studentDiscount: 750,
+          partnerPayoutPerTeam: 750,
+          ownProjectBonus: 0,
+          nextTierText: `${5 - convertedCount} more converted team(s) to unlock Campus Ambassador (₹1,000/team)`
+        };
+      }
+      return {
+        tierName: 'Starter Partner',
+        badgeClass: 'bg-indigo-100 text-indigo-800 border-indigo-300',
+        studentDiscount: 500,
+        partnerPayoutPerTeam: 500,
+        ownProjectBonus: 0,
+        nextTierText: `${3 - convertedCount} more converted team(s) to unlock Campus Lead (₹750/team + Certificate)`
+      };
+    }
+
+    async function getConvertedReferralMap() {
+      const [{ data: reqs }, { data: quotes }] = await Promise.all([
+        db.from('project_requests').select('tracking_code, advisor_code'),
+        db.from('quotes').select('tracking_code, advance_paid')
+      ]);
+
+      const paidSet = new Set((quotes || []).filter(q => q.advance_paid).map(q => q.tracking_code));
+      const totalByCode = {};
+      const convertedByCode = {};
+
+      (reqs || []).forEach(r => {
+        if (!r.advisor_code) return;
+        const c = r.advisor_code.toUpperCase();
+        totalByCode[c] = (totalByCode[c] || 0) + 1;
+        if (paidSet.has(r.tracking_code)) {
+          convertedByCode[c] = (convertedByCode[c] || 0) + 1;
+        }
+      });
+
+      return { totalByCode, convertedByCode };
+    }
 
     // =========================================================================
-    // 5. INITIALIZATION & COLLEGE DROPDOWN HANDLERS
+    // 5. INITIALIZATION & DUAL COLLEGE DROPDOWN HANDLERS
     // =========================================================================
     window.addEventListener('DOMContentLoaded', async () => {
       renderBrandPills();
@@ -1003,28 +1254,32 @@
       await checkAdminAuthState();
 
       document.addEventListener('click', (e) => {
-        const wrapper = document.getElementById('collegeSelectorWrapper');
-        if (wrapper && !wrapper.contains(e.target)) {
+        const w1 = document.getElementById('collegeSelectorWrapper');
+        if (w1 && !w1.contains(e.target)) {
           document.getElementById('collegeDropdownList').classList.add('hidden');
+        }
+        const w2 = document.getElementById('partnerCollegeWrapper');
+        if (w2 && !w2.contains(e.target)) {
+          document.getElementById('partCollegeDropdownList').classList.add('hidden');
         }
       });
     });
 
-    function openCollegeDropdown() {
-      filterCollegeDropdown();
-      document.getElementById('collegeDropdownList').classList.remove('hidden');
+    function openCollegeDropdown(inputId, listId, mode) {
+      filterCollegeDropdown(inputId, listId, mode);
+      document.getElementById(listId).classList.remove('hidden');
     }
 
-    function toggleCollegeDropdown() {
-      const list = document.getElementById('collegeDropdownList');
-      if (list.classList.contains('hidden')) openCollegeDropdown();
+    function toggleCollegeDropdown(inputId, listId, mode) {
+      const list = document.getElementById(listId);
+      if (list.classList.contains('hidden')) openCollegeDropdown(inputId, listId, mode);
       else list.classList.add('hidden');
     }
 
-    function filterCollegeDropdown() {
-      const rawVal = document.getElementById('collegeInput').value.trim();
+    function filterCollegeDropdown(inputId, listId, mode) {
+      const rawVal = document.getElementById(inputId).value.trim();
       const q = rawVal.toLowerCase();
-      const list = document.getElementById('collegeDropdownList');
+      const list = document.getElementById(listId);
 
       const matches = KARNATAKA_COLLEGES.filter(c =>
         !q || c.name.toLowerCase().includes(q) || c.univ.toLowerCase().includes(q)
@@ -1034,7 +1289,7 @@
       if (rawVal.length > 1) {
         const safeRaw = rawVal.replace(/'/g, "\\'");
         html += `
-          <button type="button" onclick="selectCollegeItem('${safeRaw}', null)"
+          <button type="button" onclick="selectCollegeItem('${safeRaw}', null, '${mode}')"
             class="w-full text-left px-3.5 py-2.5 bg-indigo-50/70 hover:bg-indigo-100 text-xs font-bold text-indigo-700 flex items-center justify-between">
             <span>➕ Use "${rawVal}"</span>
             <span class="text-[10px] uppercase tracking-wider bg-indigo-600 text-white px-2 py-0.5 rounded">Custom Entry</span>
@@ -1048,7 +1303,7 @@
         html += matches.map(c => {
           const safeName = c.name.replace(/'/g, "\\'");
           return `
-            <button type="button" onclick="selectCollegeItem('${safeName}', '${c.univ}')"
+            <button type="button" onclick="selectCollegeItem('${safeName}', '${c.univ}', '${mode}')"
               class="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 text-xs flex items-center justify-between gap-2 transition">
               <span class="font-medium text-slate-800">${c.name}</span>
               <span class="text-[10px] shrink-0 px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold">${c.univ}</span>
@@ -1061,12 +1316,19 @@
       list.classList.remove('hidden');
     }
 
-    function selectCollegeItem(name, univ) {
-      document.getElementById('collegeInput').value = name;
-      document.getElementById('collegeDropdownList').classList.add('hidden');
-      if (univ) {
-        const btn = document.querySelector(`#univGroup button[data-val="${univ}"]`);
-        if (btn) selectSingleOption('univGroup', btn, univ);
+    async function selectCollegeItem(name, univ, mode) {
+      if (mode === 'partner') {
+        document.getElementById('partCollegeInput').value = name;
+        document.getElementById('partCollegeDropdownList').classList.add('hidden');
+        autoSuggestPartnerCode();
+        await checkCollegePartnerSpots(name);
+      } else {
+        document.getElementById('collegeInput').value = name;
+        document.getElementById('collegeDropdownList').classList.add('hidden');
+        if (univ) {
+          const btn = document.querySelector(`#univGroup button[data-val="${univ}"]`);
+          if (btn) selectSingleOption('univGroup', btn, univ);
+        }
       }
     }
 
@@ -1078,23 +1340,29 @@
       icon.className = isError ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold';
       text.textContent = msg;
       banner.classList.remove('hidden');
-      setTimeout(() => banner.classList.add('hidden'), 4000);
+      setTimeout(() => banner.classList.add('hidden'), 4500);
     }
 
     // =========================================================================
     // 6. NAVIGATION & STEPPER LOGIC
     // =========================================================================
     function switchView(viewName) {
-      ['studentView', 'trackView', 'adminView'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      ['studentView', 'trackView', 'partnerView', 'adminView'].forEach(id => document.getElementById(id).classList.add('hidden'));
       document.getElementById(viewName + 'View').classList.remove('hidden');
 
       document.getElementById('navStudentBtn').className = viewName === 'student'
-        ? 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-indigo-600 text-white transition'
-        : 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition';
+        ? 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-indigo-600 text-white transition'
+        : 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition';
 
       document.getElementById('navTrackBtn').className = viewName === 'track'
-        ? 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-indigo-600 text-white transition'
-        : 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition';
+        ? 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-indigo-600 text-white transition'
+        : 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition';
+
+      document.getElementById('navPartnerBtn').className = viewName === 'partner'
+        ? 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-emerald-600 text-white transition'
+        : 'px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-emerald-300 hover:text-white hover:bg-slate-800 border border-emerald-500/30 transition';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function goToStep(step) {
@@ -1423,34 +1691,62 @@
     }
 
     // =========================================================================
-    // 9. CAMPUS ADVISOR CODE VALIDATION & FORM SUBMISSION
+    // 9. CAMPUS PARTNER CODE VALIDATION (ANTI-SELF-REFERRAL + TIERED DISCOUNT)
     // =========================================================================
+    async function recheckAdvisorOnPhoneChange() {
+      const code = document.getElementById('advisorCodeInput').value.trim();
+      if (code) await validateAdvisorCode();
+    }
+
     async function validateAdvisorCode() {
       const code = document.getElementById('advisorCodeInput').value.trim().toUpperCase();
+      const studentPhone10 = normalizePhone10(document.getElementById('phoneInput').value);
       const msgEl = document.getElementById('advisorStatusMsg');
+
       if (!code) {
         msgEl.classList.add('hidden');
         validatedAdvisorDiscount = 0;
+        validatedAdvisorCode = null;
         return;
       }
 
       const { data, error } = await db
         .from('campus_advisors')
-        .select('code, advisor_name, college_name')
+        .select('code, advisor_name, college_name, phone, is_active, status')
         .eq('code', code)
-        .eq('is_active', true)
         .maybeSingle();
 
       msgEl.classList.remove('hidden');
-      if (data && !error) {
-        validatedAdvisorDiscount = 1500;
-        msgEl.className = 'text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-lg';
-        msgEl.textContent = `✓ Code ${data.code} (${data.college_name}) verified! Free Review 1 & 2 PPTs unlocked.`;
-      } else {
+
+      if (!data || error || !data.is_active) {
         validatedAdvisorDiscount = 0;
+        validatedAdvisorCode = null;
         msgEl.className = 'text-xs font-semibold text-rose-600 bg-rose-50 border border-rose-200 px-3 py-2 rounded-lg';
-        msgEl.textContent = 'Invalid or inactive Campus Advisor code. You can still submit without a code.';
+        msgEl.textContent = data && data.status === 'Pending'
+          ? 'This Campus Partner code is currently awaiting Admin approval.'
+          : 'Invalid or inactive Campus Partner code. You can still submit without a code.';
+        return;
       }
+
+      // ANTI-SELF-REFERRAL CHECK
+      const advisorPhone10 = normalizePhone10(data.phone);
+      if (advisorPhone10 && studentPhone10 && advisorPhone10 === studentPhone10) {
+        validatedAdvisorDiscount = 0;
+        validatedAdvisorCode = null;
+        msgEl.className = 'text-xs font-semibold text-amber-900 bg-amber-50 border border-amber-300 px-3 py-2 rounded-lg';
+        msgEl.textContent = 'Self-Referral Lock: You cannot apply your own partner code upfront on your own project. Refer 1 other team at your college—once their 50% advance clears, you unlock ₹500 UPI cashback!';
+        return;
+      }
+
+      // Compute dynamic tier discount based on converted referrals
+      const { convertedByCode } = await getConvertedReferralMap();
+      const convertedCount = convertedByCode[data.code] || 0;
+      const tier = computeTierDetails(convertedCount);
+
+      validatedAdvisorDiscount = tier.studentDiscount;
+      validatedAdvisorCode = data.code;
+      msgEl.className = 'text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-lg';
+      msgEl.textContent = `✓ Code ${data.code} (${tier.tierName} • ${data.college_name}) verified! ₹${tier.studentDiscount.toLocaleString('en-IN')} instant discount unlocked.`;
     }
 
     async function submitProjectRequest() {
@@ -1470,7 +1766,7 @@
       btn.textContent = 'Submitting Request...';
 
       const rawCode = document.getElementById('advisorCodeInput').value.trim().toUpperCase();
-      if (rawCode && validatedAdvisorDiscount === 0) {
+      if (rawCode) {
         await validateAdvisorCode();
       }
 
@@ -1520,7 +1816,7 @@
         components_summary: componentsSummaryText,
         custom_parts: customParts,
         addons: addonsObj,
-        advisor_code: validatedAdvisorDiscount > 0 ? rawCode : null,
+        advisor_code: validatedAdvisorDiscount > 0 ? validatedAdvisorCode : null,
         deadline: deadline,
         status: 'New Request',
         estimated_quote_summary: estimate
@@ -1562,6 +1858,7 @@
       document.getElementById('descInput').value = '';
       selectedKit = [];
       validatedAdvisorDiscount = 0;
+      validatedAdvisorCode = null;
       document.getElementById('advisorCodeInput').value = '';
       document.getElementById('advisorStatusMsg').classList.add('hidden');
       setEngineerChooseState(true);
@@ -1571,7 +1868,178 @@
     }
 
     // =========================================================================
-    // 10. STUDENT TRACK QUOTE LOOKUP & WEBSITE UPI PAYMENT QR
+    // 10. SELF-SERVE CAMPUS PARTNER REGISTRATION & TIER DASHBOARD
+    // =========================================================================
+    function autoSuggestPartnerCode() {
+      const name = document.getElementById('partNameInput').value.trim().toUpperCase().replace(/[^A-Z]/g, '');
+      const college = document.getElementById('partCollegeInput').value.trim();
+      const matched = KARNATAKA_COLLEGES.find(c => c.name.toLowerCase() === college.toLowerCase());
+      let prefix = matched ? matched.codePrefix : college.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 5);
+      if (!prefix) prefix = 'BLR';
+      const suffix = name.slice(0, 6) || 'LEAD';
+      document.getElementById('partDesiredCodeInput').value = `${prefix}-${suffix}`;
+    }
+
+    async function checkCollegePartnerSpots(collegeName) {
+      const banner = document.getElementById('collegeSpotsBanner');
+      if (!collegeName) {
+        banner.classList.add('hidden');
+        return;
+      }
+
+      const { data } = await db
+        .from('campus_advisors')
+        .select('code, is_active, status')
+        .eq('college_name', collegeName);
+
+      const occupied = (data || []).filter(a => a.is_active || a.status === 'Pending').length;
+      partnerCollegeSpotsRemaining = Math.max(0, MAX_PARTNERS_PER_COLLEGE - occupied);
+
+      banner.classList.remove('hidden');
+      if (partnerCollegeSpotsRemaining > 0) {
+        banner.className = 'text-xs font-semibold mt-2 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800';
+        banner.textContent = `✓ ${partnerCollegeSpotsRemaining} of ${MAX_PARTNERS_PER_COLLEGE} Campus Partner spots available for ${collegeName}`;
+      } else {
+        banner.className = 'text-xs font-semibold mt-2 px-3 py-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-700';
+        banner.textContent = `⚠ All ${MAX_PARTNERS_PER_COLLEGE} Campus Partner spots for ${collegeName} are currently filled.`;
+      }
+    }
+
+    async function registerCampusPartner() {
+      const name = document.getElementById('partNameInput').value.trim();
+      const phone = document.getElementById('partPhoneInput').value.trim();
+      const college = document.getElementById('partCollegeInput').value.trim();
+      const branchSem = document.getElementById('partBranchInput').value.trim();
+      const roleType = document.getElementById('partRoleInput').value;
+      const desiredCode = document.getElementById('partDesiredCodeInput').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, '');
+      const upi = document.getElementById('partUpiInput').value.trim();
+      const agreed = document.getElementById('partTermsCheck').checked;
+
+      if (!name || !phone || !college || !branchSem || !desiredCode || !upi) {
+        showToast('Please fill in all Campus Partner fields.', true);
+        return;
+      }
+      if (normalizePhone10(phone).length < 10) {
+        showToast('Please enter a valid 10-digit WhatsApp number.', true);
+        return;
+      }
+      if (!agreed) {
+        showToast('Please accept the Fair-Play & Anti-Self-Referral Rules.', true);
+        return;
+      }
+
+      await checkCollegePartnerSpots(college);
+      if (partnerCollegeSpotsRemaining <= 0) {
+        showToast(`All ${MAX_PARTNERS_PER_COLLEGE} partner slots for this college are full.`, true);
+        return;
+      }
+
+      const btn = document.getElementById('submitPartnerBtn');
+      btn.disabled = true;
+      btn.textContent = 'Submitting Application...';
+
+      const { data: existingCode } = await db
+        .from('campus_advisors')
+        .select('code')
+        .eq('code', desiredCode)
+        .maybeSingle();
+
+      if (existingCode) {
+        btn.disabled = false;
+        btn.textContent = 'Submit Campus Partner Application →';
+        showToast(`Code "${desiredCode}" is already taken—add 2 digits (e.g., ${desiredCode}01) and retry.`, true);
+        return;
+      }
+
+      const { error } = await db.from('campus_advisors').insert([{
+        code: desiredCode,
+        advisor_name: name,
+        phone: phone,
+        college_name: college,
+        branch_sem: branchSem,
+        role_type: roleType,
+        upi_id: upi,
+        is_active: false,
+        status: 'Pending'
+      }]);
+
+      btn.disabled = false;
+      btn.textContent = 'Submit Campus Partner Application →';
+
+      if (error) {
+        showToast('Registration error: ' + error.message, true);
+        return;
+      }
+
+      document.getElementById('regConfirmedCode').textContent = desiredCode;
+      document.getElementById('partnerRegSuccessBox').classList.remove('hidden');
+      document.getElementById('partnerLookupInput').value = desiredCode;
+      showToast('Partner application submitted! Pending Admin approval.');
+    }
+
+    async function lookupPartnerDashboard() {
+      const raw = document.getElementById('partnerLookupInput').value.trim();
+      const box = document.getElementById('partnerDashboardResult');
+      if (!raw) {
+        showToast('Enter your Referral Code or 10-digit WhatsApp number.', true);
+        return;
+      }
+
+      const upperCode = raw.toUpperCase();
+      const phone10 = normalizePhone10(raw);
+
+      const { data: allAdvisors } = await db.from('campus_advisors').select('*');
+      const partner = (allAdvisors || []).find(a =>
+        a.code === upperCode || (phone10.length === 10 && normalizePhone10(a.phone) === phone10)
+      );
+
+      box.classList.remove('hidden');
+      if (!partner) {
+        box.innerHTML = `<p class="text-xs font-semibold text-rose-600">No Campus Partner record found for "${raw}". Apply on the left to get your code!</p>`;
+        return;
+      }
+
+      const { totalByCode, convertedByCode } = await getConvertedReferralMap();
+      const totalReferrals = totalByCode[partner.code] || 0;
+      const convertedCount = convertedByCode[partner.code] || 0;
+      const tier = computeTierDetails(convertedCount);
+      const totalUnlockedUpi = convertedCount * tier.partnerPayoutPerTeam;
+
+      const statusBadge = partner.is_active
+        ? `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">✓ Approved & Active</span>`
+        : `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800">⏳ Pending Approval</span>`;
+
+      box.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="mono text-sm font-extrabold text-indigo-700">${partner.code}</div>
+            <div class="text-xs font-bold text-slate-900">${partner.advisor_name}</div>
+          </div>
+          ${statusBadge}
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <div class="text-[10px] text-slate-500">Leads Referred</div>
+            <div class="mono text-sm font-extrabold text-slate-900">${totalReferrals}</div>
+          </div>
+          <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
+            <div class="text-[10px] text-emerald-700">Converted (Paid)</div>
+            <div class="mono text-sm font-extrabold text-emerald-800">${convertedCount}</div>
+          </div>
+          <div class="bg-indigo-50 p-2.5 rounded-xl border border-indigo-200">
+            <div class="text-[10px] text-indigo-700">Unlocked UPI</div>
+            <div class="mono text-sm font-extrabold text-indigo-800">₹${totalUnlockedUpi.toLocaleString('en-IN')}</div>
+          </div>
+        </div>
+        <div class="p-3 rounded-xl border ${tier.badgeClass} text-xs space-y-1">
+          <div class="font-extrabold">Current Rank: ${tier.tierName} (₹${tier.studentDiscount} team discount / ₹${tier.partnerPayoutPerTeam} payout)</div>
+          <div class="text-[11px] opacity-90">${tier.nextTierText}</div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 11. STUDENT TRACK QUOTE LOOKUP & WEBSITE UPI PAYMENT QR
     // =========================================================================
     async function lookupStudentQuote() {
       const code = document.getElementById('trackCodeSearchInput').value.trim().toUpperCase();
@@ -1608,7 +2076,7 @@
         detailsBox.innerHTML = `
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs sm:text-sm text-amber-900 space-y-1.5">
             <div><strong>Status: Under Engineer Feasibility Review.</strong></div>
-            <p>Our Bengaluru engineering team is reviewing your project specifications and component requirements. We will connect with you on WhatsApp and unlock your confirmed quote & UPI payment link here shortly.</p>
+            <p>Our Bengaluru engineering team is reviewing your project specifications and component requirements. We will connect with you on WhatsApp and unlock your confirmed quote & UPI payment QR here shortly.</p>
           </div>
         `;
       } else {
@@ -1634,7 +2102,7 @@
             </div>
             ${Number(quote.discount_amount) > 0 ? `
               <div class="flex justify-between px-4 py-3 border-b border-slate-100 text-emerald-700 bg-emerald-50/40">
-                <span>Campus Advisor Discount (${req.advisor_code || 'Applied'})</span>
+                <span>Campus Partner Discount (${req.advisor_code || 'Applied'})</span>
                 <span class="mono font-bold">− ₹${Number(quote.discount_amount).toLocaleString('en-IN')}</span>
               </div>
             ` : ''}
@@ -1679,7 +2147,7 @@
     }
 
     // =========================================================================
-    // 11. PASSWORD-PROTECTED ADMIN AUTH & WORKBENCH
+    // 12. PASSWORD-PROTECTED ADMIN AUTH & WORKBENCH
     // =========================================================================
     async function checkAdminAuthState() {
       const { data: { session } } = await db.auth.getSession();
@@ -1752,8 +2220,8 @@
         ? 'px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold'
         : 'px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold';
       document.getElementById('subTabAdvisorsBtn').className = tab === 'advisors'
-        ? 'px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold'
-        : 'px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold';
+        ? 'px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold flex items-center gap-1.5'
+        : 'px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5';
     }
 
     async function loadAdminRequests() {
@@ -1820,7 +2288,7 @@
         aiRecommend: activeAdminRequest.ai_recommend_parts,
         customParts: activeAdminRequest.custom_parts,
         addons: activeAdminRequest.addons || {},
-        advisorDiscount: activeAdminRequest.advisor_code ? 1500 : 0
+        advisorDiscount: activeAdminRequest.advisor_code ? 500 : 0
       });
 
       document.getElementById('edAddonsSummary').textContent = `Requested Add-Ons: ${(est.addonLines || []).join(' | ') || 'Core Prototype Only'}`;
@@ -1856,7 +2324,7 @@
         document.getElementById('edFeasibilityNote').value = '';
         document.getElementById('edProtoPrice').value = est.prototypePrice || (activeAdminRequest.project_type.includes('Mini') ? 6500 : 13500);
         document.getElementById('edAddonsPrice').value = est.addonsPrice ?? 0;
-        document.getElementById('edDiscountPrice').value = est.discount ?? (activeAdminRequest.advisor_code ? 1500 : 0);
+        document.getElementById('edDiscountPrice').value = est.discount ?? (activeAdminRequest.advisor_code ? 500 : 0);
         document.getElementById('edAdvancePaidCheck').checked = false;
         document.getElementById('edFinalPaidCheck').checked = false;
       }
@@ -1975,56 +2443,166 @@
       document.getElementById('edStatusSelect').value = newStatus;
       showToast('Quote & UPI QR published for ' + activeAdminRequest.tracking_code);
       loadAdminRequests();
+      loadAdminAdvisors();
     }
 
     // =========================================================================
-    // 12. CAMPUS ADVISORS MANAGER
+    // 13. CAMPUS PARTNERS MANAGER (APPROVALS + TIER & PAYOUT LEDGER)
     // =========================================================================
     async function loadAdminAdvisors() {
-      const { data } = await db.from('campus_advisors').select('*').order('code');
+      const [{ data }, { totalByCode, convertedByCode }] = await Promise.all([
+        db.from('campus_advisors').select('*').order('created_at', { ascending: false }),
+        getConvertedReferralMap()
+      ]);
+
+      const advisors = data || [];
+      const pending = advisors.filter(a => a.status === 'Pending' && !a.is_active);
+
+      const badge = document.getElementById('pendingPartnersBadge');
+      const pendingCard = document.getElementById('pendingPartnersCard');
+      const pendingList = document.getElementById('pendingPartnersList');
+
+      if (pending.length > 0) {
+        badge.textContent = pending.length;
+        badge.classList.remove('hidden');
+        pendingCard.classList.remove('hidden');
+        pendingList.innerHTML = pending.map(p => `
+          <div class="bg-white p-3.5 rounded-xl border border-amber-300 flex flex-col justify-between gap-2.5">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="mono text-xs font-extrabold text-indigo-700">${p.code}</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">${p.role_type || 'Student Lead'}</span>
+              </div>
+              <div class="text-xs font-bold text-slate-900 mt-1">${p.advisor_name} (${p.phone || '--'})</div>
+              <div class="text-[11px] text-slate-600">${p.college_name} • ${p.branch_sem || ''}</div>
+              <div class="text-[11px] mono text-slate-500 mt-0.5">UPI: ${p.upi_id || '--'}</div>
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+              <button type="button" onclick="approvePartner('${p.code}')" class="flex-1 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition">
+                ✓ Approve & Activate
+              </button>
+              <button type="button" onclick="rejectPartner('${p.code}')" class="px-3 py-1.5 rounded-lg border border-rose-300 text-rose-600 hover:bg-rose-50 text-xs font-bold transition">
+                Reject
+              </button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        badge.classList.add('hidden');
+        pendingCard.classList.add('hidden');
+      }
+
       const tbody = document.getElementById('advisorsTableBody');
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400">No advisor codes added yet.</td></tr>`;
+      if (advisors.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-4 text-center text-slate-400">No campus partners yet.</td></tr>`;
         return;
       }
-      tbody.innerHTML = data.map(a => `
-        <tr>
-          <td class="py-2.5 px-3 mono font-bold text-indigo-700">${a.code}</td>
-          <td class="py-2.5 px-3 font-medium text-slate-900">${a.advisor_name}</td>
-          <td class="py-2.5 px-3 text-slate-600">${a.college_name}</td>
-          <td class="py-2.5 px-3 mono text-slate-500">${a.upi_id || '--'}</td>
-          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Active</span></td>
-        </tr>
-      `).join('');
+
+      tbody.innerHTML = advisors.map(a => {
+        const leads = totalByCode[a.code] || 0;
+        const converted = convertedByCode[a.code] || 0;
+        const tier = computeTierDetails(converted);
+        const payout = converted * tier.partnerPayoutPerTeam;
+
+        return `
+          <tr>
+            <td class="py-2.5 px-3 mono font-bold text-indigo-700">${a.code}</td>
+            <td class="py-2.5 px-3">
+              <div class="font-bold text-slate-900">${a.advisor_name}</div>
+              <div class="text-[11px] text-slate-500">${a.phone || '--'}</div>
+            </td>
+            <td class="py-2.5 px-3">
+              <div class="text-slate-800">${a.college_name}</div>
+              <div class="text-[11px] text-slate-500">${a.branch_sem || a.role_type || ''}</div>
+            </td>
+            <td class="py-2.5 px-3 mono font-bold text-slate-900">${converted} / ${leads}</td>
+            <td class="py-2.5 px-3">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${tier.badgeClass}">${tier.tierName}</span>
+            </td>
+            <td class="py-2.5 px-3 mono font-extrabold text-emerald-700">₹${payout.toLocaleString('en-IN')}</td>
+            <td class="py-2.5 px-3 mono text-slate-600">${a.upi_id || '--'}</td>
+            <td class="py-2.5 px-3">
+              <button type="button" onclick="togglePartnerActive('${a.code}', ${!a.is_active})"
+                class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${a.is_active ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}">
+                ${a.is_active ? 'Active' : 'Paused'}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function approvePartner(code) {
+      const { error } = await db
+        .from('campus_advisors')
+        .update({ is_active: true, status: 'Approved' })
+        .eq('code', code);
+
+      if (error) {
+        showToast('Error approving partner: ' + error.message, true);
+        return;
+      }
+      showToast(`Partner ${code} approved and live!`);
+      loadAdminAdvisors();
+    }
+
+    async function rejectPartner(code) {
+      const { error } = await db
+        .from('campus_advisors')
+        .delete()
+        .eq('code', code);
+
+      if (error) {
+        showToast('Error rejecting partner: ' + error.message, true);
+        return;
+      }
+      showToast(`Application ${code} removed.`);
+      loadAdminAdvisors();
+    }
+
+    async function togglePartnerActive(code, nextState) {
+      await db
+        .from('campus_advisors')
+        .update({ is_active: nextState, status: nextState ? 'Approved' : 'Paused' })
+        .eq('code', code);
+      showToast(`${code} is now ${nextState ? 'Active' : 'Paused'}.`);
+      loadAdminAdvisors();
     }
 
     async function createCampusAdvisor() {
       const code = document.getElementById('newAdvCode').value.trim().toUpperCase();
       const name = document.getElementById('newAdvName').value.trim();
+      const phone = document.getElementById('newAdvPhone').value.trim();
       const college = document.getElementById('newAdvCollege').value.trim();
       const upi = document.getElementById('newAdvUpi').value.trim();
 
       if (!code || !name || !college) {
-        showToast('Enter Code, Advisor Name, and College.', true);
+        showToast('Enter Code, Partner Name, and College.', true);
         return;
       }
 
       const { error } = await db.from('campus_advisors').insert([{
-        code, advisor_name: name, college_name: college, upi_id: upi || null, is_active: true
+        code,
+        advisor_name: name,
+        phone: phone || null,
+        college_name: college,
+        upi_id: upi || null,
+        is_active: true,
+        status: 'Approved'
       }]);
 
       if (error) {
-        showToast('Error adding advisor: ' + error.message, true);
+        showToast('Error adding partner: ' + error.message, true);
         return;
       }
 
-      ['newAdvCode', 'newAdvName', 'newAdvCollege', 'newAdvUpi'].forEach(id => document.getElementById(id).value = '');
-      showToast('Campus Advisor code added: ' + code);
+      ['newAdvCode', 'newAdvName', 'newAdvPhone', 'newAdvCollege', 'newAdvUpi'].forEach(id => document.getElementById(id).value = '');
+      showToast('Campus Partner code added: ' + code);
       loadAdminAdvisors();
     }
 
     // =========================================================================
-    // 13. MODALS & COMPLIANCE POLICIES
+    // 14. MODALS & COMPLIANCE POLICIES
     // =========================================================================
     function closeModal(id) {
       document.getElementById(id).classList.add('hidden');
