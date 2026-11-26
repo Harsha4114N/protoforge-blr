@@ -4,6 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ProtoForge BLR — Custom College Engineering Projects, VLSI & IEEE Documentation</title>
+  <meta name="description" content="Custom VTU, Autonomous & Diploma Engineering Projects in Bengaluru — IoT, Embedded, Robotics, AI/ML, FPGA/VLSI prototypes, IEEE papers & Viva prep." />
+
+  <!-- Inline PF SVG Favicon (Prevents /favicon.ico 404) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234F46E5'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='800' font-size='28' fill='white'%3EPF%3C/text%3E%3C/svg%3E" />
+
+  <!-- OpenGraph / WhatsApp Link Preview Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="ProtoForge BLR" />
+  <meta property="og:url" content="https://protoforge-blr.vercel.app/" />
+  <meta property="og:title" content="ProtoForge BLR — Custom Engineering Projects, VLSI & IEEE Documentation" />
+  <meta property="og:description" content="Scope your custom IoT, Robotics, AI/ML, or FPGA/VLSI college project in 4 steps. Built, bench-tested, and viva-ready in Bengaluru." />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="ProtoForge BLR — Custom Engineering Projects, VLSI & IEEE Documentation" />
+  <meta name="twitter:description" content="Scope your custom IoT, Robotics, AI/ML, or FPGA/VLSI college project in 4 steps. Built, bench-tested, and viva-ready in Bengaluru." />
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Supabase JS v2 -->
@@ -892,7 +907,7 @@
           <div id="pendingPartnersList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </div>
 
-        <!-- Active & All Partners Ledger -->
+        <!-- Active & Paused Partners Ledger -->
         <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
@@ -996,7 +1011,7 @@
     // =========================================================================
     const SUPABASE_URL = 'https://uvkgomlzeyivczvkesdj.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CQNaUF-_rBtO_3312BuMJw_J2pdOTgN';
-    const OWNER_UPI_ID = '7892672646@ybl'; // Update to your preferred PhonePe/GPay/Paytm UPI ID
+    const OWNER_UPI_ID = '7892672646@ybl';
     const OWNER_MERCHANT_NAME = 'ProtoForge BLR';
     const MAX_PARTNERS_PER_COLLEGE = 3;
 
@@ -1870,13 +1885,25 @@
     // =========================================================================
     // 10. SELF-SERVE CAMPUS PARTNER REGISTRATION & TIER DASHBOARD
     // =========================================================================
+    function extractFirstNameSuffix(rawFullName) {
+      const tokens = String(rawFullName || '')
+        .trim()
+        .split(/[\s.]+/)
+        .map(t => t.toUpperCase().replace(/[^A-Z]/g, ''))
+        .filter(Boolean);
+
+      if (tokens.length === 0) return 'LEAD';
+      const firstRealName = (tokens[0].length <= 2 && tokens.length > 1) ? tokens[1] : tokens[0];
+      return firstRealName.slice(0, 8) || 'LEAD';
+    }
+
     function autoSuggestPartnerCode() {
-      const name = document.getElementById('partNameInput').value.trim().toUpperCase().replace(/[^A-Z]/g, '');
+      const rawName = document.getElementById('partNameInput').value;
       const college = document.getElementById('partCollegeInput').value.trim();
       const matched = KARNATAKA_COLLEGES.find(c => c.name.toLowerCase() === college.toLowerCase());
       let prefix = matched ? matched.codePrefix : college.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 5);
       if (!prefix) prefix = 'BLR';
-      const suffix = name.slice(0, 6) || 'LEAD';
+      const suffix = extractFirstNameSuffix(rawName);
       document.getElementById('partDesiredCodeInput').value = `${prefix}-${suffix}`;
     }
 
@@ -2457,6 +2484,7 @@
 
       const advisors = data || [];
       const pending = advisors.filter(a => a.status === 'Pending' && !a.is_active);
+      const ledgerAdvisors = advisors.filter(a => !(a.status === 'Pending' && !a.is_active));
 
       const badge = document.getElementById('pendingPartnersBadge');
       const pendingCard = document.getElementById('pendingPartnersCard');
@@ -2493,12 +2521,12 @@
       }
 
       const tbody = document.getElementById('advisorsTableBody');
-      if (advisors.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="py-4 text-center text-slate-400">No campus partners yet.</td></tr>`;
+      if (ledgerAdvisors.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-4 text-center text-slate-400">No approved campus partners yet.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = advisors.map(a => {
+      tbody.innerHTML = ledgerAdvisors.map(a => {
         const leads = totalByCode[a.code] || 0;
         const converted = convertedByCode[a.code] || 0;
         const tier = computeTierDetails(converted);
