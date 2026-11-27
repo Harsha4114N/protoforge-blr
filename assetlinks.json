@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "app.vercel.protoforge_blr.twa",
-        "sha256_cert_fingerprints": ["7D:48:B4:E5:21:6B:FB:9B:86:F4:1F:AC:B7:75:A2:83:84:BC:22:F2:08:E7:13:D9:EA:C4:CE:03:05:AC:36:B1"]
-      }
-    }]
