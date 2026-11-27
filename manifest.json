@@ -1,0 +1,32 @@
+{
+  "name": "ProtoForge BLR — Engineering Projects & VLSI Lab",
+  "short_name": "ProtoForge BLR",
+  "description": "Custom VTU, Autonomous & Diploma Engineering Projects in Bengaluru — IoT, Embedded, Robotics, AI/ML, FPGA/VLSI prototypes, IEEE papers & Viva prep.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F8FAFC",
+  "theme_color": "#0F172A",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -6,6 +6,15 @@
   <title>ProtoForge BLR — Custom College Engineering Projects, VLSI & IEEE Documentation</title>
   <meta name="description" content="Custom VTU, Autonomous & Diploma Engineering Projects in Bengaluru — IoT, Embedded, Robotics, AI/ML, FPGA/VLSI prototypes, IEEE papers & Viva prep." />
 
+  <!-- PWA Manifest & Mobile App Meta Tags -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0F172A" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ProtoForge BLR" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+
   <!-- Inline PF SVG Favicon (Prevents /favicon.ico 404) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234F46E5'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='800' font-size='28' fill='white'%3EPF%3C/text%3E%3C/svg%3E" />
 
@@ -84,6 +93,9 @@
         </button>
         <button id="navPartnerBtn" onclick="switchView('partner')" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-emerald-300 hover:text-white hover:bg-slate-800 border border-emerald-500/30 transition">
           Campus Partner
+        </button>
+        <button id="installAppBtn" onclick="triggerPwaInstall()" class="hidden px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition">
+          📲 Install App
         </button>
         <button id="navAdminBtn" onclick="handleAdminNavClick()" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-700 transition flex items-center gap-1.5">
           <span id="adminLockDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
@@ -583,7 +595,6 @@
     <!-- VIEW 3: CAMPUS PARTNER REGISTRATION & TIER TRACKER                    -->
     <!-- ===================================================================== -->
     <section id="partnerView" class="hidden space-y-6">
-      <!-- Hero & Tier Rules Banner -->
       <div class="bg-navy-900 text-white rounded-2xl p-6 sm:p-7 shadow-md space-y-5">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -599,7 +610,6 @@
           </div>
         </div>
 
-        <!-- 3 Count-Based Progression Tiers -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
           <div class="bg-slate-800/80 border border-slate-700 rounded-xl p-4 space-y-1.5">
             <div class="flex items-center justify-between">
@@ -631,7 +641,6 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- LEFT 7 COLS: PARTNER APPLICATION FORM -->
         <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-5">
           <div class="border-b border-slate-100 pb-3.5">
             <h2 class="text-lg font-extrabold text-slate-900">Apply for Your Campus Referral Code</h2>
@@ -649,7 +658,6 @@
             </div>
           </div>
 
-          <!-- Searchable Karnataka College Selector for Partner -->
           <div class="relative" id="partnerCollegeWrapper">
             <label class="block text-xs font-semibold text-slate-700 mb-1.5">Your College (Karnataka List or Custom) *</label>
             <div class="relative">
@@ -693,7 +701,6 @@
             </div>
           </div>
 
-          <!-- Anti-Abuse Policy Checkbox -->
           <label class="bg-amber-50/80 border border-amber-200 rounded-xl p-3.5 flex items-start gap-2.5 cursor-pointer">
             <input id="partTermsCheck" type="checkbox" class="mt-0.5 w-4 h-4 accent-indigo-600 shrink-0" />
             <span class="text-xs text-amber-950 leading-relaxed">
@@ -711,7 +718,6 @@
           </div>
         </div>
 
-        <!-- RIGHT 5 COLS: PARTNER STATUS & EARNINGS CHECKER -->
         <div class="lg:col-span-5 space-y-5">
           <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
             <div>
@@ -817,7 +823,6 @@
               <p id="edCustomParts" class="text-xs font-semibold text-amber-800"></p>
             </div>
 
-            <!-- Internal BOM & SP Road Wholesale Cost Workbench -->
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <div>
@@ -836,7 +841,6 @@
               <textarea id="edFeasibilityNote" rows="3" placeholder="e.g., Verified sensor compatibility. Added a 3S 20A BMS protection board and LM2596 buck converter for stable voltage during college viva demo." class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
             </div>
 
-            <!-- Pricing & Margin Calculator -->
             <div class="bg-indigo-50/60 border border-indigo-200 rounded-2xl p-4 space-y-4">
               <h4 class="text-sm font-bold text-indigo-950">Margin-Protected Quote Builder</h4>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -896,7 +900,6 @@
 
       <!-- ADMIN SUB-TAB B: CAMPUS PARTNERS & APPROVALS -->
       <div id="adminAdvisorsPanel" class="hidden space-y-6">
-        <!-- Pending Self-Serve Applications -->
         <div id="pendingPartnersCard" class="hidden bg-amber-50/70 rounded-2xl border-2 border-amber-300 p-5 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
             <div>
@@ -907,7 +910,6 @@
           <div id="pendingPartnersList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
         </div>
 
-        <!-- Active & Paused Partners Ledger -->
         <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
@@ -917,7 +919,6 @@
             <button onclick="loadAdminAdvisors()" class="text-xs font-semibold text-indigo-600 hover:underline self-start">↻ Refresh Ledger</button>
           </div>
 
-          <!-- Quick Manual Add Bar -->
           <div class="grid grid-cols-1 sm:grid-cols-6 gap-2 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
             <input id="newAdvCode" type="text" placeholder="Code (MSRIT-01)" class="uppercase mono rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
             <input id="newAdvName" type="text" placeholder="Partner Name" class="rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
@@ -1007,6 +1008,46 @@
   <!-- APPLICATION LOGIC -->
   <script>
     // =========================================================================
+    // 0. PWA SERVICE WORKER & ANDROID/CHROME INSTALL PROMPT
+    // =========================================================================
+    let deferredInstallPrompt = null;
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch((err) => {
+          console.warn('Service worker registration skipped:', err);
+        });
+      });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const installBtn = document.getElementById('installAppBtn');
+      if (installBtn) installBtn.classList.remove('hidden');
+    });
+
+    async function triggerPwaInstall() {
+      if (!deferredInstallPrompt) {
+        showToast('Use your browser menu → "Add to Home screen" to install.');
+        return;
+      }
+      deferredInstallPrompt.prompt();
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      if (outcome === 'accepted') {
+        document.getElementById('installAppBtn').classList.add('hidden');
+        showToast('ProtoForge BLR App installed on your device!');
+      }
+      deferredInstallPrompt = null;
+    }
+
+    window.addEventListener('appinstalled', () => {
+      const installBtn = document.getElementById('installAppBtn');
+      if (installBtn) installBtn.classList.add('hidden');
+      deferredInstallPrompt = null;
+    });
+
+    // =========================================================================
     // 1. SUPABASE & OWNER PAYMENT / PARTNER CONFIGURATION
     // =========================================================================
     const SUPABASE_URL = 'https://uvkgomlzeyivczvkesdj.supabase.co';
@@ -1084,7 +1125,6 @@
       { name: 'Impact College of Engineering and Applied Sciences, Sahakarnagar', univ: 'VTU Affiliated', codePrefix: 'ICEAS' },
       { name: 'KNS Institute of Technology, Yelahanka', univ: 'VTU Affiliated', codePrefix: 'KNSIT' },
       { name: 'Government SKSJ Technological Institute, KR Circle Bengaluru', univ: 'VTU Affiliated', codePrefix: 'SKSJTI' },
-      // Mysuru & Mandya
       { name: 'JSS Science and Technology University (SJCE), Mysuru', univ: 'Deemed University', codePrefix: 'SJCE' },
       { name: 'The National Institute of Engineering (NIE), Mysuru', univ: 'Autonomous', codePrefix: 'NIE' },
       { name: 'Vidyavardhaka College of Engineering (VVCE), Mysuru', univ: 'Autonomous', codePrefix: 'VVCE' },
@@ -1094,7 +1134,6 @@
       { name: 'NIE Institute of Technology (NIEIT), Mysuru', univ: 'VTU Affiliated', codePrefix: 'NIEIT' },
       { name: 'PES College of Engineering (PESCE), Mandya', univ: 'Autonomous', codePrefix: 'PESCE' },
       { name: 'BGS Institute of Technology (BGSIT), BG Nagar Mandya', univ: 'Autonomous', codePrefix: 'BGSIT' },
-      // Mangaluru, Udupi & Coastal Karnataka
       { name: 'Manipal Institute of Technology (MIT), Manipal', univ: 'Deemed University', codePrefix: 'MIT' },
       { name: 'NITK Surathkal (National Institute of Technology Karnataka)', univ: 'Autonomous', codePrefix: 'NITK' },
       { name: 'NMAM Institute of Technology, Nitte', univ: 'Deemed University', codePrefix: 'NMAMIT' },
@@ -1107,7 +1146,6 @@
       { name: 'Moodlakatte Institute of Technology, Kundapura', univ: 'VTU Affiliated', codePrefix: 'MITK' },
       { name: 'Vivekananda College of Engineering & Technology (VCET), Puttur', univ: 'VTU Affiliated', codePrefix: 'VCET' },
       { name: 'KVG College of Engineering, Sullia', univ: 'VTU Affiliated', codePrefix: 'KVGCE' },
-      // Hubballi, Dharwad & Belagavi
       { name: 'KLE Technological University (BVB), Hubballi', univ: 'Deemed University', codePrefix: 'KLETU' },
       { name: 'SDM College of Engineering and Technology (SDMCET), Dharwad', univ: 'Autonomous', codePrefix: 'SDMCET' },
       { name: 'KLE Institute of Technology (KLEIT), Hubballi', univ: 'VTU Affiliated', codePrefix: 'KLEIT' },
@@ -1121,7 +1159,6 @@
       { name: 'Hirasugar Institute of Technology, Nidasoshi Belagavi', univ: 'VTU Affiliated', codePrefix: 'HIT' },
       { name: 'BLDEA V.P. Dr. P.G. Halakatti College of Engineering, Vijayapura', univ: 'Autonomous', codePrefix: 'BLDEA' },
       { name: 'Basaveshwar Engineering College (BEC), Bagalkot', univ: 'Autonomous', codePrefix: 'BEC' },
-      // Tumakuru, Hassan, Shivamogga & Davangere
       { name: 'Siddaganga Institute of Technology (SIT), Tumakuru', univ: 'Autonomous', codePrefix: 'SIT' },
       { name: 'Sri Siddhartha Institute of Technology (SSIT), Tumakuru', univ: 'Deemed University', codePrefix: 'SSIT' },
       { name: 'Kalpataru Institute of Technology (KIT), Tiptur', univ: 'VTU Affiliated', codePrefix: 'KIT' },
@@ -1136,7 +1173,6 @@
       { name: 'UBDT College of Engineering, Davangere', univ: 'VTU Affiliated', codePrefix: 'UBDT' },
       { name: 'SJM Institute of Technology (SJMIT), Chitradurga', univ: 'VTU Affiliated', codePrefix: 'SJMIT' },
       { name: 'Adichunchanagiri Institute of Technology (AIT), Chikkamagaluru', univ: 'VTU Affiliated', codePrefix: 'AITCKM' },
-      // Kalaburagi, Ballari, Raichur & Bidar
       { name: 'PDA College of Engineering, Kalaburagi', univ: 'Autonomous', codePrefix: 'PDA' },
       { name: 'Sharnbasva University — Faculty of Engineering, Kalaburagi', univ: 'Deemed University', codePrefix: 'SHARNBASVA' },
       { name: 'Appa Institute of Engineering and Technology, Kalaburagi', univ: 'VTU Affiliated', codePrefix: 'AIET' },
@@ -1145,7 +1181,6 @@
       { name: 'Guru Nanak Dev Engineering College (GNDEC), Bidar', univ: 'Autonomous', codePrefix: 'GNDEC' },
       { name: 'Bheemanna Khandre Institute of Technology (BKIT), Bhalki Bidar', univ: 'VTU Affiliated', codePrefix: 'BKIT' },
       { name: 'SLN College of Engineering, Raichur', univ: 'VTU Affiliated', codePrefix: 'SLNCE' },
-      // Polytechnics
       { name: 'MEI Polytechnic, Rajajinagar Bengaluru', univ: 'Diploma / Polytechnic', codePrefix: 'MEIP' },
       { name: 'PV Polytechnic, Malleshwaram Bengaluru', univ: 'Diploma / Polytechnic', codePrefix: 'PVP' },
       { name: 'Acharya Polytechnic, Soldevanahalli Bengaluru', univ: 'Diploma / Polytechnic', codePrefix: 'APOLY' },
@@ -1743,7 +1778,6 @@
         return;
       }
 
-      // ANTI-SELF-REFERRAL CHECK
       const advisorPhone10 = normalizePhone10(data.phone);
       if (advisorPhone10 && studentPhone10 && advisorPhone10 === studentPhone10) {
         validatedAdvisorDiscount = 0;
@@ -1753,7 +1787,6 @@
         return;
       }
 
-      // Compute dynamic tier discount based on converted referrals
       const { convertedByCode } = await getConvertedReferralMap();
       const convertedCount = convertedByCode[data.code] || 0;
       const tier = computeTierDetails(convertedCount);
