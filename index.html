@@ -105,11 +105,23 @@
     </div>
   </header>
 
-  <!-- GLOBAL TOAST BANNER -->
-  <div id="toastBanner" class="hidden fixed bottom-5 right-5 z-50 max-w-sm bg-navy-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 text-sm flex items-center gap-3">
+  <!-- GLOBAL TOAST BANNER (Positioned above Floating WhatsApp Button) -->
+  <div id="toastBanner" class="hidden fixed bottom-20 right-5 z-50 max-w-sm bg-navy-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 text-sm flex items-center gap-3">
     <span id="toastIcon" class="text-emerald-400 font-bold">✓</span>
     <span id="toastMessage">Saved successfully</span>
   </div>
+
+  <!-- FLOATING WHATSAPP SUPPORT BUTTON -->
+  <a href="https://wa.me/919187756148?text=Hi%20ProtoForge%20BLR%2C%20I%20have%20a%20question%20about%20a%20college%20engineering%20project."
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Chat with ProtoForge BLR on WhatsApp"
+     class="fixed bottom-5 right-5 z-40 flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs sm:text-sm px-4 py-3 rounded-full shadow-xl transition transform hover:scale-105">
+    <svg class="w-5 h-5 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.33-1.66a11.86 11.86 0 0 0 5.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.17-3.45-8.42zM12.07 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.76.98 1-3.66-.24-.38a9.86 9.86 0 0 1-1.51-5.25c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.89 7c0 5.46-4.44 9.89-9.88 9.89zm5.43-7.41c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35z"/>
+    </svg>
+    <span>Ask on WhatsApp</span>
+  </a>
 
   <!-- MAIN CONTENT AREA -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -527,12 +539,12 @@
         </div>
       </div>
 
-      <!-- CLEAN ON-SITE SUBMISSION CONFIRMATION CARD -->
+      <!-- ON-SITE SUBMISSION CONFIRMATION CARD + WHATSAPP HANDOFF -->
       <div id="submissionSuccessPanel" class="hidden bg-white rounded-2xl border-2 border-emerald-500 p-6 sm:p-8 shadow-md text-center max-w-2xl mx-auto space-y-5">
         <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl font-bold mx-auto">✓</div>
         <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Project Request Submitted!</h2>
         <p class="text-sm text-slate-600">
-          Thank you! Our engineering lead will review your requirements, message you on WhatsApp to finalize technical details, and unlock your quote & UPI payment link on the <strong>Track Quote</strong> tab.
+          Your specifications have been logged. Tap the green WhatsApp button below to share your tracking code with our engineering desk so we can prioritize your feasibility check and quote.
         </p>
 
         <div class="bg-slate-900 text-white rounded-xl p-4 flex items-center justify-between max-w-md mx-auto">
@@ -545,7 +557,11 @@
           </button>
         </div>
 
-        <p class="text-xs text-slate-500">Once your 50% advance is confirmed, we will create your dedicated project WhatsApp group with your team.</p>
+        <div class="pt-1">
+          <button type="button" onclick="sendTrackingCodeOnWhatsapp()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs sm:text-sm font-bold shadow-md transition">
+            📲 Send Tracking Code on WhatsApp (+91 91877 56148)
+          </button>
+        </div>
 
         <div class="pt-2 flex flex-wrap justify-center gap-3 border-t border-slate-100">
           <button type="button" onclick="openTrackWithGeneratedCode()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold">
@@ -990,10 +1006,10 @@
   </div>
 
   <!-- FOOTER -->
-  <footer class="bg-white border-t border-slate-200 mt-12">
+  <footer class="bg-white border-t border-slate-200 mt-12 pb-16 sm:pb-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
       <div>
-        <span class="font-bold text-slate-800">ProtoForge BLR</span> — Custom Prototyping, VLSI & Academic Documentation Desk, Bengaluru, Karnataka.
+        <span class="font-bold text-slate-800">ProtoForge BLR</span> — Custom Prototyping, VLSI & Academic Documentation Desk, Bengaluru • WhatsApp: <a href="https://wa.me/919187756148" target="_blank" class="font-semibold text-indigo-600 hover:underline">+91 91877 56148</a>
       </div>
       <div class="flex flex-wrap items-center gap-4 font-medium">
         <button onclick="openPolicy('about')" class="hover:text-indigo-600">About & Contact</button>
@@ -1048,12 +1064,14 @@
     });
 
     // =========================================================================
-    // 1. SUPABASE & OWNER PAYMENT / PARTNER CONFIGURATION
+    // 1. SUPABASE, WHATSAPP BUSINESS & OWNER PAYMENT CONFIGURATION
     // =========================================================================
     const SUPABASE_URL = 'https://uvkgomlzeyivczvkesdj.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CQNaUF-_rBtO_3312BuMJw_J2pdOTgN';
     const OWNER_UPI_ID = '7892672646@ybl';
     const OWNER_MERCHANT_NAME = 'ProtoForge BLR';
+    const BUSINESS_WHATSAPP_NUMBER = '919187756148';
+    const BUSINESS_WHATSAPP_DISPLAY = '+91 91877 56148';
     const MAX_PARTNERS_PER_COLLEGE = 3;
 
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -1230,6 +1248,7 @@
     let selectedKit = [];
     let validatedAdvisorDiscount = 0;
     let validatedAdvisorCode = null;
+    let lastSubmittedLead = null;
     let adminRequestsCache = [];
     let activeAdminRequest = null;
     let activeAdminBom = [];
@@ -1881,10 +1900,32 @@
         return;
       }
 
+      lastSubmittedLead = { trackingCode, name, college, domain, title };
       document.getElementById('generatedTrackingCode').textContent = trackingCode;
       [1, 2, 3, 4].forEach(n => document.getElementById('stepPanel' + n).classList.add('hidden'));
       document.getElementById('submissionSuccessPanel').classList.remove('hidden');
       showToast('Project request submitted!');
+    }
+
+    function sendTrackingCodeOnWhatsapp() {
+      const code = document.getElementById('generatedTrackingCode').textContent;
+      const lead = lastSubmittedLead || {
+        trackingCode: code,
+        name: document.getElementById('studentNameInput').value.trim() || 'Student',
+        college: document.getElementById('collegeInput').value.trim() || '',
+        domain: document.getElementById('domainInput').value || '',
+        title: document.getElementById('titleInput').value.trim() || 'Custom Engineering Project'
+      };
+      const text = [
+        `Hi ProtoForge BLR! I just submitted a project request on the portal:`,
+        `• Tracking Code: ${lead.trackingCode}`,
+        `• Name: ${lead.name}`,
+        `• College: ${lead.college}`,
+        `• Domain: ${lead.domain}`,
+        `• Title: ${lead.title}`,
+        `Please share the feasibility update and quote!`
+      ].join('\n');
+      window.open(`https://wa.me/${BUSINESS_WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
     }
 
     function copyTrackingCode() {
@@ -2133,10 +2174,14 @@
 
       const detailsBox = document.getElementById('trackQuoteDetailsBox');
       if (!quote) {
+        const waStatusLink = `https://wa.me/${BUSINESS_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi ProtoForge BLR, checking feasibility status for my project ${req.tracking_code} (${req.title}).`)}`;
         detailsBox.innerHTML = `
-          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs sm:text-sm text-amber-900 space-y-1.5">
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs sm:text-sm text-amber-900 space-y-2.5">
             <div><strong>Status: Under Engineer Feasibility Review.</strong></div>
             <p>Our Bengaluru engineering team is reviewing your project specifications and component requirements. We will connect with you on WhatsApp and unlock your confirmed quote & UPI payment QR here shortly.</p>
+            <a href="${waStatusLink}" target="_blank" rel="noopener noreferrer" class="inline-block px-4 py-2 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold">
+              📲 Message Engineer on WhatsApp
+            </a>
           </div>
         `;
       } else {
@@ -2144,6 +2189,7 @@
         const balanceAmt = Number(quote.total_amount) - advanceAmt;
         const upiPayUri = `upi://pay?pa=${encodeURIComponent(OWNER_UPI_ID)}&pn=${encodeURIComponent(OWNER_MERCHANT_NAME)}&am=${advanceAmt}&cu=INR&tn=${encodeURIComponent(req.tracking_code + ' 50% Advance')}`;
         const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiPayUri)}`;
+        const waReceiptLink = `https://wa.me/${BUSINESS_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi ProtoForge BLR! I have paid the ₹${advanceAmt.toLocaleString('en-IN')} (50% Advance) for ${req.tracking_code} (${req.title}). Sharing the payment screenshot now!`)}`;
 
         detailsBox.innerHTML = `
           <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1.5">
@@ -2192,11 +2238,13 @@
           ${!quote.advance_paid ? `
             <div class="bg-white border-2 border-indigo-600 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-5">
               <img src="${qrImgUrl}" alt="UPI Payment QR" class="w-36 h-36 rounded-xl border border-slate-200 p-1.5 bg-white shrink-0" />
-              <div class="space-y-2 text-center sm:text-left">
+              <div class="space-y-2.5 text-center sm:text-left">
                 <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700">Official Website UPI Checkout</span>
                 <h4 class="text-base font-extrabold text-slate-900">Pay ₹${advanceAmt.toLocaleString('en-IN')} (50% Advance) via GPay / PhonePe / Paytm</h4>
                 <p class="text-xs text-slate-600">Scan the QR code or pay to UPI ID: <span class="mono font-bold text-slate-900">${OWNER_UPI_ID}</span> with reference <span class="mono font-bold">${req.tracking_code}</span>.</p>
-                <p class="text-[11px] text-emerald-700 font-semibold">Once paid, share the screenshot on WhatsApp—we will create your dedicated project WhatsApp group immediately.</p>
+                <a href="${waReceiptLink}" target="_blank" rel="noopener noreferrer" class="inline-block px-4 py-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold shadow-sm transition">
+                  📤 Send Payment Screenshot on WhatsApp (${BUSINESS_WHATSAPP_DISPLAY})
+                </a>
               </div>
             </div>
           ` : ''}
@@ -2675,6 +2723,7 @@
           title: 'About ProtoForge BLR & Contact',
           body: `<p><strong>ProtoForge BLR</strong> is a Bengaluru-based custom hardware prototyping, VLSI/FPGA design, embedded systems, AI/software development, and academic documentation consultancy serving VTU, Autonomous, and Diploma engineering students across Karnataka.</p>
                  <p><strong>Location:</strong> Bengaluru, Karnataka, India</p>
+                 <p><strong>WhatsApp Desk:</strong> <a href="https://wa.me/${BUSINESS_WHATSAPP_NUMBER}" target="_blank" class="text-indigo-600 font-semibold underline">${BUSINESS_WHATSAPP_DISPLAY}</a></p>
                  <p><strong>Support Email:</strong> harshan20051@gmail.com</p>`
         },
         pricing: {
